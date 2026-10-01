@@ -1,0 +1,969 @@
+id,lemma,language,cefr_level,pos,ipa,definition_target,audio_url,source,created_at,updated_at
+00092354-13f5-47aa-94c6-3312579db388,difference,en,A1,noun,/ˈdɪfrəns/,The quality of being different.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-09 14:46:55.109598+00
+0037e237-072d-4af2-8d3a-dea99fa6c6a5,cow,en,A1,noun,/kaʊ/,ISO 639-3 language code for Cowlitz.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:09.13251+00
+0056af7a-dc76-45d4-83fb-bb090b2b673a,funny,en,A1,adj,/ˈfʌni/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+006e3372-af9d-425e-99db-621f15dff500,band,en,A1,noun,/bænd/,"A strip of material used for strengthening or coupling.
+A strip of material wrapped around things to hold them together.
+
+A narrow strip of cloth or other material on clothing, to bind, strengthen, or ornament it.
+
+A strip along the spine of a book where the pages are attached.
+A belt or strap that is part of a machine.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:41.03974+00
+00b948f4-d29c-4883-b76a-0d79f3f9a3ce,breakfast,en,A1,noun,/ˈbrekfəst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+01349ddb-dd2f-4dc6-a4bc-7b0d04ca744e,grandmother,en,A1,noun,/ˈɡrænmʌðər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0183f0aa-0190-40e9-81c7-876959a5f8ae,hobby,en,A1,noun,/ˈhɑːbi/,An activity that one enjoys doing in one's spare time.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-10 22:21:13.808951+00
+02003e54-c1ca-47cb-b1cd-22a5ab1d5f98,tomato,en,A1,noun,/təˈmeɪtəʊ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0207c3e9-e099-43b8-a155-11c44ac28b87,fill,en,A1,verb,/fɪl/,"To make full
+To add contents to  so that it is full.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-10 22:21:10.178984+00
+0248069c-0eda-408c-aef6-e526e49a6c5e,exercise,en,A1,noun,/ˈeksərsaɪz/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+027138a6-6353-48c4-a9d8-07a23cf72cc3,any,en,A1,det,/ˈeni/,ISO 639-3 language code for Anyi.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 06:15:49.232475+00
+02c7675e-96a6-432b-a68e-c8d3019f19dd,writing,en,A1,noun,/ˈraɪtɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0322f09c-3a0d-4a3d-bdcd-2b632de16261,repeat,en,A1,verb,/rɪˈpiːt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0366ac58-5779-4f02-8c67-4ad73e13caf2,phone,en,A1,noun,/fəʊn/,"A device for transmitting conversations and other sounds in real time across distances, now often a small portable unit also capable of running software etc.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 18:48:05.066434+00
+03aaa565-23dc-46de-9511-0651be792617,driver,en,A1,noun,/ˈdraɪvər/,"One who drives something.
+
+ A person who drives a motorized vehicle such as a car, truck, bus, train, forklift, etc.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 23:11:20.744838+00
+03b05bb5-4c78-452a-94f8-46dca7cb295a,build,en,A1,verb,/bɪld/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+041bf091-7e2a-47a8-a580-372fc0fe2ff1,nine,en,A1,num,/naɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0491b52a-ee6a-4534-975c-ab30d2ad9be9,sell,en,A1,verb,/sel/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+049b49a3-809f-4144-9157-a9b639327bac,somebody,en,A1,pron,/ˈsʌmbədi/,Some unspecified person.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-09 14:47:12.034296+00
+053b81ad-d564-45e3-bcec-494dfb23c2ed,dad,en,A1,noun,/dæd/,ISO 639-3 language code for Marik.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 17:26:45.10808+00
+05cb3c08-794d-401e-b6d0-216bce36f4e7,future,en,A1,noun,/ˈfjuːtʃər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+06cf29d6-1905-4365-9257-f5ee7d840cdc,want,en,A1,verb,/wɑːnt/,"To wish for or desire (something); to feel a need or desire for; to crave, hanker, or demand. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-23 20:32:06.523043+00
+075bae0c-83ff-4071-89cb-775697b1784e,common,en,A1,adj,/ˈkɑːmən/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0773a14d-aa43-444d-8f4f-c8c5ced0a8b2,wake,en,A1,verb,/weɪk/,(often followed by up) To stop sleeping.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-09 19:28:43.987297+00
+07c7bb30-9e4a-4319-a634-563f869dc04e,go,en,A1,verb,/ɡəʊ/,"To move, either physically or in an abstract sense:",,oxford_3000,2026-05-17 11:57:15.443642+00,2026-06-06 17:56:37.005787+00
+07df5b5c-b5f4-420e-8aa8-adfcb3fce0bf,result,en,A1,noun,/rɪˈzʌlt/,"To proceed, spring up or rise, as a consequence, from facts, arguments, premises, combination of circumstances, consultation, thought or endeavor.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:14.931503+00
+07f7f34d-0619-4f00-8e66-328e324f348f,prefer,en,A1,verb,/prɪˈfɜːr/,To be in the habit of choosing something rather than something else; to favor; to like better.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:32:00.828069+00
+086d39da-ae67-4f7b-974c-7f6eeab1e7c5,chicken,en,A1,noun,/ˈtʃɪkɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+08b6fe1e-acee-45a0-91a5-6cb97bfd6e71,nice,en,A1,adj,/naɪs/,"Pleasant, satisfactory, complimentary. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:13:36.912365+00
+0901759f-7f26-4ae1-9f09-0fbfe3b8bc79,job,en,A1,noun,/dʒɑːb/,ISO 639-3 language code for Joba.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 14:55:08.59677+00
+09125c99-791f-434a-b5e5-8e4e2b344064,January,en,A1,noun,/ˈdʒænjueri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+096d8228-32d2-48f8-9d4d-6e785d2fdb0b,fantastic,en,A1,adj,/fænˈtæstɪk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+096e8cc0-4c1e-4b51-9366-47e388d9e7a2,shower,en,A1,noun,/ˈʃaʊər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0973d09f-51f3-4c2f-8bfe-f864c5f2429e,girl,en,A1,noun,/ɡɜːrl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0979d8df-f8f0-45ef-8489-956623e91109,back,en,A1,adv,/bæk/,At or near the rear.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:38.164613+00
+098fbc4b-63d2-4b55-8e5a-b085b24ef01c,bath,en,A1,noun,/bæθ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+09ad069b-072d-478e-87c3-2afbab485ce1,fifty,en,A1,num,/ˈfɪfti/,The cardinal number occurring after forty-nine and before fifty-one.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:16.528441+00
+09c9539a-3d18-4f05-b9fc-691058a8530b,rich,en,A1,adj,/rɪtʃ/,Wealthy: having a lot of money and possessions.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 23:27:06.319174+00
+09e551f8-c3ed-45d5-b5a0-75ee7a88530b,full,en,A1,adj,/fʊl/,Containing the maximum possible amount that can fit in the space available.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 09:50:28.573236+00
+09ee12a9-a866-4823-827e-8161340bf8f3,song,en,A1,noun,/sɔːŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0a2def2a-6ce1-4460-88e2-1db414d871d3,euro,en,A1,noun,/ˈjʊrəʊ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0a5f8c8a-e224-42ef-8f66-2c45e20a46bc,now,en,A1,adv,/naʊ/,ISO 639-3 language code for Nyambo.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:38:57.243225+00
+0a603060-6dd3-485f-8d5b-a0ee0a59db86,brother,en,A1,noun,/ˈbrʌðər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0ac28b61-2721-4c9a-81cd-83ae78347e09,dancer,en,A1,noun,/ˈdænsər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0b4d6d77-039c-49a0-aeff-1d32dbed9ca1,form,en,A1,noun,/fɔːrm/,"To do with shape.
+The shape or visible structure of a thing or person.
+
+A thing that gives shape to other things as in a mold.
+Regularity, beauty, or elegance.
+ The inherent nature of an object; that which the mind itself contributes as the condition of knowing; that in which the essence of a thing consists.
+Characteristics not involving atomic components. (Can we add an example for this sense?)
+ A long bench with no back.
+
+ The boundary line of a material object. In painting, more generally, the human body.
+ The combination of planes included under a general crystallographic symbol. It is not necessarily a closed solid.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:16.245032+00
+0b66a823-7066-4da4-8738-1a812a35a754,ice,en,A1,noun,/aɪs/,ISO 639-2/B language code for Icelandic.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-04 22:51:27.099319+00
+0be40177-84fd-4cc2-b54c-04493a3f889c,dark,en,A1,adj,/dɑːrk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0ce8960a-5cd8-4219-9b76-39b08677e70f,office,en,A1,noun,/ˈɑːfɪs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0d93032a-d00c-44c3-9308-cbea09a2f0a1,photograph,en,A1,noun,/ˈfəʊtəɡræf/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0de7d945-aeb5-4f5c-986b-193c17ce44e1,tourist,en,A1,noun,/ˈtʊrɪst/,Someone who travels for pleasure rather than for business; a leisure visitor. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 10:54:29.824246+00
+0ded42af-c9e6-427d-8aaf-2d26eb2b63ea,ago,en,A1,adv,/əˈɡəʊ/,ISO 639-3 language code for Tainae.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 22:03:18.504543+00
+0dfce055-0b57-4991-b1ed-50ced580a4fe,mistake,en,A1,noun,/mɪˈsteɪk/,"To understand wrongly, taking one thing or person for another.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:48:50.819455+00
+0e1d0468-abfc-4ff3-aa62-5762139fccf3,change,en,A1,noun,/tʃeɪndʒ/,To become something different.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 17:52:33.11793+00
+0e229d71-e03e-4c2d-9882-50a9e4fa32b6,chart,en,A1,noun,/tʃɑːrt/,"A map.
+A map illustrating the geography of a specific phenomenon.
+A navigator's map.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-08 07:28:32.958899+00
+0e8fa335-60ea-4be9-b85b-a8a208847b1c,road,en,A1,noun,/rəʊd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0eaa87ba-7330-4ad1-b064-7ea4282166e8,dance,en,A1,noun,/dæns/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0f643721-b60e-40ec-951b-f03992e49fa7,what,en,A1,det,/wʌt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0f8caadc-078c-4947-b14b-b71d29f03371,pay,en,A1,verb,/peɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0fd15840-8eed-4d73-b552-80b28bb6a5ba,theatre,en,A1,noun,/ˈθiːətər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+0fdd2cda-0918-42f4-829f-3bdbceb7cb92,hate,en,A1,verb,/heɪt/,An object of hatred.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 23:11:34.718057+00
+1011d201-d238-4ab6-84f7-57aee7fd76ce,through,en,A1,adv,/θruː/,"From one side or end of (something) to the other. 
+So as to enter (something), pass within or across, and then leave.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:46.160675+00
+10e6a07b-f45e-4264-a9bb-b66d7f8169c2,business,en,A1,noun,/ˈbɪznəs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+11408a8d-b5f2-4fe5-8496-14e51a820ac0,plant,en,A1,noun,/plænt/,"An organism that is not an animal, especially an organism capable of photosynthesis, and typically a small or herbaceous organism of this kind, rather than a tree.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-07 19:24:45.928082+00
+12046561-ce9b-4ada-b10f-c4443c14da3a,read,en,A1,verb,/riːd/,To look at and interpret letters or other information that is written.,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 18:12:04.405698+00
+121d1a02-b76f-4010-a88f-a2cd6ac1bb43,quarter,en,A1,noun,/ˈkwɔːrtər/,"A fourth part of something.
+ Each of four equal parts into which something can be divided; a fourth part. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 21:36:20.715736+00
+12389183-d42f-4f2d-a403-d8de8ddabb1b,reading,en,A1,noun,/ˈriːdɪŋ/,present participle and gerund of read,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:57.510372+00
+124b747f-3785-4998-92a5-5eeed3606899,short,en,A1,adj,/ʃɔːrt/,"Having a small distance from one end or edge to another, either horizontally or vertically.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:52.510626+00
+1270b0c5-7999-4aef-b16b-535938134199,after,en,A1,prep,/ˈæftər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1277303c-cf94-43fa-ab53-780500d9104f,late,en,A1,adj,/leɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+12d7d899-42d8-4cbc-ba7e-81c86ea3bbf8,someone,en,A1,pron,/ˈsʌmwʌn/,One or some person of unspecified or indefinite identity.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:45:10.40113+00
+1317feb8-9070-41a9-9a03-c06065d195ab,beginning,en,A1,noun,/bɪˈɡɪnɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+13e3887d-ed29-4adc-b6eb-d7b9c8764994,negative,en,A1,adj,/ˈneɡətɪv/,Not positive or neutral; bad; undesirable; unfavourable.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-04 22:50:49.383211+00
+14a331fe-1084-40cc-9d25-98409dbf3f01,also,en,A1,adv,/ˈɔːlsəʊ/,In addition; besides; as well; further; too. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 17:52:11.11239+00
+14c5d8b8-48d7-45c8-b2ed-833d73ce5a65,dangerous,en,A1,adj,/ˈdeɪndʒərəs/,Full of danger.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:56:47.498924+00
+14ef223c-4749-4699-890a-452f8bbfbbdf,never,en,A1,adv,/ˈnevər/,At no time; on no occasion; in no circumstance.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-10 22:21:24.84147+00
+14f1ea10-1a68-4c5c-9f93-145def1a0080,everyone,en,A1,pron,/ˈevriwʌn/,Every person.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-08 07:28:06.626435+00
+1508a206-397d-4c3c-9228-ae9869530c3b,boyfriend,en,A1,noun,/ˈbɔɪfrend/,A male partner in an unmarried romantic relationship.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 15:24:06.367687+00
+1580180b-4be0-4aae-8ce3-f5a3a3fad703,baby,en,A1,noun,/ˈbeɪbi/,"A very young human, particularly from birth to a couple of years old or until walking is fully mastered.
+
+A very young human, even if not yet born.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:31:48.563943+00
+158e0b9a-6eb7-4fdb-8e2c-aafd9f173797,me,en,A1,pron,/miː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+15adf4aa-5041-4ec0-80e4-b9d1b0adc2bd,ninety,en,A1,num,/ˈnaɪnti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+15ffe3e9-3396-460a-9260-06392b80f927,pig,en,A1,noun,/pɪɡ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1639bf64-e1f8-4913-ad0c-e4f14e52665c,bank,en,A1,noun,/bæŋk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1660f087-6ea0-4ae0-b015-d6d1a346d1d6,family,en,A1,noun,/ˈfæməli/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+169651e9-bc5a-4b63-980e-cc2b2a8600bf,love,en,A1,noun,/lʌv/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+16e64ef2-5c78-4ea7-9c23-c13a95c4e9c4,idea,en,A1,noun,/aɪˈdiːə/,"An abstract archetype of a given thing, compared to which real-life examples are seen as imperfect approximations; pure essence, as opposed to actual examples. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:41:08.434431+00
+17e81917-e2bb-4b31-ba7c-a9bd4738d1e0,eighty,en,A1,num,/ˈeɪti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+18d3b0e3-2ebb-46c1-a79b-43722dc22df8,section,en,A1,noun,/ˈsekʃn/,A cutting; a part cut out from the rest of something.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:20:45.705755+00
+18dfd36b-86e4-44f5-89ef-96cfead59ce0,at,en,A1,prep,/æt/,"In, near, or in the general vicinity of (a particular place).",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-07 19:24:24.204831+00
+18eacc09-584a-46d3-ad45-d861f083b349,busy,en,A1,adj,/ˈbɪzi/,Crowded with business or activities; having a great deal going on.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:17.176807+00
+192501c8-7503-42ed-bae4-f3e6511b176d,tree,en,A1,noun,/triː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1944937c-2743-4af9-b6e5-5406456fb24a,interview,en,A1,noun,/ˈɪntərvjuː/,An official face-to-face meeting of monarchs or other important figures. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 23:27:06.585499+00
+198f0687-da38-4278-a3be-0f8cf785ab49,enough,en,A1,adv,/ɪˈnʌf/,"Sufficient; all that is required, needed, or appropriate.
+Used before a noun in the manner of words like some, a bit of, and so on.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 15:24:02.356313+00
+19a1f51e-9dcf-4891-9b54-223f1db1656c,but,en,A1,conj,/bʌt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+19befc21-4530-4563-af01-3a6df11249c6,child,en,A1,noun,/tʃaɪld/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+19f24fdf-b2e4-4790-809d-5688c5813e7e,neighbour,en,A1,noun,/ˈneɪbər/,A person living on adjacent or nearby land; a person situated adjacently or nearby; anything (of the same type of thing as the subject) in an adjacent or nearby position.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:47:54.51605+00
+1a1f40a3-f68a-4b8d-bd05-e2a74da50c42,hear,en,A1,verb,/hɪr/,To perceive sounds through the ear. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:20:15.744545+00
+1a9b08af-2ee2-4416-adf9-2b280c9aa6be,good,en,A1,adj,/ɡʊd/,"Of a person or an animal:
+Acting in the interest of what is beneficial, ethical, or moral.",,oxford_3000,2026-05-17 11:57:15.443642+00,2026-06-12 06:15:30.285186+00
+1ab259d6-2f13-46cb-99f0-3e549c01e0b2,bored,en,A1,adj,/bɔːrd/,simple past and past participle of bore,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:05:50.977773+00
+1ae0232e-c595-4bbe-85ce-965138d8f8ff,million,en,A1,num,/ˈmɪljən/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1b40714e-c264-4bc4-92c6-4d3c4fa3232d,meeting,en,A1,noun,/ˈmiːtɪŋ/,The act of persons or things that meet.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:39.601243+00
+1b5423b1-372b-463f-9a28-a9db8c36b7b9,healthy,en,A1,adj,/ˈhelθi/,Enjoying good health; free from disease or disorder.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 19:55:21.431128+00
+1b5fe7d5-2747-46a4-93e8-72eeb6e8e88f,next,en,A1,adj,/nekst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1bbb86b2-0484-45d3-b645-b045a657f075,weather,en,A1,noun,/ˈweðər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1bd9d5e0-0028-4d1d-b251-5cb0b675d528,meaning,en,A1,noun,/ˈmiːnɪŋ/,"The denotation, referent, or idea connected with a word, expression, or symbol.
+
+The connotation associated with a word, expression, or symbol.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:13:28.492549+00
+1be6f5d7-6674-40b8-b8e3-2440a72c6521,of,en,A1,prep,/ʌv/,"Expressing distance or motion.
+ From (a place); off. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 17:27:01.862595+00
+1c1df333-c492-4b4a-b0b3-93a7c007a838,message,en,A1,noun,/ˈmesɪdʒ/,"A communication, or what is communicated; any concept or information conveyed.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:34:22.175435+00
+1c4c6910-71a7-4020-a417-e6a9024298e2,prepare,en,A1,verb,/prɪˈper/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1c954bf9-170e-412b-879c-5c4aa05d8618,east,en,A1,adj,/iːst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1cd14a0b-2521-411f-b1b3-667a45ab7d59,hat,en,A1,noun,/hæt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1cda512f-d0d5-4976-bf4f-c1e80eb34907,actress,en,A1,noun,/ˈæktrəs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1cec4bca-2f81-422a-9017-d8ef6b820013,horse,en,A1,noun,/hɔːrs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1ceec17d-9556-43b3-abe5-6bf85404013d,window,en,A1,noun,/ˈwɪndəʊ/,"An opening, usually covered by one or more panes of clear glass, to allow light and air from outside to enter a building or vehicle.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:41:16.45878+00
+1d738c36-ae83-4834-9394-b241ce563c3e,friendly,en,A1,adj,/ˈfrendli/,"Generally warm, approachable and easy to relate with in character.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:31:36.675528+00
+1dad7104-7b10-4adb-9e28-a48885d876c0,three,en,A1,num,/θriː/,NATO &amp; ICAO radiotelephony clear code (spelling-alphabet name) for the digit 3.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:32:02.28451+00
+1e012958-8c90-4332-a1a9-ff52211679b3,sorry,en,A1,adj,/ˈsɑːri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1e53597b-61ae-4a58-b12b-19f46db1a1ca,country,en,A1,noun,/ˈkʌntri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1f16b06d-113f-4b3a-af37-ec2ded8d8051,ten,en,A1,num,/ten/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+1f711b59-2f8d-46c1-9ff8-5086fc0c10f3,down,en,A1,adv,/daʊn/,From a higher position to a lower one; downwards.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-10 22:21:16.160407+00
+1f77b8f0-6385-4541-bda6-6a7293da2e63,left,en,A1,adj,/left/,Designating the side of the body toward the west when one is facing north; the side of the body on which the heart is located in most humans; the opposite of right. This arrow points to the reader's left: ←,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 17:52:05.041876+00
+1faa8a9f-6d68-487b-b7e0-7ece393056e1,train,en,A1,noun,/treɪn/,"Elongated or trailing portion.
+The elongated back portion of a dress or skirt (or an ornamental piece of material added to similar effect), which drags along the ground. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:35:59.218687+00
+2014c4c3-6a73-4635-8b00-a71d324bc8de,lion,en,A1,noun,/ˈlaɪən/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2014f6e1-cb35-4ce5-959f-5367aa3a1cae,tell,en,A1,verb,/tel/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+204ec551-01d1-48ba-8013-331ecbb59ec2,August,en,A1,noun,/ˈɔːɡəst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+213497f9-a741-43b6-bd2a-d2c27f605fc9,amazing,en,A1,adj,/əˈmeɪzɪŋ/,present participle and gerund of amaze,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:45:03.789008+00
+213e3a20-8f86-46b7-8fd8-34695f331090,price,en,A1,noun,/praɪs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+214cd526-6f62-403f-ba6d-61da312da9a4,compare,en,A1,verb,/kəmˈper/,"To assess the similarities and differences between two or more things [""to compare X with Y""]. Having made the comparison of X with Y, one might have found it similar to Y or different from Y.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 09:49:58.306854+00
+2180fe0a-5524-4ea8-8686-4209e306fcf0,star,en,A1,noun,/stɑːr/,"Any small, natural and bright dot in the sky, most visible in the night or twilight sky. This sense includes the planets, but it is now sometimes used in exclusion of them due to influence from the technical astronomical sense.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:13.060786+00
+22017fff-d261-4cbc-b46b-005169748eaa,you,en,A1,pron,/juː/,"The people spoken, or written to, as an object. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:22.692136+00
+2280cc69-37d3-44eb-adbc-27d07389eb15,ear,en,A1,noun,/ɪr/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+23835e2d-b0ff-48aa-a3e7-53e20e06f224,foot,en,A1,noun,/fʊt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2396b586-79a9-42d3-97fd-5a436f246b6a,out,en,A1,adv,/aʊt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+23e158a8-ae09-4ccf-b287-b579b6e820f4,red,en,A1,adj,/red/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+23ec9523-d0f9-4204-865c-dadd72206f11,flower,en,A1,noun,/ˈflaʊər/,"A colorful, conspicuous structure associated with angiosperms, frequently scented and attracting various insects, and which may or may not be used for sexual reproduction.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-05 15:47:12.425368+00
+23fabbac-c516-4575-8aad-3ca80b3247a2,know,en,A1,verb,/nəʊ/,To perceive the truth or factuality of; to be certain of; to be certain that.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:44:34.425551+00
+2422aed1-bc72-4d7d-b34e-3edd5b244bce,a,en,A1,det,/eɪ/,The first letter of the basic modern Latin alphabet.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:30:16.486465+00
+2425b9a6-9362-442e-b208-f4c8f211e45f,twice,en,A1,adv,/twaɪs/,Two times.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 23:11:36.282081+00
+2451bda8-e797-4bff-83d4-6ea916eee679,worker,en,A1,noun,/ˈwɜːrkər/,"One who works: a person who performs labor for a living; traditionally, especially, manual labor.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:20:22.64282+00
+24586f4d-9809-4742-87c0-4a6deeb30b3a,house,en,A1,noun,/haʊs/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+24e7567b-951a-4e22-8216-27ba4644657f,move,en,A1,verb,/muːv/,"To change place or posture; to go, in any manner, from one place or position to another.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:12.161005+00
+24e845b4-a82a-4bb0-a5d8-4e41a808d2ec,food,en,A1,noun,/fuːd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+251fad2d-f422-4836-96df-5563bc79adc3,scientist,en,A1,noun,/ˈsaɪəntɪst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+259ce34a-bce9-4443-b6b4-b7bbd2a8b85b,thirty,en,A1,num,/ˈθɜːrti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+260d19a6-48b4-4367-ad06-4ebf871147db,ice cream,en,A1,noun,/ˈaɪs kriːm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2645b689-037c-452f-a5e0-84006ce9dee8,they,en,A1,pron,/ðeɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+264a7909-6d57-4256-bd80-e8a9771bb94b,oh,en,A1,interj,/əʊ/,Expression of surprise.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:05:44.031083+00
+26af6bde-245d-4048-aa22-8dc90a36b708,sixty,en,A1,num,/ˈsɪksti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+27eb8b75-b2e2-4536-9eb0-25de8095bd96,date,en,A1,noun,/deɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+28007540-077f-4e71-b722-eed0dce2b359,festival,en,A1,noun,/ˈfestɪvl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+285442cd-b06a-4e4f-b33c-6d7498c272a5,today,en,A1,adv,/təˈdeɪ/,On the current day or date.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:09.853629+00
+28ae3933-11ae-403b-a09f-8fbef5de406b,people,en,A1,noun,/ˈpiːpl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+29dc1368-14a0-4ed1-a778-db3090d8b783,lose,en,A1,verb,/luːz/,To cease to have (something) in one's possession or capability.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:54.977536+00
+2a050ae3-8179-4358-b8e0-ea07d852ac52,carry,en,A1,verb,/ˈkæri/,To lift (something) and take it to another place; to transport (something) by lifting.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:22:28.196273+00
+2a0b7cc7-acec-4e52-b17e-e3e059e0c0f3,advice,en,A1,noun,/ədˈvaɪs/,An opinion offered to guide behavior in an effort to be helpful.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:22:13.766694+00
+2a239555-389e-49d4-aef8-36de85872435,student,en,A1,noun,/ˈstuːdnt/,A person who studies or learns about a particular subject.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 17:51:49.400819+00
+2a2bb583-d857-4507-9a19-53bb09850603,July,en,A1,noun,/dʒuˈlaɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2a601eae-4268-4c6e-9a48-3f1f57ad8d4a,why,en,A1,adv,/waɪ/,"For what cause, reason, or purpose.
+Introducing a complete question.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 19:55:33.35727+00
+2ae66ab7-ce68-431a-be47-43360f57a7e9,agree,en,A1,verb,/əˈɡriː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2b177f11-4e72-4828-9da8-362b55b7569b,bill,en,A1,noun,/bɪl/,"A written list or inventory. (Now obsolete except in specific senses or set phrases; bill of lading, bill of goods, etc.)",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-05 15:47:04.202784+00
+2bc90208-47e4-4115-ad7d-e14cec464dc2,far,en,A1,adv,/fɑːr/,ISO 639-3 language code for Fataleka.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:45:14.479281+00
+2c6bc479-b385-4b9e-98bc-145b041997bc,hand,en,A1,noun,/hænd/,"The part of the forelimb below the forearm or wrist in a human, and the corresponding part in many other animals.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:02.442592+00
+2ca6da00-dbea-431d-b348-1578c693e697,design,en,A1,noun,/dɪˈzaɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2cb3cb62-9038-45d3-b319-b9c9cd54523a,happen,en,A1,verb,/ˈhæpən/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2cf09caa-6f3f-4300-af22-b9fe0a9b28ce,picture,en,A1,noun,/ˈpɪktʃər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2d05e24f-6ec2-44c1-9af9-fe57d5631327,front,en,A1,adj,/frʌnt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2d240800-b125-4694-9844-6fdf0a709650,topic,en,A1,noun,/ˈtɑːpɪk/,topical,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:47:42.695607+00
+2d2b3dd0-d9e0-49e4-a938-69543ef96e3c,high,en,A1,adj,/haɪ/,"Physically elevated, extending above a base or average level:
+Very elevated; extending or being far above a base; tall; lofty.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:04.187252+00
+2d474175-4ea9-4d03-b0f9-9bb3738436f7,must,en,A1,verb,/mʌst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2d925dca-bf94-474e-bb5e-268c0fbc9457,classroom,en,A1,noun,/ˈklæsrʊm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2d9947e5-92bd-4b65-b7a9-af7bf04ca59f,off,en,A1,adv,/ɔːf/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2df31e7d-d521-479e-a4b2-e629e6dee015,singer,en,A1,noun,/ˈsɪŋər/,"A person who sings, often professionally.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:05:53.681156+00
+2e570bc9-4de9-487d-ac0c-ff52c7e6f163,fish,en,A1,noun,/fɪʃ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+2fc5242c-a304-4676-a00e-ff51856bc28d,hard,en,A1,adj,/hɑːrd/,"Solid and firm.
+
+Resistant to pressure; difficult to break, cut, or penetrate.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-04 22:51:17.656366+00
+2ffe9d0b-7c59-4916-a650-511c01bd4baa,angry,en,A1,adj,/ˈæŋɡri/,Displaying or feeling anger.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:04.551414+00
+300b4fbe-4ffd-4ef0-a2a2-a877bd7330fb,kitchen,en,A1,noun,/ˈkɪtʃɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3042ab62-521e-407d-8dfa-cbdc42c29615,return,en,A1,noun,/rɪˈtɜːrn/,To come or go back (to a place or person).,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:54:57.124004+00
+30b91d12-1b59-4130-90e2-2a9770a48ef8,blonde,en,A1,adj,/blɑːnd/,Alternative form of blond (“person with fair hair”).,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 19:55:15.037108+00
+3153a234-77ee-49b7-a22d-5f35a13d2a77,spell,en,A1,verb,/spel/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3163af8b-2ee5-46aa-84d8-a84ad159ffea,cool,en,A1,adj,/kuːl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+317e64ee-fe6a-4ee7-8b3a-838b89c74ae3,cake,en,A1,noun,/keɪk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3205131c-3fab-429f-ad98-070827b9de05,correct,en,A1,adj,/kəˈrekt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3217125b-82ae-4a0a-8033-9ee599e08d22,into,en,A1,prep,/ˈɪntuː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+325eaee2-7fd9-4362-967a-f14a09bf38d7,article,en,A1,noun,/ˈɑːrtɪkl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+32d12e9f-4717-4ade-b170-be9bf55c90ff,weekend,en,A1,noun,/ˈwiːkend/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+331f6e43-5992-423b-8340-54e5fef1ac3f,both,en,A1,det,/bəʊθ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+33369a45-0197-4dac-87bf-6fe7023cbf49,mouse,en,A1,noun,/maʊs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+336815c8-217a-411f-bdb0-1b171dfd7645,fifteen,en,A1,num,/ˌfɪfˈtiːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+33868383-6da2-4258-9371-1a067ac7a734,style,en,A1,noun,/staɪl/,"Senses relating to a thin, pointed object.
+ A sharp stick used for writing on clay tablets or other surfaces; a stylus;  an instrument used to write with ink; a pen.
+
+A tool with a sharp point used in engraving; a burin, a graver, a stylet, a stylus.
+
+The gnomon or pin of a sundial, the shadow of which indicates the hour.
+
+ The stalk that connects the stigma(s) to the ovary in a pistil of a flower.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:55:24.421934+00
+33b4222b-86e6-4325-b1e8-800dfa35d98e,life,en,A1,noun,/laɪf/,"The state of organisms preceding their death, characterized by biological processes such as metabolism and reproduction and distinguishing them from inanimate objects; the state of being alive and living.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-07 19:24:34.361327+00
+33f62b55-b774-42e4-be32-1b2697557dfe,hope,en,A1,verb,/həʊp/,"To want (something) to happen, with a sense of expectation that it might .mw-parser-output .object-usage-tag{font-style:italic}.mw-parser-output .deprecated{color:var(--wikt-palette-grey-lime-8,olivedrab)}[with that (+ clause); or  with clause; or with so or  not].",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:47:50.555686+00
+3463ad94-6063-40f6-9819-4d7f33f303f7,chair,en,A1,noun,/tʃer/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+346d67cd-069b-4ffd-b797-7fe300a3c9bb,dialogue,en,A1,noun,/ˈdaɪəlɔːɡ/,A conversation or other form of discourse between two or more individuals.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:20:05.660658+00
+35b7addb-e8c2-41fe-822c-802901bcfb36,day,en,A1,noun,/deɪ/,ISO 639-2 &amp; ISO 639-5 language code for Land Dayak languages.,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-23 20:31:52.232949+00
+35ba69db-192a-4ff9-814d-cced5d6ebbc2,card,en,A1,noun,/kɑːrd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+35ea7f32-683e-48dc-ac7d-3508cab53d12,one,en,A1,det,/wʌn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+365e5a60-5904-4a6c-86c7-5bbd0b60702d,college,en,A1,noun,/ˈkɑːlɪdʒ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+369fa53d-54ff-45bf-b6a7-0191c1320719,pair,en,A1,noun,/per/,Two alike or identical things taken together; often followed by of.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:43.76322+00
+36fe0fc3-2a8a-4dda-bece-b3015242179e,painting,en,A1,noun,/ˈpeɪntɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+370b9d31-55fe-4391-80e3-11a5f4b91997,wife,en,A1,noun,/waɪf/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+37155e77-1509-4300-8e49-de9b474d0c4c,wear,en,A1,verb,/wer/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+374bd492-9d95-4eaf-9309-24faa6c8c88f,under,en,A1,adv,/ˈʌndər/,"Beneath; below; at or to the bottom of, or the area covered or surmounted by.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:42.805542+00
+3764fb35-7d8d-482d-b602-5ff0d8f1d962,bathroom,en,A1,noun,/ˈbæθrʊm/,"A room containing a shower or bathtub, and  a toilet.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:37.627474+00
+377fbea0-6003-49ce-9d47-2f376103b980,address,en,A1,noun,/ˈædres/,"Direction.
+ Guidance; help. .mw-parser-output .defdate{font-size:smaller}
+ A polite approach made to another person, especially of a romantic nature; an amorous advance. 
+
+A manner of speaking or writing to another; language, style.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:05:54.931914+00
+383b283d-9d2f-42bb-ae81-31f336175ba2,its,en,A1,det,/ɪts/,ISO 639-3 language code for Itsekiri.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:43:44.118809+00
+384462c4-c0ac-4119-b560-ff20b74b0d51,quite,en,A1,adv,/kwaɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+38c5ace5-5d5f-4b7f-93a1-521708a788db,exam,en,A1,noun,/ɪɡˈzæm/,"Clipping of examination, especially when meaning “test” or in compound terms.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:03.229506+00
+38d78fbf-8330-46c1-b601-7fc5f2103c90,cent,en,A1,noun,/sent/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3997523b-b77e-48e9-a009-11a73364c37b,person,en,A1,noun,/ˈpɜːrsn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+39b0ccfe-b88a-4ca2-a83f-55f891bbcd4f,stop,en,A1,noun,/stɑːp/,ITU &amp; IMO radiotelephony clear code (spelling-alphabet name) for  full stop / period.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:36.527099+00
+39f457c4-3a45-4995-b221-4a9bf099cfa8,pink,en,A1,adj,/pɪŋk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3a2bd649-ce02-4706-8f8d-c456e7423552,street,en,A1,noun,/striːt/,"A paved part of road, usually in a village or a town.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:24.2354+00
+3a32c43e-97a6-431a-b184-820c58e191b0,not,en,A1,adv,/nɑːt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3a795390-9642-4b38-8655-123eedbd19ea,sit,en,A1,verb,/sɪt/,ISO 639-2 &amp; ISO 639-5 language code for Sino-Tibetan languages.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:56:24.514259+00
+3a796800-b26e-4ff0-b42b-9a4333b23eb2,the,en,A1,det,/ðiː/,ISO 639-3 language code for Chitwania Tharu.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-04 22:50:28.265654+00
+3a9f2338-2ded-447f-b78f-f38d50bc00f9,nurse,en,A1,noun,/nɜːrs/,"A person involved in providing direct care for the sick:
+ Anyone performing this role, regardless of training or profession.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:13:36.097973+00
+3adf2579-1bae-4d01-ab0a-7996cdf9f69a,age,en,A1,noun,/eɪdʒ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3b5004c1-c3c6-43f6-a196-1a52a35b44f2,sheep,en,A1,noun,/ʃiːp/,A woolly ruminant of the genus Ovis.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:35:30.098595+00
+3b5989e1-6c53-4563-8504-eccfa3aa51f2,eat,en,A1,verb,/iːt/,"To ingest; to be ingested.
+ To consume (something solid or semi-solid, usually food) by putting it into the mouth and swallowing it.",,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-23 19:42:27.781044+00
+3bb625d0-473b-4d23-9a4a-dccfa7c4072d,see,en,A1,verb,/siː/,ISO 639-3 language code for Seneca.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:17.519839+00
+3bc64123-5b9d-44b9-a0b0-93865f4549cf,up,en,A1,adv,/ʌp/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3bdbbdf6-9a08-4276-9e0c-b7afd9aa417d,sometimes,en,A1,adv,/ˈsʌmtaɪmz/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3ccb103b-7d6c-49da-a8e4-7639de2e682b,hospital,en,A1,noun,/ˈhɑːspɪtl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3cd2d2bf-9b59-42c1-9fb9-48ddfae88d20,north,en,A1,adj,/nɔːrθ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3cd2f4c9-6ecb-49e1-a3e8-6059b3efdab4,aunt,en,A1,noun,/ænt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3ce9c68a-8a96-40dc-87b7-14cb3bfaab3b,or,en,A1,conj,/ɔːr/,ISO 639-1 language code for Odia.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 10:54:26.598801+00
+3d2e2a0b-2bfc-486f-adce-386cbd31ed9a,bad,en,A1,adj,/bæd/,ISO 639-2 &amp; ISO 639-5 language code for Banda languages.,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 12:05:21.058051+00
+3d623311-5f3d-44ed-8de7-a5b668e82185,old,en,A1,adj,/əʊld/,ISO 639-3 language code for Mochi.,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-06-15 21:11:58.28168+00
+3e5b1874-88ad-4ad6-9146-295f3f2c029e,partner,en,A1,noun,/ˈpɑːrtnər/,Either of a pair of people or things that belong together.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:55:37.025704+00
+3ec15132-a122-4f49-a27a-db83aaf09896,very,en,A1,adv,/ˈveri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+3fd2f7fe-0d95-4cf4-bfa4-6c2d37bd7efe,six,en,A1,num,/sɪks/,NATO &amp; ICAO radiotelephony clear code (spelling-alphabet name) for the digit 6.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 09:49:56.289925+00
+404e1f00-9a62-4aeb-b40b-4ac26b5918e0,teacher,en,A1,noun,/ˈtiːtʃər/,"A person who teaches, especially one employed in a school; preceptor.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:31.030906+00
+4112ec42-ca70-4b43-af70-510c80c51358,have,en,A1,verb,/hæv/,"To possess, own.",,oxford_3000,2026-05-17 11:57:15.443642+00,2026-06-06 23:27:05.34291+00
+41d7ae82-5baa-4ac0-ab3c-606cc56a876e,reader,en,A1,noun,/ˈriːdər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+423f3c00-ad56-4bab-9bfd-7b5c2b84f716,place,en,A1,noun,/pleɪs/,"An area; somewhere within an area.
+An open space, particularly a city square, market square, or courtyard.
+
+ A street, sometimes but not always surrounding a public place, square, or plaza of the same name.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:38:48.552159+00
+42e3d5f7-16ef-4755-9c91-cfd1e634db82,yes,en,A1,interj,/jes/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+42f153b2-c19e-489c-9028-010803d06fcb,centre,en,A1,noun,/ˈsentər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4306c97f-9027-41f3-a9eb-440d840eadf7,talk,en,A1,verb,/tɔːk/,"To communicate, usually by means of speech.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 22:47:40.06736+00
+44657ebd-c144-4c99-bbdd-325de21fef77,paper,en,A1,noun,/ˈpeɪpər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+44804882-7548-4aa3-8a2f-b248576a2a09,example,en,A1,noun,/ɪɡˈzæmpl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+44862993-66e2-418c-8445-64142b2cb95a,tooth,en,A1,noun,/tuːθ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+449a19a2-a1f3-4d34-a5c7-4413c3350f21,face,en,A1,noun,/feɪs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+44a59f54-9447-485e-8186-09861ff6e834,anything,en,A1,pron,/ˈeniθɪŋ/,"Any object, act, state, event, or fact whatsoever; a thing of any kind; something or other.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:19.77695+00
+44c2f4d0-674a-4057-9071-40e068424def,present,en,A1,adj,/ˈpreznt/,"Relating to now, for the time being; current.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-07 19:24:49.505929+00
+44fa2f1f-9061-4c48-ab0f-ad99fbf56951,television,en,A1,noun,/ˈtelɪvɪʒn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+456c0beb-9b4f-4d99-b0be-90f4e72ad8e9,cat,en,A1,noun,/kæt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+458b7429-61be-48bb-a857-0be12e3a4331,where,en,A1,adv,/wer/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+45e1a71c-aa4c-4199-a453-19793ee71243,have to,en,A1,verb,/ˈhæf tə/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+45f2e4ff-e9be-472e-a3ab-e5a628fcf1e1,win,en,A1,verb,/wɪn/,ISO 639-3 language code for Winnebago.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:28.263799+00
+46964b80-81f5-4f9b-9104-b92775208a67,club,en,A1,noun,/klʌb/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+46bc3e7a-c6c5-48df-b368-623250653fcd,school,en,A1,noun,/skuːl/,An institution dedicated to teaching and learning; an educational institution.,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-06-15 18:48:19.52708+00
+46f026c8-6ccf-4015-b2cc-219470dcd0fc,always,en,A1,adv,/ˈɔːlweɪz/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+47502622-ec12-41e7-933f-7ff62a401638,class,en,A1,noun,/klæs/,"A group, collection, category or set sharing characteristics or attributes.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-25 20:43:14.763091+00
+4752e771-294b-4c2c-8c5c-6275518ca326,map,en,A1,noun,/mæp/,ISO 639-2 &amp; ISO 639-5 language code for Austronesian languages.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:48.096353+00
+477fcaaa-871f-4ab2-ad9a-93ac25a00ad4,drive,en,A1,verb,/draɪv/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+47cb80b4-ba7a-433c-868b-cb203efe5b01,radio,en,A1,noun,/ˈreɪdiəʊ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+47ee6d38-66fc-407b-b377-a50b02a15114,famous,en,A1,adj,/ˈfeɪməs/,Well known.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-25 20:41:50.10075+00
+47f02b99-dc8e-483e-810a-df0716cef0c2,waiter,en,A1,noun,/ˈweɪtər/,"A male or female attendant who serves customers at their tables in a restaurant, café or similar.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 14:55:34.634943+00
+486219b8-3f34-43c7-825c-c9dbaee788a4,blue,en,A1,adj,/bluː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+48b7a0d3-c8f6-45a0-a300-f33a9e9ceded,study,en,A1,noun,/ˈstʌdi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+48bd8960-6617-4e03-ad01-ce8f251fad89,history,en,A1,noun,/ˈhɪstri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+48f643ec-4d71-45f0-878d-16aec77e9a4c,friend,en,A1,noun,/frend/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+495a4908-6bd4-42d4-bc6d-0ee0a5c6d166,mean,en,A1,verb,/miːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+498885c6-378a-4e8c-989d-cd38d07984da,above,en,A1,adv,/əˈbʌv/,"Physically over; on top of; worn on top of, said of clothing. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-09 19:28:48.823604+00
+49eddeca-4b9a-448e-8354-9573e76c7bb5,dollar,en,A1,noun,/ˈdɑːlər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+49f843ce-adcf-4f48-893d-718548efe5d2,number,en,A1,noun,/ˈnʌmbər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4a68d3fe-4b4e-4b09-a804-97858a9609b9,would,en,A1,verb,/əd/,"Past tense of will; usually followed by a bare infinitive.
+Used to form the ""anterior future"", or ""future in the past"", indicating a futurity relative to a past time. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 23:11:21.253542+00
+4a74ad8b-55a5-46d2-812f-a13b90fb6086,police,en,A1,noun,/pəˈliːs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4a827096-7b89-4ede-aa29-0f6fe853465b,cream,en,A1,noun,/kriːm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4b075a09-888b-4859-b7da-519acdc57ab4,girlfriend,en,A1,noun,/ˈɡɜːrlfrend/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4b5db7f1-768a-46ed-a758-8011adec03ba,early,en,A1,adj,/ˈɜːrli/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4b7d2f66-fc85-4cdc-8365-5ff6ded500bb,tall,en,A1,adj,/tɔːl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4bd3e818-b1aa-4796-878d-c830ca554203,create,en,A1,verb,/kriˈeɪt/,To bring into existence;,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:14:08.944442+00
+4bdac555-0488-45a0-b362-1079f9607e86,shopping,en,A1,noun,/ˈʃɑːpɪŋ/,present participle and gerund of shop,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:11:44.450345+00
+4bef2554-d8f8-45a8-be05-b77658745362,fat,en,A1,adj,/fæt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4c39ad4e-060f-4cca-9f78-11cf804e1bde,world,en,A1,noun,/wɜːrld/,"The subjective human experience, regarded collectively; human collective existence; existence in general; the reality we live in.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 14:55:20.960246+00
+4c744ae3-40b1-483d-8ce0-84880edcd696,describe,en,A1,verb,/dɪˈskraɪb/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4d610a5f-a53d-4059-a63a-554a1bbef42d,floor,en,A1,noun,/flɔːr/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4d87ee68-41e4-4c3a-8005-75da7f476d0b,choose,en,A1,verb,/tʃuːz/,To pick; to make the choice of; to select.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:45:03.164623+00
+4dd758c4-f564-4b7b-b956-60c35b21cd10,artist,en,A1,noun,/ˈɑːrtɪst/,"A person who creates art.
+A person who creates art as an occupation.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 09:50:31.972854+00
+4e452459-3092-44bf-9a02-84c687c53a7b,station,en,A1,noun,/ˈsteɪʃn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4e93fbd0-d480-4f23-aec1-01f605914c91,later,en,A1,adv,/ˈleɪtər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4e94a8dd-2618-4fd4-bd9a-ce5498108e84,sugar,en,A1,noun,/ˈʃʊɡər/,"A food consisting of small, sweet crystals, principally of sucrose, obtained from sugar cane or sugar beet and used as sweetener and preservative.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:38:45.35936+00
+4eeb1e0c-5ce7-4d2a-afba-7bfaaba5c0cf,online,en,A1,adj,/ˌɑːnˈlaɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4ef4e5d0-4ff8-4cf3-976c-945b0fe48e67,share,en,A1,verb,/ʃer/,"A portion of something, especially a portion given or allotted to someone.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 18:48:10.364429+00
+4f672244-3766-4b18-82e7-138f0aa94ca3,dancing,en,A1,noun,/ˈdænsɪŋ/,The activity of taking part in a dance.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:06:06.091847+00
+4f7db8da-23af-4e44-861b-038c79fc7a1a,thirsty,en,A1,adj,/ˈθɜːrsti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+4fd8aa37-6986-43ec-8d54-6fce5aeaa7ee,piano,en,A1,noun,/piˈænəʊ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+50be28a6-a2a4-4a9a-b386-8186ef29dc48,email,en,A1,noun,/ˈiːmeɪl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+50cfb26e-11a9-4e56-9463-917ecd0e9391,month,en,A1,noun,/mʌnθ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+50eea4db-40bf-4c14-acdb-c12fbd62daaa,sentence,en,A1,noun,/ˈsentəns/,The decision or judgement of a jury or court; a verdict. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:26.162713+00
+51108c0e-3965-4695-bae3-51c3d2581d58,work,en,A1,noun,/wɜːrk/,"Employment.
+Labour, occupation, job.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:41:56.016627+00
+51114f00-1c64-4673-88dc-af10f1dd5701,decide,en,A1,verb,/dɪˈsaɪd/,"To resolve (a contest, problem, dispute, etc.); to choose, determine, or settle.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:38:36.609681+00
+51195835-58ed-47d9-a0ce-73d88949403b,terrible,en,A1,adj,/ˈterəbl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+51c86b7f-6e96-4bda-bca8-822e2d71bdad,night,en,A1,noun,/naɪt/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+520316e3-5586-4b96-ad75-a677ab6b6fdc,supermarket,en,A1,noun,/ˈsuːpərmɑːrkɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+52293f0c-d22f-44d4-afd1-cbdab6e0ad8d,possible,en,A1,adj,/ˈpɑːsəbl/,Able but not certain to happen; neither inevitable nor impossible.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 17:26:33.993914+00
+52ac6ffd-5a73-4562-9d4a-7e625615b155,room,en,A1,noun,/rʊm/,An opportunity or scope (to do something). .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-05 15:46:48.262407+00
+52accc52-6e89-4bb0-bc2f-649be2862f88,say,en,A1,verb,/seɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+52c3548d-5bca-426f-bf85-c560e07fddd6,all,en,A1,det,/ɔːl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+52eec182-5a5b-49cf-a33a-3e77a9694230,show,en,A1,noun,/ʃəʊ/,To display or exhibit; to have somebody see (something); to direct attention to something.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 17:15:37.676932+00
+53168dfa-f28f-4e59-986f-0a3c21a3a7a5,lie,en,A1,verb,/laɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5329e79d-7b51-435c-a89e-d7b0a1266843,walk,en,A1,noun,/wɔːk/,"To move on the feet by alternately setting each foot (or pair or group of feet, in the case of animals with four or more feet) forward, with at least one foot on the ground at all times. Compare run.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:47:23.245328+00
+533cd4e8-4ef1-472d-98cf-d0ca1f1139ef,afraid,en,A1,adj,/əˈfreɪd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+537473bd-1c3b-44fd-a040-df981ac15b0f,next to,en,A1,prep,/ˈnekst tu/,"Beside, alongside, by, adjacent to, or near.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:04.870007+00
+5386f52b-4dfc-4881-9934-1f974382da4d,south,en,A1,adj,/saʊθ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+53b735b0-aa93-433e-beee-e28f3e15fa45,meal,en,A1,noun,/miːl/,Correct quotes,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:39.341116+00
+54e1b56c-d0ad-44a6-a9c2-71d95d0968c4,how,en,A1,adv,/haʊ/,ISO 639-3 language code for Honi.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-09 14:46:47.939844+00
+54fb4f46-a7f6-4f0e-b729-364530f665f7,word,en,A1,noun,/wɜːrd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+557c4642-4210-456d-baf4-e96e25fba46c,green,en,A1,adj,/ɡriːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+55c97d0f-ef0a-4a09-b15f-9cce32b53d9e,need,en,A1,verb,/niːd/,A requirement for something; something needed.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 23:11:26.309698+00
+56409588-04b2-4aff-b00d-229d7ebee4d0,fourth,en,A1,Adjective,/fɔːrθ/,The ordinal form of the number four.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:41.806188+00
+564f9df5-66fd-4e45-a092-ff6e1cf6215c,boy,en,A1,noun,/bɔɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+565af305-4bf2-4622-adc4-49a743961800,birthday,en,A1,noun,/ˈbɜːrθdeɪ/,The anniversary of the day on which someone is born. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:21:21.410759+00
+5675ead3-f968-41fd-9dab-d3129172c9f1,sweater,en,A1,noun,/ˈswetər/,"A knitted jacket or jersey, usually of thick wool, worn by athletes before or after exercise.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 16:46:12.213257+00
+581b13a3-5069-479f-b59e-537874079806,complete,en,A1,adj,/kəmˈpliːt/,To finish; to make done; to reach the end.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:21:23.343303+00
+583a67a8-0020-43f1-ab10-409c17f35fbf,laugh,en,A1,noun,/læf/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+58ccd036-824a-463f-9784-3d20c7c25dcf,March,en,A1,noun,/mɑːrtʃ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+58f892cc-5062-4e41-9fb0-a357d7d3cd50,model,en,A1,noun,/ˈmɑːdl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5918ac9c-1bdd-46de-9e1f-49d7e190f8ae,cooking,en,A1,noun,/ˈkʊkɪŋ/,The process of preparing food by using heat.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:13.276881+00
+591b7090-2f3e-499e-b50c-81efd9756517,name,en,A1,noun,/neɪm/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+598edb84-1acf-408f-99d6-366b710f1579,yellow,en,A1,adj,/ˈjeləʊ/,"The color of sunflower petals and lemons; the color obtained by mixing green and red light, or by subtracting blue from white light; the color evoked by light of wavelength around 580 nm; one of the three primary colors in subtractive color systems.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:07.239193+00
+59cfb4d7-092b-4530-881c-df1588c017f5,shoe,en,A1,noun,/ʃuː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+59f62b81-c8d7-4656-b12f-5ef10235942c,parent,en,A1,noun,/ˈperənt/,"A person who raises a child (which they have made, adopted, fostered, taken as their own, etc.). .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-05 15:47:00.143785+00
+5a62e5d9-e43c-4c5f-aa95-890169ff4561,quiet,en,A1,adj,/ˈkwaɪət/,With little or no sound; free of disturbing noise.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:48:50.370893+00
+5c9b5785-ee22-4609-83a7-9e544213a756,half,en,A1,det,/hæf/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5cae7837-78d9-45b0-bc87-a67fef9efed9,anyone,en,A1,pron,/ˈeniwʌn/,Any person; anybody.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:38:49.554862+00
+5d5f70a2-5975-48de-9cde-7e4a0f76cb0c,fall,en,A1,verb,/fɔːl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5de949ce-5fcb-4161-b7ec-e3a2179c8b83,arm,en,A1,noun,/ɑːrm/,ISO 639-2/B language code for Armenian.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:40.514693+00
+5e00bb08-3a6c-4d53-9eb8-c4076447f8b8,October,en,A1,noun,/ɑːkˈtəʊbər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5e07bad2-0ebb-481c-aaab-f799280deefe,moment,en,A1,noun,/ˈməʊmənt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5e341c31-d483-4b23-a769-ed9aabf5d5dd,fine,en,A1,adj,/faɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5e563089-8fed-4385-a439-ff006973e7eb,summer,en,A1,noun,/ˈsʌmər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5e5bec72-c97a-4297-91f2-ceeef4c4a14e,computer,en,A1,noun,/kəmˈpjuːtər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5ea66aa0-6d80-4576-9025-efafa585ec86,period,en,A1,noun,/ˈpɪriəd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5f3e35a8-0996-40eb-b624-d79dd64167a7,special,en,A1,adj,/ˈspeʃl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5f4de075-4170-4399-b8ef-2a31816187b0,so,en,A1,adv,/səʊ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5f4dfe24-0edb-4dc2-9acb-e1c200a80526,geography,en,A1,noun,/dʒiˈɑːɡrəfi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5f63b57f-2141-4a31-93d7-4212425f1484,December,en,A1,noun,/dɪˈsembər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+5f978194-1ef4-4d12-82cd-43ec02031128,delicious,en,A1,adj,/dɪˈlɪʃəs/,Pleasing to the sense of taste; tasty.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:32:00.520583+00
+5fcb9c77-1d8b-4614-8a47-3f6127f2df86,orange,en,A1,adj,/ˈɔːrɪndʒ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6022dd0b-e86e-4e68-abae-4388e3ebae79,title,en,A1,noun,/ˈtaɪtl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+60bde9e0-cc25-408b-925c-ef50b0ac1f37,holiday,en,A1,noun,/ˈhɑːlədeɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+60ffd4b7-e8b8-4432-96aa-c926246315e8,photo,en,A1,noun,/ˈfəʊtəʊ/,A photograph.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:46:41.852558+00
+61484309-3ab5-4832-879f-bceae54cd359,city,en,A1,noun,/ˈsɪti/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+619e7ab4-c82d-4d3c-9400-d78816242cb5,visit,en,A1,noun,/ˈvɪzɪt/,"To habitually go to (someone in distress, sickness etc.) to comfort them. (Now generally merged into later senses, below.) .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:12.739285+00
+61f6eb3c-519e-4a45-ac2b-6047681d9969,finish,en,A1,verb,/ˈfɪnɪʃ/,An end; the end of anything.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 20:37:07.897428+00
+6209357b-a7f7-4bcb-ae61-02edb9a4cd84,plan,en,A1,noun,/plæn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+620e2256-7d21-4c33-bd66-97dd407cc3c1,cafe,en,A1,noun,/kæˈfeɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+623a77f0-448a-465b-901a-dbabb58d68f8,and,en,A1,conj,/ænd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6261262e-0c94-4709-883b-51cdf0b32a40,camera,en,A1,noun,/ˈkæmrə/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+627f87d2-f778-44a4-bc4a-01a2515b3856,free,en,A1,adj,/friː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+62d568be-c5be-4876-af4e-76479b61b4cc,evening,en,A1,noun,/ˈiːvnɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+634e0f64-a4b7-4063-9f11-50842895792e,watch,en,A1,noun,/wɑːtʃ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6362e66d-6096-49dd-a291-7df4416a1c5c,line,en,A1,noun,/laɪn/,"A path through two or more points (compare ‘segment’); a continuous mark, including as made by a pen; any path, curved or straight.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 14:55:45.11155+00
+6374285f-a9ef-4b87-9cec-5dc0d02a1ec9,many,en,A1,det,/ˈmeni/,"before a countable noun: A large, indefinite number of.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-09 19:28:32.076651+00
+645303e1-ef6f-4a15-8f2e-1727bb6da92a,answer,en,A1,noun,/ˈænsər/,A response or reply; something said or done in reaction to a statement or question.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 22:03:11.551812+00
+64576c6a-9f0a-4b48-a757-b0814965c3ce,understand,en,A1,verb,/ˌʌndərˈstænd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+64693f2e-b9a6-4647-b4b6-3910b7ac71e1,dog,en,A1,noun,/dɔːɡ/,"A mammal of the family Canidae:
+ The species Canis familiaris (sometimes designated Canis lupus familiaris), domesticated for thousands of years and of highly variable appearance because of human breeding.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 10:54:29.894259+00
+646cc5fa-90d6-4fce-87c8-bc4e86e92755,climb,en,A1,verb,/klaɪm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+658370aa-5259-498e-ab34-b0955a0a1878,clothes,en,A1,noun,/kləʊz/,Items of clothing; apparel.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-05 15:46:45.0951+00
+66f12f61-aad5-46f9-8d70-334fe300ee12,spring,en,A1,noun,/sprɪŋ/,To move or burst forth.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:43.798605+00
+66f169f3-cd8a-42b4-93a1-e94dd1571446,metre,en,A1,noun,/ˈmiːtər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+670f752d-98eb-46ec-a599-da80efaaa1bc,meet,en,A1,verb,/miːt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+67647f3b-1374-4e69-8576-f928ebd59d38,young,en,A1,adj,/jʌŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6783afa3-8d13-4407-8ae8-ec9370b1e011,will,en,A1,verb,/wɪl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+67f06b24-75b2-4b49-81e7-d1a4e476d665,white,en,A1,adj,/waɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+685848b2-cff6-433b-83d3-d6b5e660a1eb,sleep,en,A1,verb,/sliːp/,To rest in a state of reduced consciousness.,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-06-14 17:15:16.423894+00
+687951dd-cdeb-41b3-aea8-5d1c2c6771a4,traffic,en,A1,noun,/ˈtræfɪk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+693ee0ba-fe75-447a-b0f7-1ff35709fc5b,thing,en,A1,noun,/θɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6940a4d0-eeef-4bd1-bd53-1db07e14db12,between,en,A1,prep,/bɪˈtwiːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+69af82b6-93fb-48ff-8b1a-d9178f120e2b,better,en,A1,adj,/ˈbetər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6a28032d-a27b-49df-8771-aa7a4ab1fea8,on,en,A1,adv,/ɑːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6a3d8935-10cf-45be-b919-79b662b08a4f,trip,en,A1,noun,/trɪp/,A journey; an excursion or jaunt.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 10:54:24.928795+00
+6b066470-c245-4d57-929c-dd3e923b169e,even,en,A1,adv,/ˈiːvn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6b4305dc-608c-4a1e-a3c8-58dfb9ae6ca6,story,en,A1,noun,/ˈstɔːri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6bb4dfb9-4cef-45f1-bc40-69b39fb7e3f6,across,en,A1,adv,/əˈkrɔːs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6c39de7c-c35b-49b4-8542-16f651f8d767,remember,en,A1,verb,/rɪˈmembər/,To recall from one's memory; to have an image in one's memory.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:10.560022+00
+6c7d56df-0d93-4852-87dd-27c1acee4d4b,much,en,A1,adv,/mʌtʃ/,A large amount of. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 15:23:20.704936+00
+6cbf0dc4-076a-4cb1-8ccc-98fb0e69f6f3,match,en,A1,noun,/mætʃ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6ccb8d4c-61b4-4283-973c-819065aedf25,dirty,en,A1,adj,/ˈdɜːrti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6cf2d759-c486-4728-ba47-b12eb59a090b,policeman,en,A1,noun,/pəˈliːsmən/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6cf48f7f-b28f-40bc-a680-f9f9354802e2,own,en,A1,adj,/əʊn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6d43e3ef-d9db-46ee-9a35-a4e94afef1b2,team,en,A1,noun,/tiːm/,"A set of draught animals, such as two horses in front of a carriage.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:11:44.45011+00
+6d55f5f6-47d9-4d39-9aec-6794779eac5f,sing,en,A1,verb,/sɪŋ/,To produce musical or harmonious sounds with one’s voice.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-04 22:51:06.222183+00
+6d6a395e-0844-4c35-8e9d-3c60bca3b802,salt,en,A1,noun,/sɔːlt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6dce3a2b-9f8d-47c0-b3c0-fe6d32376ce0,think,en,A1,verb,/θɪŋk/,"To ponder, to go over in one's mind.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:22:13.424509+00
+6e240f73-7f0f-4973-b7bc-32eff9d8e84f,actor,en,A1,noun,/ˈæktər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6eba967d-9eef-431d-9e89-0e4c390b0a80,dear,en,A1,adj,/dɪr/,High in price; expensive.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:32:20.429602+00
+6f1bb64b-282d-4490-8e8a-aa8d3ad36717,opposite,en,A1,adj,/ˈɑːpəzɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6f4b335b-cafd-4c2f-a0d6-3275422a1deb,paint,en,A1,noun,/peɪnt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+6f8b2421-8764-411f-976e-05156b4af1d0,different,en,A1,adj,/ˈdɪfrənt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+705c9beb-1035-4710-8efe-2bdf5238eeae,I,en,A1,pron,/aɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+70b171e6-7946-4939-9405-0918c9ebbecb,speak,en,A1,verb,/spiːk/,"To communicate with one's voice, to say words out loud.",,oxford_3000,2026-05-17 11:57:15.443642+00,2026-06-11 15:45:09.304377+00
+70b6d75d-cefd-40cd-aee6-e390fa100607,travel,en,A1,noun,/ˈtrævl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+71031b9e-9fc8-4b58-8ba2-61488c942157,machine,en,A1,noun,/məˈʃiːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7132d76f-e806-4571-a9fd-3c703042305f,vacation,en,A1,noun,/vəˈkeɪʃn/,An extended trip or journey away from home for rest or pleasure. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 17:26:23.394923+00
+71995e37-ec31-47a0-b675-9ce8ded65fcb,poor,en,A1,adj,/pɔːr/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+722ccd8c-594e-4a97-8cd6-50fd1b6c33f2,join,en,A1,verb,/dʒɔɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+722e3c2e-edc2-4505-bdd3-46de16b653e6,spelling,en,A1,noun,/ˈspelɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+725d8468-219b-40a3-a179-027daeb38fc1,father,en,A1,noun,/ˈfɑːðər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+727d6f2f-b914-439e-b294-05d591537e61,eighteen,en,A1,num,/ˌeɪˈtiːn/,"The cardinal number occurring after seventeen and before nineteen, represented in Roman numerals as XVIII and in Arabic numerals as 18.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 19:55:44.938474+00
+72835a5f-ec84-4b17-b839-33964fedc961,September,en,A1,noun,/sepˈtembər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+72d19577-1be5-42eb-8fdb-cc3b85dc2d2d,fact,en,A1,noun,/fækt/,Something actual as opposed to invented.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:27.740934+00
+73252ead-9428-4aff-afe8-49ff34dc6c1b,music,en,A1,noun,/ˈmjuːzɪk/,"A series of sounds organized in time, usually employing some combination of harmony, melody, rhythm, tempo, etc., often to convey a mood.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:56.72059+00
+73269b5d-6f31-49ea-9592-3fbd93d51c9b,there,en,A1,adv,/ðer/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+73349ec3-b350-49ed-b07d-43162e7bca22,yesterday,en,A1,adv,/ˈjestərdi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+735b8409-84da-4dd5-8dcc-1b5575e58e49,pencil,en,A1,noun,/ˈpensl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+738b379e-ccab-4c66-b1e4-0d2b93397d1a,boot,en,A1,noun,/buːt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+73bc2ea8-c861-41c9-aa6b-8cb71833e949,first,en,A1,adv,/fɜːrst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+73c64ceb-7c0a-421f-800a-054a8fed4023,take,en,A1,verb,/teɪk/,"To get into one's hands, possession, or control, with or without force.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 18:47:14.765248+00
+73f92d3c-d981-45d1-8a46-40981e51e268,fire,en,A1,noun,/ˈfaɪər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+73fc6a97-49b0-4bb2-a826-1da4ac3ff788,egg,en,A1,noun,/eɡ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7425ab02-7f17-41a1-8b73-f7f527f9e877,teach,en,A1,verb,/tiːtʃ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+742bafa3-33a8-46f2-a781-8a40a4fa78e8,November,en,A1,noun,/nəʊˈvembər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7435488e-9256-4546-92a9-f077cf6cc923,hotel,en,A1,noun,/həʊˈtel/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+74dbcdf6-4df3-42d8-b9ba-7caf26305e87,river,en,A1,noun,/ˈrɪvər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+753f3b2d-93ac-4119-af39-f491db7f0a24,he,en,A1,pron,/hiː/,ISO 639-1 language code for Hebrew.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 20:36:44.31677+00
+75a98fd4-7d59-4a87-89d8-429168fa9f57,movie,en,A1,noun,/ˈmuːvi/,A recorded sequence of images displayed on a screen at a rate sufficiently fast to create the appearance of motion; a film; a video.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:45:04.935+00
+76869330-b69f-45f4-a63a-d28e0a7dbe46,town,en,A1,noun,/taʊn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+76c23834-63a7-4c6e-b3e6-abb38f3212e3,pound,en,A1,noun,/paʊnd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7724d056-eda8-4d02-9c02-85e5696fd15f,for,en,A1,prep,/fɔːr/,ISO 639-3 language code for Fore.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 22:13:33.702436+00
+777ad4ee-d981-4d0a-9efb-d02c714de391,game,en,A1,noun,/ɡeɪm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+77b9c2d0-53f2-4873-a53b-c6e7f4def821,often,en,A1,adv,/ˈɔːftən/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+786ac45c-2a70-45d7-ae7c-6c3fa5aec474,adult,en,A1,noun,/ˈædʌlt/,An animal that is full-grown.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:38.561781+00
+78ffc75d-6ca7-43e3-9d3b-65c77cc73f3a,event,en,A1,noun,/ɪˈvent/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7908393d-8690-4e22-929a-bbb0f1ec2fd8,guess,en,A1,noun,/ɡes/,To reach a partly (or totally) unconfirmed conclusion; to engage in conjecture; to speculate.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 10:54:37.466254+00
+7945e7e4-0824-4cfd-8b2c-cc05ea7b4e9f,play,en,A1,noun,/pleɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+79c7a902-9625-4645-885b-cd7b2a1bfafb,just,en,A1,adv,/dʒʌst/,"Factually right, correct; factual.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 18:48:03.388454+00
+7a3a26f9-3f52-4e6c-abb2-f8492ca11d1f,pen,en,A1,noun,/pen/,Former ISO 639-3 language code for Penesak.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-25 20:41:50.102035+00
+7a8a9a76-3e21-41fe-b63f-fd417dca6f5f,Saturday,en,A1,noun,/ˈsætərdi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7acda5e8-a85e-487a-a3b6-f101ecee0d8b,turn,en,A1,noun,/tɜːrn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7ade2c3b-b984-4090-97db-95ad26dfde23,customer,en,A1,noun,/ˈkʌstəmər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7af5b43b-127b-416f-bb66-2e30992fb518,let,en,A1,verb,/let/,ISO 639-3 language code for Lesing-Gelimi.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:45:04.286418+00
+7afa4f47-3ea5-45b3-aee7-ee1b2ef988ef,pepper,en,A1,noun,/ˈpepər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7b09b2ce-9af1-43ab-a3ae-ce8b82554774,bottle,en,A1,noun,/ˈbɑːtl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7b14d29f-dd83-4bba-9c71-8d5b735bea55,bag,en,A1,noun,/bæɡ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7b2bae02-275d-46df-9140-300c5d6b662d,cup,en,A1,noun,/kʌp/,ISO 639-3 language code for Cupeño.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-08 07:28:29.516625+00
+7c0daf23-a6e9-4519-9cff-a159e4f5dda6,man,en,A1,noun,/mæn/,ISO 639-2 &amp; ISO 639-3 language code for Mandingo.,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-06-10 22:21:10.161691+00
+7c3c4db4-91e8-4fd4-a04c-eabec5c01f7b,time,en,A1,noun,/taɪm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7c46a689-f67c-4434-854d-d2989e05d8ef,menu,en,A1,noun,/ˈmenjuː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7c719cb9-a259-4331-9a84-24134e81e5d5,nose,en,A1,noun,/nəʊz/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7c96bd66-9f84-48f1-83fd-9790a37e3be6,rice,en,A1,noun,/raɪs/,"Cereal plants, Oryza sativa of the grass family whose seeds are used as food.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:16.519312+00
+7d26f0f2-3288-4576-8338-ac4de25fc5ad,clean,en,A1,adj,/kliːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7d2b0e3e-3a45-410e-a405-3873bd52662b,sad,en,A1,adj,/sæd/,ISO 639-2 &amp; ISO 639-3 language code for Sandawe.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 14:55:08.587702+00
+7d90d673-b5ad-4a75-8256-c76a2e7ead2a,together,en,A1,adv,/təˈɡeðər/,"At the same time, in the same place; in close association or proximity.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 19:55:49.613812+00
+7e01022f-c1bc-4aff-8f58-d6659b9de22a,library,en,A1,noun,/ˈlaɪbreri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7e47518a-5cf7-4c83-a937-9f8809e6af9a,thirteen,en,A1,num,/ˌθɜːrˈtiːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7e5cac82-80f0-418b-9c07-c52faf4e8a24,programme,en,A1,noun,/ˈprəʊɡræm/,"UK, New Zealand, and India standard spelling of program.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:06:02.169626+00
+7ede3887-6f31-474f-a6a7-46793beba608,type,en,A1,noun,/taɪp/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7f0f7fe3-bd2d-4f02-985e-c1c27e0e23fd,fast,en,A1,adv,/fæst/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+7f24ff4d-bad3-4f67-a949-cc4dd646b9f4,fruit,en,A1,noun,/fruːt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7f492386-87f0-4ec6-b8a6-e61e558413d2,black,en,A1,adj,/blæk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+7fde39aa-a881-4946-ba53-4aac20ab7ea9,please,en,A1,interj,/pliːz/,To make happy or satisfy; to give pleasure to.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:56:41.298917+00
+80b7c460-e4b1-4384-934e-9796516bf58e,come,en,A1,verb,/kʌm/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+80d5301b-cfc1-4e2c-99cf-dca3831b3184,again,en,A1,adv,/əˈɡeɪn/,Another time: indicating a repeat of an action. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 17:15:02.134752+00
+80f569a6-e258-4870-94f3-8f819b3f928f,welcome,en,A1,adj,/ˈwelkəm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+812be89f-15e7-4176-9e9c-179a4f623660,hundred,en,A1,num,/ˈhʌndrəd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+81a81454-e8a9-4c31-a62f-a4bcb7f3c04b,imagine,en,A1,verb,/ɪˈmædʒɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+81ac2612-a18f-4119-9f56-b457eafb475c,airport,en,A1,noun,/ˈerpɔːrt/,"An airfield (an area designated for the takeoff and landing of aircraft), including one or more runways and (for commercial airports) one or more passenger terminals.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 22:02:57.855279+00
+81ed73a4-ccb9-462d-a4bc-0db39c994482,open,en,A1,adj,/ˈəʊpən/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+82840a1b-4d97-483f-98fa-4d81bc73e708,sick,en,A1,adj,/sɪk/,In poor health; ill.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-10 13:00:42.345221+00
+828811d4-702f-43e7-b483-f8df4bf010bc,ask,en,A1,verb,/æsk/,ISO 639-3 language code for Ashkun.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:30.67132+00
+828e529b-78a2-4770-b5d5-9231f6d24408,close,en,A1,verb,/kləʊz/,"To remove or block an opening, gap or passage through.
+ To move a thing, or part of a thing, nearer to another so that the gap or opening between the two is removed.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-05 15:47:33.096768+00
+82c87f62-048e-41a9-b8b8-2b8e7f5fb7ff,leg,en,A1,noun,/leɡ/,A limb or appendage that an animal uses for support or locomotion on land.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:13:30.129834+00
+832e4610-4375-4a69-8374-3685ca1bd33e,o'clock,en,A1,adv,/əˈklɑːk/,"NATO, ICAO, ITU &amp; IMO radiotelephony code word used with numerals up to twelve to indicate direction",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:55:55.695945+00
+833645db-04b3-4572-8059-0ebf2a15a5cd,doctor,en,A1,noun,/ˈdɑːktər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+838f97b3-dae7-4335-8934-90fb16f36fd8,flight,en,A1,noun,/flaɪt/,The act of flying.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:34:04.726623+00
+839a752f-7822-41ca-8dbb-d50ddc0a8888,April,en,A1,noun,/ˈeɪprəl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+83bca646-d105-42c1-803a-764833714f31,strong,en,A1,adj,/strɔːŋ/,Capable of producing great physical force.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 17:52:13.079929+00
+841d4967-6615-4b8d-9dc4-9fc6991caf2d,important,en,A1,adj,/ɪmˈpɔːrtnt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8429cfb7-e5ca-4daf-ba92-0fbbaf5d517e,plane,en,A1,noun,/pleɪn/,Of a surface: flat or level.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 17:27:13.042188+00
+8489646c-d40e-477c-870b-61967dd2e79b,blog,en,A1,noun,/blɑːɡ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+84918cb6-7791-4533-bc53-49c5c56d76e0,send,en,A1,verb,/send/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+85015d45-ac94-49a3-b516-8cf4e6f5a0ce,paragraph,en,A1,noun,/ˈpærəɡræf/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8533700f-c848-433c-91b2-68efb085c363,door,en,A1,noun,/dɔːr/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+854fbe88-f4a1-4a69-bbc6-716e6de6a63d,around,en,A1,adv,/əˈraʊnd/,Forming a circle or closed curve containing (something).,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:22:34.151031+00
+856d7ff8-b2ef-46bb-9927-a7c6b95b2f98,February,en,A1,noun,/ˈfebrueri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+85e5acea-79a2-40c3-9d64-6efe899f546b,large,en,A1,adj,/lɑːrdʒ/,Of considerable or relatively great size or extent.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:21:45.388529+00
+862fe509-c299-4938-9d5e-d1bc404c2522,company,en,A1,noun,/ˈkʌmpəni/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8633410b-ad68-485d-9da3-773497e66ae5,quickly,en,A1,adv,/ˈkwɪkli/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8643cd5d-c73e-4c51-9382-828b03f13f74,them,en,A1,pron,/ðem/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+86623f20-21b8-48ac-b106-9592217a43c4,sound,en,A1,noun,/saʊnd/,Healthy.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:51.68656+00
+86aac4c1-9497-44a3-b434-f9eff72d9ce7,sister,en,A1,noun,/ˈsɪstər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+86d0622f-200e-4422-814f-9ff8293c3a1b,information,en,A1,noun,/ˌɪnfərˈmeɪʃn/,Something that provides a definitive characterization or description of the nature and attributes of a specified entity.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:22:22.449065+00
+86e53aa0-36c0-4c48-9a77-22cf7e505148,relax,en,A1,verb,/rɪˈlæks/,To make something loose.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-16 09:43:48.538213+00
+87970e19-a358-4ad5-8389-4cdc3df89ce4,feeling,en,A1,noun,/ˈfiːlɪŋ/,Emotionally sensitive.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:46:03.015726+00
+87bbe43c-21ce-48d2-b69d-c7d359f0f768,building,en,A1,noun,/ˈbɪldɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+880eeacf-f72a-492a-90ea-ce46480de511,money,en,A1,noun,/ˈmʌni/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+884ca873-1f34-4838-ab30-33e422f3e775,second,en,A1,det,/ˈsekənd/,Number-two; following after the first one with nothing between them. The ordinal number corresponding to the cardinal number two.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:19.207441+00
+885dfd8e-1ece-4bb0-bb60-e0f6ace9c49d,colour,en,A1,noun,/ˈkʌlər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8864715d-a4ae-42e4-859e-db7a746313f8,question,en,A1,noun,/ˈkwestʃən/,"A worded or expressed sentence, phrase, or only a word on its own, which asks for information, a reply, or a response; an interrogative.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:06.558717+00
+88661020-ccf9-434b-bb08-77e3c5bbe765,minute,en,A1,noun,/ˈmɪnɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+887d70a2-c8da-4f8b-9255-721a664530b3,bicycle,en,A1,noun,/ˈbaɪsɪkl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8895c610-be4e-44a6-9404-aaefefbbcdac,four,en,A1,num,/fɔːr/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+889c61fc-9a21-48ca-ad95-32df00ed3d36,discuss,en,A1,verb,/dɪˈskʌs/,To converse or debate concerning a particular topic.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 09:50:30.70299+00
+893ac233-e919-4c4c-b531-1332c99dc5be,fly,en,A1,verb,/flaɪ/,ISO 639-3 language code for Tsotsitaal.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:28.120263+00
+897189ba-9cab-47d4-8b3f-01c36ac865e8,clock,en,A1,noun,/klɑːk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+89936a04-1e49-4451-a0ed-6a5528121935,other,en,A1,adj,/ˈʌðər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+89a581df-834d-45d8-a641-96281368ac30,introduce,en,A1,verb,/ˌɪntrəˈduːs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8a085746-06fb-4b3e-a083-3699cac09632,career,en,A1,noun,/kəˈrɪr/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8ad976c0-1b50-4f72-9add-a705dcc535de,forty,en,A1,num,/ˈfɔːrti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8b0b276d-1461-46cc-8b1a-796ed0498b75,CD,en,A1,noun,/ˌsiː ˈdiː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8b161dc2-f650-4898-8856-03db9b73d556,buy,en,A1,verb,/baɪ/,ISO 639-3 language code for Mmani.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:39:02.274732+00
+8c718db4-bdb6-436d-bb09-23de00e6b4ee,description,en,A1,noun,/dɪˈskrɪpʃn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8c7fa4cc-f40e-40dc-9214-7bbee5d59f84,include,en,A1,verb,/ɪnˈkluːd/,"To bring into a group, class, set, or total as a (new) part or member.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-08 07:28:40.539923+00
+8c95d112-96f9-4b17-8786-b97167f44a2b,add,en,A1,verb,/æd/,ISO 639-3 language code for Dzodinka.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:48.680419+00
+8d624a5e-b7c7-4c97-97f5-fc48254bc8c2,rain,en,A1,noun,/reɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8e289f75-b647-473b-bc7f-b260d347b7a0,lot,en,A1,adv,/lɑːt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8e315747-f6b7-458b-b9d1-9f50117508be,seventy,en,A1,num,/ˈsevnti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8e38e014-a00d-41da-a37d-549084773e73,concert,en,A1,noun,/ˈkɑːnsərt/,"To plan together; to settle or adjust by conference, agreement, or consultation.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-08 07:28:03.010228+00
+8e6ea36f-fcce-4454-a9d6-5723b15c7d5b,well,en,A1,adj,/wel/,"Accurately, competently, satisfactorily.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 20:36:48.300823+00
+8e9516f4-b815-4cee-a87c-c5f21f51229e,without,en,A1,prep,/wɪˈðaʊt/,"Outside, externally.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-05 15:47:34.337863+00
+8ed0ca4e-eb40-4a41-85fd-efe6d499eaad,university,en,A1,noun,/ˌjuːnɪˈvɜːrsəti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+8f293d66-1339-4187-9c8e-c85db1a180be,behind,en,A1,adv,/bɪˈhaɪnd/,At or to the back or far side of.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-07 19:24:28.376533+00
+8f933104-ac47-4cb6-ab8f-a3db48363e50,to,en,A1,part,/tuː/,ISO 639-1 language code for Tongan.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:41:39.528408+00
+8fc9be01-4965-4e66-9bcb-dd6ee81ef539,land,en,A1,noun,/lænd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+905d2fde-a35c-4887-91fa-cc488267bf15,mother,en,A1,noun,/ˈmʌðər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9193c3bb-56f0-4710-add3-dcfc8f99ee22,passport,en,A1,noun,/ˈpæspɔːrt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+91a026da-e6d2-4355-8e63-58851bcf06bf,natural,en,A1,adj,/ˈnætʃrəl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+91c39224-7dfc-43fd-aacd-46682b59853d,difficult,en,A1,adj,/ˈdɪfɪkəlt/,"Hard, not easy, requiring much effort.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:40.58035+00
+9269f186-fb37-42e9-8933-5411537d6cb1,beach,en,A1,noun,/biːtʃ/,"The shore of a body of water, especially when sandy or pebbly.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:46.967422+00
+92721927-3c35-45c0-bb7a-714cfadf1dfc,situation,en,A1,noun,/ˌsɪtʃuˈeɪʃn/,The combination of circumstances at a given moment; a state of affairs.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:16.518492+00
+929c6d40-9313-4e0e-b6cf-f74f3ec75a90,way,en,A1,noun,/weɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9303d173-18d3-4ad7-a042-9f409e1746bf,usually,en,A1,adv,/ˈjuːʒəli/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+930b7a4d-b526-45bd-9499-d9361b53906b,false,en,A1,adj,/fɔːls/,"Untrue, not factual, factually incorrect.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:26.574946+00
+9317d216-14fe-462f-a552-c07ab2e79f5b,pretty,en,A1,adj,/ˈprɪti/,"Pleasant to the sight or other senses; attractive, especially of women or children. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 14:55:25.736357+00
+9342f9a5-98da-4bbc-9c3e-32ac4e1d38c5,tonight,en,A1,adv,/təˈnaɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+93e75f81-e251-4bce-acf8-b93d64e950c6,midnight,en,A1,noun,/ˈmɪdnaɪt/,"The middle of the night: the sixth temporal hour, equidistant between sunset and sunrise.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:13:43.855059+00
+93f3cfb9-898f-4a88-9b58-394cda122ae3,bedroom,en,A1,noun,/ˈbedrʊm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+94136389-8da4-4d3e-9156-720233439b7a,upstairs,en,A1,adv,/ˌʌpˈsterz/,Located on a higher floor or level of a building.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:24.318214+00
+9452f777-0025-449d-9c15-b9681c886d90,yeah,en,A1,interj,/jeə/,Yes.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 22:03:24.259537+00
+94db24dc-663d-440b-b33f-34fb597f6a67,banana,en,A1,noun,/bəˈnænə/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+94f63c41-c59f-4d25-8a01-caaaac2b1056,Thursday,en,A1,noun,/ˈθɜːrzdi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+955dcd41-3258-4594-9779-1260c7ed549e,June,en,A1,noun,/dʒuːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9599e519-a03b-4129-9700-e89e5ede1804,trousers,en,A1,noun,/ˈtraʊzərz/,"An article of clothing that covers the part of the body between the waist and the ankles or knees, and is divided into a separate part for each leg.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:06.899892+00
+95a098d6-d625-461f-b405-1fe3c82459fd,call,en,A1,noun,/kɔːl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+96030a9f-14d3-42ab-8294-4d5dd16edc06,arrive,en,A1,verb,/əˈraɪv/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+962a022e-aa1b-494f-bb5f-d8531d18bce6,wonderful,en,A1,adj,/ˈwʌndərfl/,"Tending to excite wonder; surprising, extraordinary.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:13:16.120134+00
+962a5006-c75a-4525-8ba7-88cb0f4b492c,near,en,A1,adj,/nɪr/,Physically close.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-04 22:50:27.992953+00
+968a3cc0-49d8-4a5c-9365-3d7f147f1b81,great,en,A1,adj,/ɡreɪt/,"Taking much space; large.
+
+ Much, more than usual.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:44:28.768529+00
+96e5b3f8-8c71-4810-b384-cf60f1150e4d,small,en,A1,adj,/smɔːl/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+973fb9f9-b8e5-4dd5-b40d-19019afbb545,main,en,A1,adj,/meɪn/,"Of chief or leading importance; prime, principal. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:31:42.9072+00
+97781b24-9ffa-433a-86bf-f5e2ce9b0078,over,en,A1,adv,/ˈəʊvər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+97bb5e94-b76e-4ebd-9eb1-9ede81c2f6e1,die,en,A1,verb,/daɪ/,"To stop living; to become dead; to undergo death.
+
+followed by of as an indication of direct cause; general use:",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 17:27:09.736311+00
+9804faf2-04e2-440f-b27b-aee398c19dc3,water,en,A1,noun,/ˈwɔːtər/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+992fbff0-dca3-461f-97e7-021f85b16f23,post,en,A1,noun,/pəʊst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+99a86570-672a-42c3-b95c-9d320e271600,no one,en,A1,pron,/ˈnəʊ wʌn/,"Used in contrast to anyone, someone or everyone: not one person; nobody.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:34:57.901457+00
+99ed7c1f-a475-4e27-bed5-d354044d7338,T-shirt,en,A1,noun,/ˈtiː ʃɜːrt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9a406537-a987-4b77-ad9b-8223f2934812,below,en,A1,adv,/bɪˈləʊ/,Lower in spatial position than.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 21:11:43.356827+00
+9aaf1a35-3237-4397-8a68-ac3a9dadb712,activity,en,A1,noun,/ækˈtɪvəti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9af18e2e-4ccf-4e19-9c86-5fd3a193178d,boring,en,A1,adj,/ˈbɔːrɪŋ/,"The act or process of boring holes; such practice as an area of expertise in manufacturing.
+  Enlarging an existing hole with a single-point cutting tool or a boring head (usually with high precision and accuracy regarding the roundness and size of the hole).",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 06:15:58.591052+00
+9b34c950-7385-4720-aa70-fca15e37e4af,swim,en,A1,verb,/swɪm/,"To move through the water, without touching the bottom; to propel oneself in water by natural means.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 17:15:00.512471+00
+9b965404-89ad-488a-ba24-c8c4d738ca02,then,en,A1,adv,/ðen/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9bcc8c22-bacd-442b-9fdf-5b0db10bb6ee,past,en,A1,adj,/pæst/,"The period of time that has already happened, in contrast to the present and the future.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-05 15:47:05.841989+00
+9bdfed26-189e-45d3-bdc2-971f5e5b8861,tomorrow,en,A1,adv,/təˈmɑːrəʊ/,On the day after the present day.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:11:53.762695+00
+9c87e21e-cec9-4681-94e5-bd7d4cbbe365,party,en,A1,noun,/ˈpɑːrti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9ca89b00-b4da-425c-a2b3-fed63d08c0cf,big,en,A1,adj,/bɪɡ/,ISO 639-3 language code for Biangai.,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-06-11 15:31:49.457571+00
+9d10a2db-8952-4b24-a7aa-1459446479ad,cold,en,A1,adj,/kəʊld/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9d1b40a2-d92b-41ba-8fb2-2565206841f6,grandfather,en,A1,noun,/ˈɡrænfɑːðər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9d55b8b8-9346-4786-80cb-a67016a0035a,cost,en,A1,noun,/kɔːst/,To incur a charge of; to require payment of a (specified) price.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:24.224688+00
+9d7b5907-7ade-4b82-bcee-334915420aec,key,en,A1,adj,/kiː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9db75fd3-6caf-49f4-99f4-af4b3ed9eb8f,list,en,A1,noun,/lɪst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9de87809-cb87-4b19-8733-cbe3719a2424,however,en,A1,adv,/haʊˈevər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9deeba8e-75bc-4dea-9578-b3787c413c85,writer,en,A1,noun,/ˈraɪtər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9e6132c4-6a47-47e8-b47b-231a4a8f9dbf,conversation,en,A1,noun,/ˌkɑːnvərˈseɪʃn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+9e7d2ff3-872e-435e-9988-96ed0ab32e0d,by,en,A1,prep,/baɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a01f0d22-39a6-43b4-a3b0-6d53ac618980,light,en,A1,adj,/laɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a0302e18-ec19-42ea-90fa-6bb41b61f99a,art,en,A1,noun,/ɑːrt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a0360b2f-ab60-4935-8430-9cfb1a2a4733,detail,en,A1,noun,/dɪˈteɪl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a071f0d0-628d-415b-bcb7-9b3c63dd8093,skirt,en,A1,noun,/skɜːrt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a0a0b4ef-7764-4086-ada6-4c919a984c14,internet,en,A1,noun,/ˈɪntərnet/,Alternative letter-case form of Internet (“the specific internet consisting of a global network of computers that communicate using Internet Protocol (IP) and that use Border Gateway Protocol (BGP) to identify the best paths to route those communications”).,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:46:05.952766+00
+a0a4da02-e40f-4933-bbc2-0ce322867043,news,en,A1,noun,/nuːz/,New information of interest.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:15.075154+00
+a11da9a1-5542-45ba-9191-a51ba0de6e20,wash,en,A1,verb,/wɑːʃ/,To clean with water.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 21:36:17.461485+00
+a18a0e49-894c-4947-ad20-a2a9d613da1e,Tuesday,en,A1,noun,/ˈtuːzdi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a204c74c-63cd-4929-9c2b-03ebc48bc465,maybe,en,A1,adv,/ˈmeɪbi/,"Perhaps, possibly.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:56:14.306891+00
+a287bbb2-f422-4758-8a01-1b6547b44571,piece,en,A1,noun,/piːs/,"A part of a larger whole, usually in such a form that it is able to be separated from other parts.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:05.244699+00
+a29f3e0b-ef86-46f2-b566-411b2e7b4c21,most,en,A1,adv,/məʊst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a2a2cb31-0d7f-49a1-b440-9ee4a7a6e280,air,en,A1,noun,/er/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a31e4d5a-4181-417d-80ad-b490349464a9,carrot,en,A1,noun,/ˈkærət/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a3710ea8-d974-4c37-8263-d871210168c1,afternoon,en,A1,noun,/ˌæftərˈnuːn/,"The part of the day from noon or lunchtime until sunset, evening, or suppertime or 6pm.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 21:11:52.427816+00
+a3727313-2e83-4532-b0ac-ff01eada9566,last,en,A1,det,/læst/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a394dafc-d5bf-48b3-9a7c-c98dadb932a2,become,en,A1,verb,/bɪˈkʌm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a3d9977a-eb98-4de7-b44d-453a92413325,his,en,A1,det,/ɪz/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a41bd947-4b33-4d69-b71b-730f6cda8701,sport,en,A1,noun,/spɔːrt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a45e319a-1645-412f-a6b7-77da5622725c,third,en,A1,noun,/θɜːrd/,The ordinal form of the cardinal number three; Coming after the second.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 19:55:49.682942+00
+a46210c4-1531-4fcb-9153-c48c82022dfc,extra,en,A1,adj,/ˈekstrə/,"Beyond what is due, usual, expected, or necessary; extraneous; additional; supernumerary.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 22:13:32.97902+00
+a46dfbc4-c774-46d2-a45c-e6a5b98a953e,beer,en,A1,noun,/bɪr/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a4875fdb-f64a-4a31-8dd4-edaab7a6a460,glass,en,A1,noun,/ɡlæs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a5883e67-1549-454a-9158-f6f4cd7f582f,your,en,A1,det,/jər/,Belonging to you; of you; related to you (singular; one owner).,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 22:02:58.046818+00
+a66d3886-d8a7-4e89-b244-8dc52931cf25,can,en,A1,verb,/kæn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a72018d2-2526-4dc1-bacc-942b04fcdbab,interest,en,A1,noun,/ˈɪntrest/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a77cca67-4426-4898-985b-9f9f9ba62c67,outside,en,A1,adv,/ˌaʊtˈsaɪd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a77ed76a-9875-45b7-808b-021a641c005d,vegetable,en,A1,noun,/ˈvedʒtəbl/,Any plant.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 17:26:25.300188+00
+a7f1e075-b978-4414-a2c4-ec2c909d7cb3,break,en,A1,noun,/breɪk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a81817ce-6c96-457c-b7aa-84fbb50c1764,dictionary,en,A1,noun,/ˈdɪkʃəneri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a921d997-e13d-4283-9164-8522dddd834a,salad,en,A1,noun,/ˈsæləd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a99f21f4-06ae-4c76-82d4-b236149a5782,market,en,A1,noun,/ˈmɑːrkɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+a9aedad8-6f02-4482-a1cb-652226f8d838,married,en,A1,adj,/ˈmærid/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+aa45ae1b-d4a3-49fc-b15e-4ca4faaeb651,DVD,en,A1,noun,/ˌdiː viː ˈdiː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+aac22200-38b9-4e7e-b241-44320709b7b4,sandwich,en,A1,noun,/ˈsænwɪdʒ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ab1040b0-c711-42f5-817a-e7dbc9a142d4,toilet,en,A1,noun,/ˈtɔɪlət/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+aba39cd7-8d44-497b-bf1b-da62ee882dd0,health,en,A1,noun,/helθ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ac016012-8048-40c4-86ee-c3bff2a9d304,drink,en,A1,verb,/drɪŋk/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+ac1686fb-41dd-4ee8-be01-f6e5a73489a8,snow,en,A1,noun,/snəʊ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ac5faf4a-72de-42e5-ab5c-aa8f26690230,true,en,A1,adj,/truː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ac997f9b-4517-4196-b652-d275462dd5b6,follow,en,A1,verb,/ˈfɑːləʊ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ada0bea0-ea7e-4451-8c48-0a6e9a73ed91,report,en,A1,noun,/rɪˈpɔːrt/,"To relate details of (an event or incident); to recount, describe (something). .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 06:15:54.022981+00
+add4cf9c-7a18-4d2d-850a-4170c588057a,practice,en,A1,noun,/ˈpræktɪs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ae44d3d8-6891-41bf-b375-d1ce56e1866f,us,en,A1,pron,/ʌs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ae484f9c-a2b6-4d80-b400-bac23a297b3b,keep,en,A1,verb,/kiːp/,To continue in (a course or mode of action); to not intermit or fall from; to uphold or maintain.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:31:56.354944+00
+ae547a0e-7d00-4674-80f3-2a7bee0996e1,bed,en,A1,noun,/bed/,ISO 639-3 language code for Bedoanas.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 18:48:20.790353+00
+ae5579da-01b5-4f70-a47d-7150b8d57628,until,en,A1,conj,/ənˈtɪl/,Up to the time of (something happening); pending.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:31:52.466702+00
+ae613ee9-673b-4ca4-aac7-33f4489f265c,give,en,A1,verb,/ɡɪv/,"To move, shift, provide something abstract or concrete to someone or something or somewhere.
+To transfer one's possession or holding of (something) to (someone).",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 23:11:32.066066+00
+ae975eb4-a52d-475b-ac49-d747bdb28d9d,nobody,en,A1,pron,/ˈnəʊbədi/,Not any person; the logical negation of somebody.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:47:23.225831+00
+af57a687-f97a-43e1-981a-2bc560654fab,village,en,A1,noun,/ˈvɪlɪdʒ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+af786f99-8231-48cd-b603-ba12665706e2,thanks,en,A1,interj,/θæŋks/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+af9436d1-9c6b-4eba-bc65-04991e4f914a,each,en,A1,adv,/iːtʃ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+afc8e122-1e87-4937-81d5-691a4c20df82,listen,en,A1,verb,/ˈlɪsn/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+afd74b02-d477-44e2-8ca3-cf45c88b2ef4,hot,en,A1,adj,/hɑːt/,ISO 639-3 language code for Hote.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 15:23:26.766583+00
+b0449059-cdb2-4739-a5c0-50cd16ecdb7c,player,en,A1,noun,/ˈpleɪər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b0987304-7b71-4177-9a81-650765fa39ea,text,en,A1,noun,/tekst/,"A writing consisting of multiple glyphs, characters, symbols or sentences.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-09 14:46:49.755953+00
+b0d1013f-00e5-4654-8b3a-094a6676bc3c,soup,en,A1,noun,/suːp/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b0ea46a3-8397-44f9-a1ba-1f983ff1ed2d,apartment,en,A1,noun,/əˈpɑːrtmənt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b154f905-6948-4227-a5cc-a83e511959ff,animal,en,A1,noun,/ˈænɪml/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b19db432-504f-46d4-95b1-b0d8b360be43,bus,en,A1,noun,/bʌs/,ISO 639-3 language code for Bokobaru.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-08 07:28:03.215756+00
+b1ccc93a-78b8-454a-9d3d-3ad0684bf84c,part,en,A1,noun,/pɑːrt/,"A portion; a component.
+A fraction of a whole.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:22.765142+00
+b20712b6-998d-4e8b-a6f7-9bb2e6e061a2,find,en,A1,verb,/faɪnd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b25ac8f9-2533-425e-bce4-03abe40c3438,morning,en,A1,noun,/ˈmɔːrnɪŋ/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+b262f2bd-8f18-47a4-a7e1-7e07f3be0ddb,purple,en,A1,adj,/ˈpɜːrpl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b2a9ef6c-29c9-4cf8-9087-240d258034a7,downstairs,en,A1,adv,/ˌdaʊnˈsterz/,Located on a lower floor.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 15:23:11.126103+00
+b32f5c4c-781a-4c14-9fa5-e5f3a5dae52b,potato,en,A1,noun,/pəˈteɪtəʊ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b37e2b58-68b4-42c4-909c-bb56f557a135,kilometre,en,A1,noun,/kɪˈlɑːmɪtər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b38f0bc4-406c-41f7-89c3-5206fd717614,cheese,en,A1,noun,/tʃiːz/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b3b0c419-3410-4633-bc4a-de5c5b3cffeb,statement,en,A1,noun,/ˈsteɪtmənt/,A declaration or remark.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:11:52.85869+00
+b3ec1da9-6eea-48c3-8655-d6b07a7f85af,cannot,en,A1,verb,/ˈkænɑːt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b3fc2515-a32c-48e0-81fb-ef134bdd6603,farmer,en,A1,noun,/ˈfɑːrmər/,"Someone or something that farms, as:
+A person who works the land and/or who keeps livestock; anyone engaged in agriculture on a farm.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:31:50.256444+00
+b41adcf4-e3d9-43f3-921e-1dd9f5093d69,seventeen,en,A1,num,/ˌsevnˈtiːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b4e66cf1-97b5-47bd-bb01-2ab447369921,tea,en,A1,noun,/tiː/,ISO 639-3 language code for Temiar.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:31:54.014141+00
+b50a66b3-d99a-4623-aca3-42c62b83b77b,modern,en,A1,adj,/ˈmɑːdərn/,Pertaining to a current or recent time and style; not ancient.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:56:37.247953+00
+b536f87c-fe8b-443f-9869-e8498ac44788,dish,en,A1,noun,/dɪʃ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b5407651-20d6-42a8-ac82-26b23c618e52,really,en,A1,adv,/ˈriːəli/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b55a131b-fe17-45e1-989b-324a6dfdf9f9,test,en,A1,noun,/test/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b5796ed9-23b7-402f-8f28-2459e15f66e0,final,en,A1,adj,/ˈfaɪnl/,A final examination; a test or examination given at the end of a term or class; the test that concludes a class.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:20:15.474808+00
+b5e157a1-b5c4-4f8f-8d3e-01b462ae60ad,check,en,A1,verb,/tʃek/,An inspection or examination.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 09:49:56.517781+00
+b61deec9-f242-4488-acf8-8eccb1f168ab,order,en,A1,noun,/ˈɔːrdər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b641a06b-4388-4c4b-beb8-f55ac78fc5b6,it,en,A1,pron,/ɪt/,ISO 639-1 language code for Italian.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:34.464346+00
+b650ee9c-ca6e-4592-be27-7f8daa8590b5,like,en,A1,verb,/laɪk/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+b6c26433-c4b0-43ed-adb9-288d2314d15c,area,en,A1,noun,/ˈeriə/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b6fc2f30-1c82-4028-9923-ce8c31e7a318,more,en,A1,adv,/mɔːr/,comparative degree of many: in greater number.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:46.373299+00
+b73a6378-c2e4-46e6-a191-2be55dd5b911,year,en,A1,noun,/jɪr/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+b83dfbbd-c720-49bc-9856-f19472295c16,help,en,A1,noun,/help/,Action given to provide assistance; aid.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:34.022862+00
+b87e3054-a407-44cf-9040-9501857401be,as,en,A1,prep,/æz/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b88c4684-4feb-4456-8e52-c015d139c5cf,get,en,A1,verb,/ɡet/,To obtain; to acquire.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-04 22:51:26.331246+00
+b8c868dd-fb02-4da6-b91a-3dac0f02d2e3,local,en,A1,adj,/ˈləʊkl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b916a153-f4f0-432e-aa33-fe51653655aa,try,en,A1,verb,/traɪ/,ISO 639-3 language code for Turung.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:55:39.342815+00
+b92c74a5-5c62-4c4a-a38b-0fcd64eff33e,page,en,A1,noun,/peɪdʒ/,One of the many pieces of paper bound together within a book or similar document.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:38:36.67454+00
+b9618a19-8154-48a2-bdd8-56cfb64b0344,product,en,A1,noun,/ˈprɑːdʌkt/,Anything that is produced; a result.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:43:44.119077+00
+b967fa69-fa3c-48ae-aec5-1bd23c26693e,once,en,A1,adv,/wʌns/,One and only one time.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:02.266297+00
+b9754ed6-0483-455a-864b-32a65b60aa77,letter,en,A1,noun,/ˈletər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+b9be79a4-4a53-47cd-86f9-d58a992f7309,my,en,A1,det,/maɪ/,ISO 639-1 language code for Burmese.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:22:08.514828+00
+ba1d0ffc-a9c4-45f0-b7dc-a0e4ee944f9f,long,en,A1,adj,/lɔːŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ba321ec3-ecf0-4752-892e-93556e46e2a4,cook,en,A1,verb,/kʊk/,A person who prepares food.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 18:48:09.639926+00
+baac34a8-8810-4636-9194-1b9cdde4381f,pool,en,A1,noun,/puːl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bad50e9f-9c73-4dee-ae08-10d94d1e6f1f,bread,en,A1,noun,/bred/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+baf17869-36b6-4ce3-bfcc-1ac045a4c4b6,note,en,A1,noun,/nəʊt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bb16b565-dab9-43a0-8c70-a74c74d31c81,May,en,A1,noun,/meɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bb25733e-a4c3-48b7-af4e-4c26248c150f,ever,en,A1,adv,/ˈevər/,"Always, frequently, forever.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:46:33.183051+00
+bb2959c9-dc20-440c-9b8a-75c0c924c985,which,en,A1,det,/wɪtʃ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bbe276a1-264c-4c22-a72d-955c7c0bf5e5,new,en,A1,adj,/nuː/,ISO 639-2 &amp; ISO 639-3 language code for Newar.,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 18:13:32.019615+00
+bc19ffba-a771-424c-8253-abb8c416b14e,because,en,A1,conj,/bɪˈkɔːz/,By or for the cause that; on this account that; for the reason that.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 22:47:23.048107+00
+bc557e37-4784-4a84-be3b-76fa6d4ff711,thank,en,A1,verb,/θæŋk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bc6336f9-f95b-412d-bb82-256910f46962,son,en,A1,noun,/sʌn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bcbd11af-b85b-451c-aaa2-484868acd17d,diet,en,A1,noun,/ˈdaɪət/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bccc16c9-f181-4ffc-8bd9-8f4a3e39ee6f,grow,en,A1,verb,/ɡrəʊ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bd86e5b1-c4bb-4d2d-88c3-9c0c176c6a84,do,en,A1,verb,/duː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bdc8bb84-777e-476c-ae19-05c4a0b01f5e,perfect,en,A1,adj,/ˈpɜːrfɪkt/,Fitting its definition precisely.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:22:18.462344+00
+be14417c-4053-4258-bfe8-95e03d8bab63,ball,en,A1,noun,/bɔːl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+be1fb07a-fa22-4702-bf98-61ffc15bb942,telephone,en,A1,noun,/ˈtelɪfəʊn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bf094646-fbdf-4f5b-b1ed-ee2850f798af,gym,en,A1,noun,/dʒɪm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+bf87ee70-e2e4-4bba-8ceb-df4dc47fc55e,write,en,A1,verb,/raɪt/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+bfe04116-5bd9-432b-b17a-43aae6c83614,five,en,A1,num,/faɪv/,NATO &amp; ICAO radiotelephony clear code (spelling-alphabet name) for the digit 5.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 20:36:41.774268+00
+c03cdc34-7db9-45f3-839f-adaef3db628f,head,en,A1,noun,/hed/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c0db47ad-3096-4c7a-831e-257a0e71e07a,slow,en,A1,adj,/sləʊ/,"Taking a long time to move or go a short distance, or to perform an action; not quick in motion; proceeding at a low speed.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:31:53.12722+00
+c107a53b-26a6-426c-90b3-c071c4ac995d,when,en,A1,adv,/wen/,At what time? At which time? Upon which occasion or circumstance? Used to introduce direct or indirect questions about time.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:32:18.629786+00
+c17db86e-04af-44ce-8028-e00f38331948,cousin,en,A1,noun,/ˈkʌzn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c24287c0-dac3-42f9-b148-605545421043,woman,en,A1,noun,/ˈwʊmən/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+c27b82fc-b124-4ba3-9dd0-a1bbeed0da55,elephant,en,A1,noun,/ˈelɪfənt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c3173f11-5746-49b7-ab8e-3de45effdf53,something,en,A1,pron,/ˈsʌmθɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c34340fd-653e-494d-8159-968cd019b277,improve,en,A1,verb,/ɪmˈpruːv/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c3f837f0-67af-4d36-90a4-e0fddc8a2dc9,happy,en,A1,adj,/ˈhæpi/,"Having a feeling arising from a consciousness of well-being or of enjoyment; enjoying good of any kind, such as comfort, peace, or tranquillity; blissful, contented, joyous.",,oxford_3000,2026-05-17 11:57:15.443642+00,2026-06-08 07:28:35.277693+00
+c41df15f-7a6f-487f-8aeb-ae4433753111,tennis,en,A1,noun,/ˈtenɪs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c42bda72-0ce5-43d1-b473-908db45b000a,twenty,en,A1,num,/ˈtwenti/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c48ffa5b-f3fc-42fb-b498-121ae83f8618,sea,en,A1,noun,/siː/,ISO 639-3 language code for Semai.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 14:55:44.309095+00
+c4ae432c-e9c8-49f8-a065-08edad2eef24,week,en,A1,noun,/wiːk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c4f18d4b-5f4d-4ea5-ad93-36096f0cfb9e,too,en,A1,adv,/tuː/,ISO 639-3 language code for Xicotepec de Juárez Totonac.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:45.27979+00
+c4f1941f-56ed-454c-9863-c7cfde025758,book,en,A1,noun,/bʊk/,,,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 11:57:15.443642+00
+c66a18cd-b2e6-48e1-97c4-54486edbc4b4,journey,en,A1,noun,/ˈdʒɜːrni/,"A set amount of travelling, seen as a single unit; a discrete trip, a voyage.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-04 22:51:36.407114+00
+c6d022b1-460a-4bbc-8ee4-e3d58c6bf4eb,car,en,A1,noun,/kɑːr/,ISO 639-2 &amp; ISO 639-3 language code for Kari'na.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:31:16.690973+00
+c6e947e3-ee22-41ca-ab17-df9f06e654bf,table,en,A1,noun,/ˈteɪbl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c6ff5f94-5b3f-4b8f-8dda-b21f86abbf7a,ready,en,A1,adj,/ˈredi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c7407b1c-d68a-4554-af7a-3c08b9ac7697,similar,en,A1,adj,/ˈsɪmələr/,"Having traits or characteristics in common; alike, allied, comparable.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:31.047283+00
+c76eec8a-0658-4789-9838-d35d879453b4,reason,en,A1,noun,/ˈriːzn/,A cause:,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:27.913759+00
+c7bc5d6c-cf17-4c86-9b8d-e027a5233773,chocolate,en,A1,noun,/ˈtʃɔːklət/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c8132664-deeb-4b0b-9b9d-8fd323c43eba,miss,en,A1,verb,/mɪs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c82ad91d-5446-42d5-ad82-37a2955d75e3,right,en,A1,adj,/raɪt/,"Designating the side of the body which is positioned to the east if one is facing north, the side on which the heart is not located in most humans. This arrow points to the reader's right: →",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:55:12.907578+00
+c82ae7d0-affc-4054-890a-93efc9e66f3d,snake,en,A1,noun,/sneɪk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c873ba80-8d42-4dc9-ac91-ea27b06a73c6,than,en,A1,conj,/ðæn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c8c221ee-0fa8-4e8a-9506-6fed0cedf499,personal,en,A1,adj,/ˈpɜːrsənl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c93b0450-c679-44dc-9a20-b673a8d09432,best,en,A1,adj,/best/,superlative form of good: most good.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:13:42.064146+00
+c96d6879-fbde-4a6d-b7e3-da984549b39c,few,en,A1,adj,/fjuː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c9b859e7-5e03-4b89-8bce-67ed41aaf2ef,lunch,en,A1,noun,/lʌntʃ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+c9fc502f-4804-4c01-b937-0746f0b5dfe2,explain,en,A1,verb,/ɪkˈspleɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ca6eebd3-6f93-49dc-97a5-5833acfe3809,this,en,A1,det,/ðɪs/,The (thing) here .,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 23:11:13.616982+00
+ca7d23db-4ac4-4939-8cee-a1feb6bf4435,fourteen,en,A1,num,/ˌfɔːrˈtiːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+cada755f-ef4b-4e89-b74a-ebe2ad1c2077,bird,en,A1,noun,/bɜːrd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+cae01718-c18b-41c4-98b7-fe0c19d33cb3,onion,en,A1,noun,/ˈʌnjən/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+cb134111-4a6b-4dae-ab5a-a3fd8f2ad1a6,cheap,en,A1,adj,/tʃiːp/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+cb2047ba-510e-415f-835b-204b9f4b58b6,her,en,A1,det,/hɜːr/,ISO 639-2 &amp; ISO 639-3 language code for Herero.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 18:48:03.735551+00
+cc6b30ef-2b59-4c59-9044-5c69b090d588,live,en,A1,verb,/lɪv/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+cd55a33a-49b8-4b45-a277-fc62b87d2847,jacket,en,A1,noun,/ˈdʒækɪt/,"A piece of clothing worn on the upper body outside a shirt or blouse, often waist length to thigh length.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:44.433128+00
+cdaa5399-be05-4aae-9f0d-e888e95d2b8e,forget,en,A1,verb,/fərˈɡet/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+cdfd6938-f258-4013-a8ab-250c08861f51,grey,en,A1,adj,/ɡreɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ce41a0d7-66e1-4f51-9b0a-72913bb02997,video,en,A1,noun,/ˈvɪdiəʊ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ce86d190-ff9f-49da-ae56-0d17b210f28b,science,en,A1,noun,/ˈsaɪəns/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ce989532-5297-4625-bf16-4bec671a68aa,everybody,en,A1,pron,/ˈevribʌdi/,All people.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-10 13:00:39.005643+00
+ceeecfd0-02d7-42cf-a24c-dd47e9e49cfa,hair,en,A1,noun,/her/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+cf6c9a96-bfbe-44da-8e17-0d892deb1502,point,en,A1,noun,/pɔɪnt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d07ef3cb-c959-45f4-86dd-769edf95f247,guitar,en,A1,noun,/ɡɪˈtɑːr/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d108af64-19a8-4f23-bb24-acf33c7c072d,believe,en,A1,verb,/bɪˈliːv/,"To accept as true, particularly without absolute certainty (i.e., as opposed to knowing).",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:55:50.22057+00
+d1a96c16-651a-450b-af0a-652677aff605,eye,en,A1,noun,/aɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d1e4b88c-1d17-4860-abc6-27ff7bc42ee3,him,en,A1,pron,/ɪm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d229d79b-5025-4644-97e6-208687c90352,apple,en,A1,noun,/ˈæp.əl/,"A common, firm, round fruit produced by a tree of the genus Malus.",,oxford_3000,2026-05-17 11:57:15.443642+00,2026-05-17 12:04:31.632537+00
+d23649ca-87dd-4822-adce-a2ba37115eea,ride,en,A1,verb,/raɪd/,"To transport oneself by sitting on and directing a horse, later also a bicycle etc. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:01.254148+00
+d237c9d3-fdc2-4b9b-a115-8faf6cfc7aeb,dress,en,A1,noun,/dres/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d2435848-9872-43b2-be84-418d0ee146fe,during,en,A1,prep,/ˈdʊrɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d28c838b-c232-4857-94b1-35e698e64839,favourite,en,A1,adj,/ˈfeɪvərɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d2f68434-7250-4967-a735-b27938e2dde0,wall,en,A1,noun,/wɔːl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d3149168-0f73-44a7-95da-22ae955abdcc,soon,en,A1,adv,/suːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d394e0af-6a84-4935-86bd-0e3c8134ba6c,visitor,en,A1,noun,/ˈvɪzɪtər/,Someone who visits someone else; someone staying as a guest.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:37.300316+00
+d43d4b35-32a0-41ae-95aa-ac9d85bc8d25,who,en,A1,pron,/huː/,What person or people; which person or people; asks for the identity of someone; used in a direct or indirect question.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:39.602922+00
+d46efaea-2266-4579-8bff-8968cde7eba7,she,en,A1,pron,/ʃiː/,ISO 639-3 language code for Sheko.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:41:23.017688+00
+d511e07e-f59b-49b6-8032-aec707a3a61e,feel,en,A1,verb,/fiːl/,"To use or experience the sense of touch.
+ To become aware of through the skin; to use the sense of touch on.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:32.176709+00
+d518f37b-851f-43f4-b9c6-ebc1ccaae23c,hour,en,A1,noun,/ˈaʊər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d5454f26-7816-4834-9c70-e772aeece9f2,hello,en,A1,interj,/həˈləʊ/,A greeting (salutation) said when meeting someone or acknowledging someone’s arrival or presence.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:58.329704+00
+d5598d6a-bd2f-4158-96a6-66c53f197a10,expensive,en,A1,adj,/ɪkˈspensɪv/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d5daef2e-feef-4cf1-97be-2583f5e33be9,TV,en,A1,noun,/ˌtiː ˈviː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d64a5272-8e86-451c-a9fd-d558f2a27be8,mouth,en,A1,noun,/maʊθ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d67ba05d-be3c-487d-9fc9-2deaa87bf19d,should,en,A1,verb,/ʃʊd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d67f9003-b9d8-435a-9c4e-288e5bf716b8,film,en,A1,noun,/fɪlm/,"A thin layer of some substance; a pellicle; a membranous covering, causing opacity.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 14:55:26.422096+00
+d6ad8951-9d4a-4c27-9d30-75699615eb31,brown,en,A1,adj,/braʊn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d7253bd1-510a-4853-8618-e54034fdc5f1,cinema,en,A1,noun,/ˈsɪnəmə/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d7a2e091-aefe-451a-a9e1-f0d2610370a7,stay,en,A1,verb,/steɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d7b0e6e6-7f54-41a1-a981-b28326a79cbf,here,en,A1,adv,/hɪr/,"In, on, or at this place (a place perceived to be close to the speaker); compare there.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:55:48.945582+00
+d7ea993c-3c0f-4557-86c3-bf6e8ce44c0c,rule,en,A1,noun,/ruːl/,"A regulation, law, guideline.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:11:56.854732+00
+d893cc0e-e5f3-4fce-a123-e660ead6cd12,winter,en,A1,noun,/ˈwɪntər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d94627d8-aeff-43da-8353-b1ef7da766d7,another,en,A1,det,/əˈnʌðər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d9b81fdb-4527-45a7-8276-39d361b92616,dinner,en,A1,noun,/ˈdɪnər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+d9e6ca0e-d9b5-4920-b4b7-e3946a91a31c,sure,en,A1,adj,/ʃʊr/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+da135e3c-9eb3-4e35-812f-8ca2c3e9aa1e,run,en,A1,verb,/rʌn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+da36f337-8565-41b5-94a0-0361f0537c05,useful,en,A1,adj,/ˈjuːsfl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+da99d8a2-af3b-4e86-ae68-5fa958652419,phrase,en,A1,noun,/freɪz/,A short written or spoken expression.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 23:45:16.518114+00
+daa05fbf-6903-4ee2-81eb-751b8a2fa554,Sunday,en,A1,noun,/ˈsʌndi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+dad9e198-a9f1-48bc-88c4-1cbb315e821c,interested,en,A1,adj,/ˈɪntrestɪd/,Having or showing interest (attention or curiosity).,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 06:15:28.810303+00
+daf89fe9-b242-4efa-8fe1-816153f6695e,group,en,A1,noun,/ɡruːp/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+dbdace44-7c95-4f85-b4dd-835a2d032afc,nothing,en,A1,pron,/ˈnʌθɪŋ/,Not any thing; no thing.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:49:36.792471+00
+dc15ec99-04fa-46df-bba6-c17b381d6d1c,desk,en,A1,noun,/desk/,"A table, frame, or case, in past centuries usually with a sloping top but now usually with a flat top, for the use of writers and readers. It often has a drawer or repository underneath.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 18:47:11.626175+00
+dca22d5b-38d5-465f-b9d0-c96be36be378,born,en,A1,verb,/bɔːrn/,past participle of bear; given birth to.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:48:55.81666+00
+dce96076-44d6-444e-bed2-9c5ccbdadd7b,milk,en,A1,noun,/mɪlk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+dd847e60-9b2d-4071-a14b-d65cea3e4cef,autumn,en,A1,noun,/ˈɔːtəm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+dd90a775-5234-4100-96e9-de680f7ae8af,sixteen,en,A1,num,/ˌsɪksˈtiːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ddcfea2a-673d-4a6f-89f8-dc858cfb8f7f,body,en,A1,noun,/ˈbɑːdi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+dde50a63-5598-4c74-86ab-1b701cad6623,Wednesday,en,A1,noun,/ˈwenzdi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ddf2ff03-aa98-4a56-970f-baa72616ce37,in,en,A1,adv,/ɪn/,Former ISO 639-1 language code for Indonesian.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:45:22.736115+00
+de018a5d-0e0a-459d-b543-6b3962d77b89,space,en,A1,noun,/speɪs/,"Unlimited or generalized extent, physical or otherwise.
+The distance between objects. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:11:53.259137+00
+de181213-84ea-4189-9744-c4ca94e2b8c2,object,en,A1,noun,/ˈɑːbdʒekt/,A thing that has physical existence but is not alive.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 09:50:12.106702+00
+de467a3a-c5d3-419c-a0e8-f7ee4db5bc5f,learn,en,A1,verb,/lɜːrn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+de9a2bcf-2de9-40c5-a594-803f515d9d06,boat,en,A1,noun,/bəʊt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+dee5b004-dd20-4600-bd61-1d3f3af384a7,husband,en,A1,noun,/ˈhʌzbənd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+df0ba810-d497-4414-865f-58eeeccf6a24,website,en,A1,noun,/ˈwebsaɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+df264ba1-5d2a-4e34-a3c8-fcc70bd20724,project,en,A1,noun,/ˈprɑːdʒekt/,"A planned endeavor, usually with a specific goal and accomplished in several steps or stages.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:04.387556+00
+df5514ff-caec-4d8f-9be7-4339f6a2a1ec,our,en,A1,det,/ˈaʊər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+dfd9c2cf-3f60-427e-8f22-f4fec5cf4cc6,cut,en,A1,verb,/kʌt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e0070bfb-dffe-47d7-8e4e-61c51b652730,from,en,A1,prep,/frɑːm/,Used to indicate source or provenance.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:45:16.483558+00
+e01ce9cc-e5a7-4d4e-86af-2864ae1de78c,opinion,en,A1,noun,/əˈpɪnjən/,"A belief, judgment or perspective that a person has formed, either through objective or subjective reasoning, about a topic, issue, person or thing.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-05 15:47:36.278362+00
+e0750261-2559-445b-a416-5e070f2f081e,skill,en,A1,noun,/skɪl/,"A capacity to do something well; a technique, an ability, usually acquired or learned, as opposed to abilities that are regarded as innate.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:07.446799+00
+e07fbc4b-8924-469e-a1f0-9ab84052c083,subject,en,A1,noun,/ˈsʌbdʒekt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e0f0edcc-c7d7-428a-aa81-8734a4ed240a,make,en,A1,verb,/meɪk/,"To create.
+To build, construct, produce, or originate.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:57.956548+00
+e14542b9-8007-4e6c-8a42-9546565489fa,Friday,en,A1,noun,/ˈfraɪdi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e175e92c-b404-4116-a526-b9d54000dc36,routine,en,A1,noun,/ruːˈtiːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e1b591ad-0154-4755-b6aa-c68f333d986a,umbrella,en,A1,noun,/ʌmˈbrelə/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e22414d7-125a-4fd2-a705-14290d6aeffe,quick,en,A1,adj,/kwɪk/,"Moving with speed, rapidity or swiftness, or capable of doing so; rapid; fast.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:56:52.56621+00
+e2b72a7b-e036-4716-9d84-4abe964fb8aa,beautiful,en,A1,adj,/ˈbjuːtɪfl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e2bcd094-0f3f-4f52-bdce-eb5afd942d02,swimming,en,A1,noun,/ˈswɪmɪŋ/,The act or art of sustaining and propelling the body in water.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 22:03:08.560757+00
+e3a33b68-b309-4033-a8a8-b62c512b6f6a,farm,en,A1,noun,/fɑːrm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e40bc96c-2684-479b-9e30-1e2562419095,little,en,A1,adj,/ˈlɪtl/,"Small, not large, limited, particularly:",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-19 20:37:00.014913+00
+e46c0c20-b570-48a8-9325-89e476111bf7,that,en,A1,conj,/ðæt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e4786e76-6085-407e-b780-d17dd4efc1d0,garden,en,A1,noun,/ˈɡɑːrdn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e4d6da03-c407-4d38-8af0-72c4afa6e959,put,en,A1,verb,/pʊt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e510a7ed-8959-4997-b568-c2b72150d47c,some,en,A1,det,/sʌm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e525ed59-a00b-4086-9769-67f3b08b0bf3,course,en,A1,noun,/kɔːrs/,A sequence of events.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-16 09:43:42.135274+00
+e52e6792-b1a9-4667-8a4f-04850acda717,same,en,A1,adj,/seɪm/,Not different or other; not another or others; not different as regards self; selfsame; identical.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:31:58.311058+00
+e568e79a-629f-42c7-9bc5-506fa553ceb9,eleven,en,A1,num,/ɪˈlevn/,"NATO, ICAO, ITU &amp; IMO radiotelephony code for 11, used only with o'clock to indicate direction.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:47:40.973325+00
+e579520e-6136-4262-b352-f5f5b3b3f257,excited,en,A1,adj,/ɪkˈsaɪtɪd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e605d980-cbcd-4baa-a1ab-3a0c95761a00,hi,en,A1,interj,/haɪ/,ISO 639-1 language code for Hindi.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 17:47:38.801963+00
+e66108aa-34d5-4a49-b568-78efc20a702e,wait,en,A1,verb,/weɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e66d1274-dcc0-4fa8-adda-a5621fa040a7,ticket,en,A1,noun,/ˈtɪkɪt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e67106c6-adfe-4699-968d-45a18b4908d7,sun,en,A1,noun,/sʌn/,ISO 639-2 &amp; ISO 639-3 language code for Sundanese.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 19:55:27.063296+00
+e681e443-4cab-438c-95a2-b7ac1e2c2bca,positive,en,A1,adj,/ˈpɑːzətɪv/,"Included, present, characterized by affirmation.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:35:53.206573+00
+e6b20349-721f-4226-9097-8527ba426c99,probably,en,A1,adv,/ˈprɑːbəbli/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e70e0c92-48a6-46f5-99a6-896930db6c91,flat,en,A1,noun,/flæt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e7977883-4f29-4b04-b963-7309e820f6c2,yourself,en,A1,pron,/jərˈself/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e83901a0-9425-40cc-bcbd-5a99e0c1e44a,tired,en,A1,adj,/ˈtaɪərd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e884ec2c-c343-4367-983b-aebf03cf4a5d,everything,en,A1,pron,/ˈevriθɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e8c489a8-d908-4adb-8326-688507cf706d,goodbye,en,A1,interj,/ˌɡʊdˈbaɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+e8e900c3-8779-447b-8edc-de297b66d79d,hey,en,A1,interj,/heɪ/,An exclamation to get attention.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 17:26:06.54507+00
+e99a02b0-247a-4d70-abed-f4d2f190b4f8,fun,en,A1,noun,/fʌn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ea190f6f-f67c-4f36-a254-5780c793fec5,we,en,A1,pron,/wiː/,"Two or more people including or consisting of the speaker(s)/writer(s).
+ Excluding the person(s) being addressed.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 21:11:54.884925+00
+ea3f7998-a739-4b7d-b545-c2b06b31b597,problem,en,A1,noun,/ˈprɑːbləm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+eac193fd-16e7-4c69-b6f9-15867d30b313,shop,en,A1,noun,/ʃɑːp/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ead16d0c-5514-4f5d-88f8-ea5818b5d05e,butter,en,A1,noun,/ˈbʌtər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+eb0779aa-45d1-4d3c-b519-30c2cd868d08,language,en,A1,noun,/ˈlæŋɡwɪdʒ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+eb5fe921-70b9-41f0-8ad2-4038e96e4c54,newspaper,en,A1,noun,/ˈnuːzpeɪpər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+eb7ecbb1-be33-4fc1-833b-8ac0d13a4c4f,OK,en,A1,adj,/əʊˈkeɪ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+eb7f2b1e-d56b-42ba-95e7-ba46558ee022,stand,en,A1,verb,/stænd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ebb816e2-4dff-49b2-a5f1-af987f74ddb4,draw,en,A1,verb,/drɔː/,"Senses relating to exerting force or pulling.
+ To pull (someone or something) in a particular direction or manner. .mw-parser-output .defdate{font-size:smaller}",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 21:36:10.460039+00
+ebc0131e-e0e1-486d-8fb9-bc78ba2e5654,exciting,en,A1,adj,/ɪkˈsaɪtɪŋ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ebe3410b-b6b1-4eb2-8725-71e0370c5b3a,look,en,A1,verb,/lʊk/,"To try to see, to pay attention to with one’s eyes.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-15 22:13:33.662542+00
+ec78377f-ab3f-445e-b930-f622232317ec,use,en,A1,verb,/juːz/,The act of using.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:55:04.962944+00
+ed24efff-b8d9-41ab-8265-efcd980ee690,restaurant,en,A1,noun,/ˈrestərɑːnt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ed4672f9-1965-4ed6-b8d8-a254c6a8fe48,begin,en,A1,verb,/bɪˈɡɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ed7e2082-9733-4cd2-a061-96182f23e2eb,with,en,A1,prep,/wɪθ/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+edff033b-8fdf-4b0c-a7d8-2fdf9e0dc04f,Monday,en,A1,noun,/ˈmʌndi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ee71fec4-6a6a-40e3-a756-85e09e04f8f3,fifth,en,A1,Adjective,/fɪfθ/,The ordinal form of the number five.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 06:15:39.7514+00
+eea9e404-6b06-4652-9bf1-c2cf3fa0a6c0,teenager,en,A1,noun,/ˈtiːneɪdʒər/,A person between thirteen and nineteen years old (inclusive).,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 09:50:14.29481+00
+ef4cec14-dded-46c6-a7ad-d28a7fae0489,west,en,A1,adj,/west/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ef6580e7-0950-46f3-99f5-8b762e9a838b,meat,en,A1,noun,/miːt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ef6e813e-1072-463c-a320-bead563abbb6,grandparent,en,A1,noun,/ˈɡrænperənt/,The parent of someone's parent.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 06:15:36.948101+00
+ef81b517-7504-42ab-b8b1-7668e52442d1,lesson,en,A1,noun,/ˈlesn/,To instruct to teach.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-13 17:13:42.402736+00
+efae5cfd-7c45-46b2-b76d-a7dc98aba188,practise,en,A1,verb,/ˈpræktɪs/,To repeat (an activity) as a way of improving one's skill in that activity.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:20:35.409186+00
+f0a01567-d81d-4f2a-bc56-7ff860de5139,kind,en,A1,noun,/kaɪnd/,"A type, race or category; a group of entities that have common characteristics such that they may be grouped together.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 09:50:12.676184+00
+f0accfab-a93e-46bf-85ec-3397e86c36c3,enjoy,en,A1,verb,/ɪnˈdʒɔɪ/,To receive pleasure or satisfaction from something.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:20:17.379076+00
+f0c60470-9a91-4e31-a4ec-9a2378fc6ed9,culture,en,A1,noun,/ˈkʌltʃər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f0cf3a23-0021-4c04-8d30-aaeedbeee6e5,homework,en,A1,noun,/ˈhəʊmwɜːrk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f0da9926-7b49-4fc0-b19d-ed0f8c321feb,every,en,A1,det,/ˈevri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f10c98ae-f068-445f-9917-682585f2a718,before,en,A1,prep,/bɪˈfɔːr/,Earlier than (in time).,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:13:55.103411+00
+f1680907-a75d-4bb5-9ac8-7a2d3292c353,mountain,en,A1,noun,/ˈmaʊntn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f17a3a53-ab39-4cc1-b0a4-0ba7356fa3bf,nineteen,en,A1,num,/ˌnaɪnˈtiːn/,"The cardinal number occurring after eighteen and before twenty, represented in Roman numerals as XIX and in Arabic numerals as 19. It is the last/largest of the ""teens"".",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-20 15:23:34.339583+00
+f18d7191-647f-44d1-b26c-b8e0d9c1920a,daughter,en,A1,noun,/ˈdɔːtər/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f1e7fd3f-da51-420e-8fbe-f0ae8bc907f9,no,en,A1,det,/nəʊ/,ISO 639-1 language code for Norwegian.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 09:50:28.781219+00
+f1ea375a-8cee-447c-b92b-10d5caebc6e5,capital,en,A1,adj,/ˈkæpɪtl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f2225eb9-82a4-4ec6-8095-b195fc2d74c0,bye,en,A1,interj,/baɪ/,ISO 639-3 language code for Pouye.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-04 22:50:28.266275+00
+f29a1d3d-2ccf-4d23-81ab-78809580c1c1,end,en,A1,noun,/end/,ISO 639-3 language code for Ende.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-09 19:28:51.725225+00
+f31e5c92-20d2-4f31-aff5-dec023afa406,juice,en,A1,noun,/dʒuːs/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f3340284-cc90-46f2-a038-b3dfaa97db33,warm,en,A1,adj,/wɔːrm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f3381b2e-b7a9-4f52-9a91-33fb151a998c,wrong,en,A1,adj,/rɔːŋ/,Incorrect or untrue.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:33:31.58671+00
+f41365a1-4e08-4311-b9f5-59abbf3ac88e,jeans,en,A1,noun,/dʒiːnz/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f4a9524e-02a7-4ff5-a7dd-bdc1c7d0bfea,eight,en,A1,num,/eɪt/,NATO &amp; ICAO radiotelephony clear code (spelling-alphabet name) for the digit 8.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 15:38:38.263115+00
+f4d4d019-0dfc-4837-8e9c-fd1f74e243d0,museum,en,A1,noun,/mjuˈziːəm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f57f5a16-0849-4234-9b71-280026ec8ae9,if,en,A1,conj,/ɪf/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f5f0c881-0ba5-47cf-9261-8fb97e4c6e02,about,en,A1,adv,/əˈbaʊt/,In a circle around; all round; on every side of; on the outside of; around. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 06:15:36.280302+00
+f6089b13-2cd5-42a2-9841-e5ab80d1795e,easy,en,A1,adj,/ˈiːzi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f65760cf-f369-496b-b39c-b5a87e150505,thousand,en,A1,num,/ˈθaʊznd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f69098b3-ddd8-4bce-ac79-d990d0eec7c6,action,en,A1,noun,/ˈækʃn/,The effort of performing or doing something.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-10 13:00:41.138887+00
+f79be3d3-71c0-43c4-8d29-081ebb3ce0d2,popular,en,A1,adj,/ˈpɑːpjələr/,Common among the general public; generally accepted. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 19:55:42.736906+00
+f7b18380-2847-42a5-9452-37a3d94ef50a,mile,en,A1,noun,/maɪl/,"The international mile: a unit of length precisely equal to 1.609344 kilometers established by treaty among Anglophone nations in 1959, divided into 5,280 feet or 1,760 yards.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:35:30.269534+00
+f7cd7da3-2440-4d0a-9373-f9f6d8d4be07,could,en,A1,verb,/kʊd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f801fe1a-62b9-43cc-b6cc-90e81c2ffeb4,coffee,en,A1,noun,/ˈkɔːfi/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f9263d4b-f093-4ff5-b56c-104b5e767136,football,en,A1,noun,/ˈfʊtbɔːl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f93ce1f2-0e0b-4382-a984-b248c073090c,box,en,A1,noun,/bɑːks/,ISO 639-3 language code for Buamu.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 18:20:37.781348+00
+f9bad803-165a-4a9f-8d4d-bd752c1540e8,wine,en,A1,noun,/waɪn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+f9c85a4d-5473-4853-8e2b-65d92efb3c1f,only,en,A1,adj,/ˈəʊnli/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fa311c0f-2a86-4cbf-837c-c5e36759a7bc,mum,en,A1,noun,/mʌm/,ISO 639-3 language code for Maiwala.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-14 17:15:11.203695+00
+fa3f22e7-3537-4370-b903-dc04b12f437d,leave,en,A1,verb,/liːv/,"To have a consequence or remnant.
+ To cause or allow (something) to remain as available; to refrain from taking (something) away; to stop short of consuming or otherwise depleting (something) entirely.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:11:52.715825+00
+fa81955a-ada0-4621-a52e-cb8adeb842da,else,en,A1,adv,/els/,Other; in addition to previously mentioned items.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 19:43:57.112859+00
+faca1d77-d44e-43e9-b6ef-cd5d59b52ee9,success,en,A1,noun,/səkˈses/,The achievement of one's aim or goal. .mw-parser-output .defdate{font-size:smaller},,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-23 20:31:46.543626+00
+fad22494-a443-4477-87ce-03bc06e9b31d,hungry,en,A1,adj,/ˈhʌŋɡri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fb3a5f19-732c-4777-adf4-77432079b21e,bring,en,A1,verb,/brɪŋ/,To transport toward somebody/somewhere.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 18:12:15.647998+00
+fb5405cb-0bbe-4db5-b325-7fb1b88efeb1,still,en,A1,adv,/stɪl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fb68bb1a-958e-4108-b0da-cd7632cb5ec3,two,en,A1,num,/tuː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fc083a0c-684d-405a-82cc-6a4183a24b42,their,en,A1,det,/ðer/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fc20d331-48f7-4214-b2a5-6dc869d3e4da,interesting,en,A1,adj,/ˈɪntrestɪŋ/,"Of concern; affecting, important.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-05 15:47:29.075158+00
+fc75822f-a710-4e44-b8be-7527a44e6433,spend,en,A1,verb,/spend/,To pay out (money).,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 15:36:09.201626+00
+fc90f999-e1ec-4b7f-b4d4-e3e0e7df35eb,start,en,A1,verb,/stɑːrt/,The beginning of an activity.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-07 19:24:15.862357+00
+fca61f0f-4a55-44c9-86ff-937d64ca653b,home,en,A1,adv,/həʊm/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fcbd2f7e-f9ca-4fb9-a65d-85cef4cca8c0,shirt,en,A1,noun,/ʃɜːrt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fcd7d8eb-f3b8-4840-b79b-7836bae123c1,bike,en,A1,noun,/baɪk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fd2b127b-045b-4235-944f-742ee046aa73,real,en,A1,adj,/ˈriːəl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fd7638e0-491b-4c1c-b980-432720510f93,magazine,en,A1,noun,/ˈmæɡəziːn/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fd80d670-7cd9-46c2-b9cf-2239303dc62d,island,en,A1,noun,/ˈaɪlənd/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fda424e8-3e2e-4f85-8db2-3f18c3bd6c5d,be,en,A1,verb,/biː/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+fe2f3c74-bbd8-4ddc-9e48-56eebe819022,away,en,A1,adv,/əˈweɪ/,"From a place, hence.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-04 22:50:46.018802+00
+fe31b476-82f0-4d80-b988-1d874fe62ec9,twelve,en,A1,num,/twelv/,"NATO, ICAO, ITU &amp; IMO radiotelephony code for 12, used only with o'clock to indicate direction.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-12 06:15:50.622219+00
+fee8f5fd-5d6d-4159-a03e-4f12c5e85130,member,en,A1,noun,/ˈmembər/,One who belongs to a group.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-11 15:31:50.342478+00
+ff52a28c-5117-4c96-ad71-5d0d71108c99,taxi,en,A1,noun,/ˈtæksi/,"A vehicle that may be hired for single journeys by members of the public, particularly one with an automated meter to calculate the fare.",,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-06-06 23:27:05.536741+00
+ff5511a5-47ab-4b10-8666-88e800aacb5f,uncle,en,A1,noun,/ˈʌŋkl/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ff5c9178-73a6-4119-a70e-b296260eb1a1,coat,en,A1,noun,/kəʊt/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ff7e9985-b58c-44cd-a7d8-738142ae77aa,century,en,A1,noun,/ˈsentʃəri/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
+ff8919b6-4971-49f1-bb7c-d46c9257c90a,seven,en,A1,num,/ˈsevn/,NATO &amp; ICAO radiotelephony clear code (spelling-alphabet name) for the digit 7.,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-24 18:32:08.082942+00
+ffc9c030-4971-4915-92dc-52311789d4c6,park,en,A1,noun,/pɑːrk/,,,oxford_3000_5000,2026-05-17 13:00:01.611959+00,2026-05-17 13:00:01.611959+00
