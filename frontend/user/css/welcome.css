@@ -31,13 +31,13 @@ header {
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 22px;
+  gap: 4px;
+  font-size: 30px;
   font-weight: 900;
   color: var(--blue);
   text-decoration: none;
 }
-.logo img { width: 32px; height: 32px; object-fit: contain; }
+.logo img { width: 40px; height: 40px; object-fit: contain; }
 
 .lang-btn {
   display: flex;
@@ -118,13 +118,13 @@ main {
 }
 
 /* --- Bên phải: chữ + nút --- */
-.hero-text { max-width: 440px; }
+.hero-text { max-width: 480px; }
 
 h1 {
-  font-size: 40px;
+  font-size: 35px;
   font-weight: 800;
   line-height: 1.2;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   text-align: center;
 }
 h1 .highlight { color: var(--blue); }
@@ -138,7 +138,8 @@ h1 .highlight { color: var(--blue); }
 
 .btn {
   display: block;
-  width: 100%;
+  width: 75%;
+  margin: 0 auto;
   padding: 14px;
   border-radius: 12px;
   font-family: inherit;
@@ -156,19 +157,19 @@ h1 .highlight { color: var(--blue); }
   background: var(--blue);
   color: var(--white);
   border: none;
-  box-shadow: 0 4px 0 var(--blue-dark);
+  box-shadow: 0 6px 0 var(--blue-dark);
   margin-bottom: 14px;
 }
-.btn-primary:hover { filter: brightness(1.05); }
+.btn-primary:hover { filter: brightness(1.20); }
 .btn-primary:active { transform: translateY(4px); box-shadow: 0 0 0 var(--blue-dark); }
 
 .btn-secondary {
   background: var(--white);
   color: var(--blue);
   border: 2px solid var(--border);
-  box-shadow: 0 3px 0 var(--border);
+  box-shadow: 0 6px 0 var(--border);
 }
-.btn-secondary:hover { background: #f7faff; }
+.btn-secondary:hover { background: #ebeef1; }
 .btn-secondary:active { transform: translateY(3px); box-shadow: 0 0 0 var(--border); }
 
 /* ===== Điện thoại / màn hình nhỏ ===== */
