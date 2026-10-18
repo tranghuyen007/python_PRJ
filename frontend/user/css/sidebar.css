@@ -1,0 +1,88 @@
+/* ===== sidebar.css — khung trang, thanh điều hướng, thanh trên cùng ===== */
+
+.layout { display: flex; min-height: 100vh; }
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: 240px; height: 100vh; position: sticky; top: 0;
+  display: flex; flex-direction: column;
+  background: var(--white); border-right: 1px solid var(--border);
+  padding: 20px 14px;
+}
+
+.logo {
+  display: flex; align-items: center; gap: 8px; text-decoration: none;
+  font-size: 24px; font-weight: 900; color: var(--blue);
+  margin: 0 8px 28px;
+}
+.logo img { width: 40px; height: 40px; object-fit: contain; }
+
+.side-menu { list-style: none; margin: 0 0 24px; }
+.side-menu a {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; margin-bottom: 4px; border-radius: 12px;
+  color: var(--navy); text-decoration: none; font-size: 14px; font-weight: 600;
+  transition: background 0.15s;
+}
+.side-menu a img { width: 26px; height: 26px; object-fit: contain; }
+.side-menu a:hover { background: #f3f6fb; }
+.side-menu a.active { background: var(--blue-light); color: var(--blue); font-weight: 800; }
+
+/* Thẻ mục tiêu hằng ngày */
+.daily-card { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: #fafcff; }
+.daily-icon { width: 26px; height: 26px; color: var(--blue); }
+.daily-card h4 { margin: 10px 0 6px; font-size: 14px; font-weight: 800; }
+.daily-card p { margin-bottom: 12px; font-size: 12px; color: var(--gray); line-height: 1.5; }
+.daily-text { display: block; margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--blue); }
+
+.help-link {
+  margin-top: auto; padding: 10px 8px; font-size: 13px;
+  color: var(--gray); text-decoration: none;
+}
+.help-link:hover { color: var(--blue); }
+
+/* ---------- Thanh tiến độ (dùng chung) ---------- */
+.progress { height: 6px; background: #e6ecf5; border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--blue); border-radius: 99px; transition: width 0.4s; }
+
+/* ---------- Cột bên phải ---------- */
+.main-area { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  height: 64px; padding: 0 32px;
+  background: var(--white); border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 5;
+}
+.topbar-title { font-size: 13px; color: var(--gray); }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 10px;
+  font-size: 12px; font-weight: 700;
+}
+.pill svg { width: 15px; height: 15px; }
+.pill-streak { background: var(--blue-light); color: var(--blue); }
+.pill-points { color: var(--navy); }
+.pill-points svg { color: var(--blue); }
+
+.icon-btn {
+  width: 34px; height: 34px; display: grid; place-items: center;
+  border: none; background: none; border-radius: 10px; color: var(--gray); cursor: pointer;
+}
+.icon-btn:hover { background: var(--blue-light); color: var(--blue); }
+.icon-btn svg { width: 18px; height: 18px; }
+
+.content { flex: 1; padding: 32px 40px 48px; }
+
+/* ---------- Màn hình nhỏ ---------- */
+@media (max-width: 900px) {
+  .sidebar { width: 76px; padding: 20px 10px; }
+  .logo span, .side-menu a span, .daily-card, .help-link { display: none; }
+  .logo { margin: 0 0 24px; justify-content: center; }
+  .side-menu a { justify-content: center; padding: 10px; }
+  .topbar { padding: 0 16px; }
+  .topbar-title { display: none; }
+  .content { padding: 24px 16px 40px; }
+}

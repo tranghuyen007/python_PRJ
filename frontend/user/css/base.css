@@ -1,0 +1,27 @@
+/* ===== base.css — màu, font, reset dùng chung cho mọi trang ===== */
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap");
+
+:root {
+  --blue: #3b8ef0;
+  --blue-dark: #2a74d1;
+  --blue-light: #eef4fd;
+  --navy: #17294d;
+  --gray: #6b7a90;
+  --border: #e3e8f0;
+  --white: #ffffff;
+  --bg: #f5f8fd;
+  --green: #1f9d55;
+  --green-light: #e7f7ee;
+  --radius: 16px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Nunito", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--navy);
+}
+
+a { color: inherit; }
+button { font-family: inherit; }
