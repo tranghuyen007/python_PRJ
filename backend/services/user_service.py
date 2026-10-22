@@ -31,12 +31,12 @@ def create_user (db: Session, username: str, email: str, password: str,) -> User
          print("Email already exists")
          return
 
-    password_hash = password_hash.hash(password)
+    hashed_password = password_hash.hash(password)
 
     new_user = User (
         username = username,
         email = email,
-        password_hash=password_hash,
+        password_hash=hashed_password,
     )
 
     db.add(new_user)
