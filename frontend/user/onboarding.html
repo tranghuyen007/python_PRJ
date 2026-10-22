@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vocabbit – Lộ trình dành riêng cho bạn</title>
+  <link rel="icon" type="image/png" href="../assets/icons/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../user/css/onboarding.css" />
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="topbar">
+    <a href="welcome.html" class="logo">
+      <img src="../assets/icons/logo.png" alt="Vocabbit logo" />
+      Vocabbit
+    </a>
+    <span class="topbar-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="6" cy="19" r="2.5" /><circle cx="18" cy="5" r="2.5" />
+        <path d="M8.5 19H16a3.5 3.5 0 0 0 0-7H8a3.5 3.5 0 0 1 0-7h7.5" />
+      </svg>
+      <span>Lộ trình dành riêng cho bạn</span>
+    </span>
+  </header>
+
+  <!-- ===== Nội dung chính ===== -->
+  <main class="onboarding">
+
+    <!-- Thanh tiến trình -->
+    <div class="progress-row">
+      <button type="button" class="back-btn" id="btnBack" aria-label="Quay lại">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-count" id="progressCount">1 / 3</span>
+    </div>
+
+    <!-- Câu hỏi (nội dung do onboarding.js điền vào) -->
+    <section class="question" id="question">
+      <div class="question-head">
+        <img class="bunny" src="../assets/icons/logo.png" alt="Thỏ Vocabbit" />
+        <div>
+          <p class="eyebrow" id="eyebrow"></p>
+          <h1 id="qTitle"></h1>
+          <p class="subtitle" id="qSubtitle"></p>
+        </div>
+      </div>
+
+      <div class="options" id="options" role="radiogroup" aria-labelledby="qTitle"></div>
+
+      <p class="encourage" id="encourage" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8z" />
+        </svg>
+        <span id="encourageText"></span>
+      </p>
+
+      <div class="tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z" />
+          <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" />
+          <path d="M5 16l.6 1.4L7 18l-1.4.6L5 20l-.6-1.4L3 18l1.4-.6z" />
+        </svg>
+        <span id="tipText"></span>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Thanh dưới cùng ===== -->
+  <footer class="bottom-bar">
+    <div class="bottom-inner">
+      <div>
+        <p class="bottom-title" id="footTitle"></p>
+        <p class="bottom-sub" id="footSub"></p>
+      </div>
+      <button type="button" class="btn btn-primary" id="btnNext" disabled>
+        <span id="btnNextText">Tiếp tục</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </footer>
+
+  <script src="../user/js/onboarding.js"></script>
+</body>
+</html>
