@@ -27,6 +27,18 @@ class User(Base):
         nullable=False,
     )
 
+    role = Column(
+        String,
+        nullable=False,
+        default="USER",
+    )
+
+    status = Column(
+        String,
+        nullable=False,
+        default="ACTIVE"
+    )
+
     created_at = Column(
         DateTime,
         nullable=False,
