@@ -37,13 +37,6 @@ menuItems.forEach(function (item) {
 });
 // Quản lý cấp độ
 const levelList = document.getElementById("level-list");
-const addLevelButton = document.getElementById("btn-add-level");
-const cancelLevelButton = document.getElementById("btn-cancel-level");
-const levelFormContainer = document.getElementById("level-form-container");
-const levelForm = document.getElementById("level-form");
-const levelNameInput = document.getElementById("level-name");
-const levelDescriptionInput = document.getElementById("level-description");
-const formTitle = document.getElementById("form-title");
 
 let levels = [
     { id: 1, name: "A1", description: "Sơ cấp" },
@@ -70,136 +63,10 @@ function renderLevels() {
         const descriptionCell = document.createElement("td");
         descriptionCell.textContent = level.description;
 
-        const actionCell = document.createElement("td");
-
-        const editButton = document.createElement("button");
-        editButton.textContent = "Sửa";
-        editButton.className = "btn-edit";
-        editButton.addEventListener("click", function () {
-            editLevel(level.id);
-        });
-
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Xóa";
-        deleteButton.className = "btn-delete";
-        deleteButton.addEventListener("click", function () {
-            deleteLevel(level.id);
-        });
-
-        actionCell.append(editButton, deleteButton);
-        row.append(idCell, nameCell, descriptionCell, actionCell);
+        row.append(idCell, nameCell, descriptionCell);
         levelList.appendChild(row);
     });
 }
-
-function openLevelForm(level = null) {
-    levelForm.reset();
-    levelFormContainer.classList.remove("hidden");
-
-    if (level) {
-        formTitle.textContent = "Sửa cấp độ";
-        levelNameInput.value = level.name;
-        levelDescriptionInput.value = level.description;
-        editingId = level.id;
-    } else {
-        formTitle.textContent = "Thêm cấp độ";
-        editingId = null;
-    }
-
-    levelNameInput.focus();
-}
-
-function editLevel(id) {
-    const level = levels.find(function (item) {
-        return item.id === id;
-    });
-
-    if (level) {
-        openLevelForm(level);
-    }
-}
-
-function deleteLevel(id) {
-    const level = levels.find(function (item) {
-        return item.id === id;
-    });
-
-    if (!level) return;
-
-    const confirmed = confirm(
-        "Bạn có chắc muốn xóa cấp độ " + level.name + "?"
-    );
-
-    if (!confirmed) return;
-
-    levels = levels.filter(function (item) {
-        return item.id !== id;
-    });
-
-    renderLevels();
-    renderDashboardStats();
-}
-
-addLevelButton.addEventListener("click", function () {
-    openLevelForm();
-});
-
-cancelLevelButton.addEventListener("click", function () {
-    levelFormContainer.classList.add("hidden");
-    levelForm.reset();
-    editingId = null;
-});
-
-levelForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const name = levelNameInput.value.trim().toUpperCase();
-    const description = levelDescriptionInput.value.trim();
-
-    if (!name) {
-        alert("Vui lòng nhập tên cấp độ.");
-        return;
-    }
-
-    const duplicate = levels.some(function (level) {
-        return level.name.toUpperCase() === name
-            && level.id !== editingId;
-    });
-
-    if (duplicate) {
-        alert("Cấp độ này đã tồn tại.");
-        return;
-    }
-
-    if (editingId !== null) {
-        const level = levels.find(function (item) {
-            return item.id === editingId;
-        });
-
-        if (level) {
-            level.name = name;
-            level.description = description;
-        }
-    } else {
-        const newId = levels.length > 0
-            ? Math.max(...levels.map(function (item) {
-                return item.id;
-            })) + 1
-            : 1;
-
-        levels.push({
-            id: newId,
-            name: name,
-            description: description
-        });
-    }
-
-    renderLevels();
-    renderDashboardStats();
-    levelFormContainer.classList.add("hidden");
-    levelForm.reset();
-    editingId = null;
-});
 
 renderLevels();
 
@@ -476,7 +343,7 @@ function getTopicName(topicId) {
         return item.id === topicId;
     });
 
-    return topic ? topic.name : "Chủ đề không tồn tại";
+    return topic ? topic.name + " (" + topic.level + ")" : "Chủ đề không tồn tại";
 }
 
 // Đổ danh sách chủ đề vào các ô lựa chọn
@@ -493,12 +360,12 @@ function renderLessonTopicOptions() {
     topics.forEach(function (topic) {
         const formOption = document.createElement("option");
         formOption.value = topic.id;
-        formOption.textContent = topic.name;
+        formOption.textContent = topic.name + " (" + topic.level + ")";
         lessonTopicInput.appendChild(formOption);
 
         const filterOption = document.createElement("option");
         filterOption.value = topic.id;
-        filterOption.textContent = topic.name;
+        filterOption.textContent = topic.name + " (" + topic.level + ")";
         lessonTopicFilter.appendChild(filterOption);
     });
 

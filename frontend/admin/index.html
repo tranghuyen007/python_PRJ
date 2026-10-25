@@ -70,8 +70,8 @@
                     </div>
 
                     <div class="stat-card">
-                        <p>Người dùng</p>
-                        <h3 id="stat-users">0</h3>
+                        <p>Từ vựng</p>
+                        <h3 id="stat-vocabularies">0</h3>
                     </div>
 
                 </div>
@@ -83,24 +83,7 @@
                         chủ đề và bài học của ứng dụng.
                     </p>
                 </div>
-                <!-- Thẻ thống kê -->
-                <div class="stats-grid">
-
-                    <div class="stat-card">
-                        <p>Tổng từ vựng</p>
-                        <h3 id="stat-vocabularies">0</h3>
-                    </div>
-                </div>
-
-                <!-- Biểu đồ từ vựng theo bài học -->
-                <div class="chart-card">
-                    <h3>Số lượng từ vựng theo bài học</h3>
-                    <p class="chart-description">
-                        Thống kê số từ vựng được gán cho từng bài học.
-                    </p>
-
-                    <div id="vocabulary-chart" class="vocabulary-chart"></div>
-                </div>
+        
             </section>
 
             
@@ -112,9 +95,6 @@
                         <p>Quản lý các cấp độ tiếng Anh của ứng dụng.</p>
                     </div>
 
-                    <button id="btn-add-level" class="btn-primary">
-                        + Thêm cấp độ
-                    </button>
                 </div>
 
                 <div class="table-container">
@@ -124,7 +104,6 @@
                                 <th>ID</th>
                                 <th>Tên cấp độ</th>
                                 <th>Mô tả</th>
-                                <th>Thao tác</th>
                             </tr>
                         </thead>
 
@@ -134,39 +113,6 @@
                     </table>
                 </div>
 
-                <div id="level-form-container" class="form-container hidden">
-                    <h3 id="form-title">Thêm cấp độ</h3>
-
-                    <form id="level-form">
-                        <label for="level-name">Tên cấp độ</label>
-                        <input
-                            type="text"
-                            id="level-name"
-                            placeholder="Ví dụ: A1"
-                            required
-                        >
-
-                        <label for="level-description">Mô tả</label>
-                        <textarea
-                            id="level-description"
-                            placeholder="Mô tả cấp độ..."
-                        ></textarea>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primary">
-                                Lưu
-                            </button>
-
-                            <button
-                                type="button"
-                                id="btn-cancel-level"
-                                class="btn-secondary"
-                            >
-                                Hủy
-                            </button>
-                        </div>
-                    </form>
-                </div>
 
             </section>
 
@@ -297,7 +243,7 @@
                                     <th>ID</th>
                                     <th>Tên bài học</th>
                                     <th>Chủ đề</th>
-                                    <th>Thứ tự</th>
+                                    <th>Lesson</th>
                                     <th>Mô tả</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -324,7 +270,7 @@
                                 <option value="">Chọn chủ đề</option>
                             </select>
 
-                            <label for="lesson-order">Thứ tự bài học</label>
+                            <label for="lesson-order">Lesson</label>
                             <input
                                 type="number"
                                 id="lesson-order"
