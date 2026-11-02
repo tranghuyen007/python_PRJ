@@ -1,4 +1,4 @@
-
+﻿
 * {
     margin: 0;
     padding: 0;
@@ -23,6 +23,12 @@ body {
     color: white;
     padding: 24px 16px;
     flex-shrink: 0;
+
+    /* Giữ sidebar cố định khi cuộn trang */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .sidebar h2 {
@@ -583,5 +589,620 @@ th {
     to {
         opacity: 1;
         transform: translateX(0);
+    }
+}
+
+/* ==============================================
+   NÚT ĐĂNG XUẤT & TOPBAR RIGHT
+=============================================== */
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 14px;
+    background: #fee2e2;
+    color: #b91c1c;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+    white-space: nowrap;
+}
+
+.btn-logout:hover {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+/* ================================================================
+   ACCORDION CHỦ ĐỀ THEO CẤP ĐỘ
+================================================================ */
+
+.accordion-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ---- Item (một cấp độ) ---- */
+.accordion-item {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s;
+}
+
+.accordion-item.open {
+    box-shadow: 0 4px 16px rgba(55, 48, 163, 0.10);
+    border-color: #c7d2fe;
+}
+
+/* ---- Header (nút bấm) ---- */
+.accordion-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: white;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+    gap: 12px;
+}
+
+.accordion-header:hover {
+    background: #f8fafc;
+}
+
+.accordion-item.open > .accordion-header {
+    background: #eef2ff;
+    border-bottom: 1px solid #e0e7ff;
+}
+
+.accordion-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Badge cấp độ (A1, A2...) */
+.accordion-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 10px;
+    background: linear-gradient(135deg, #3730a3, #6366f1);
+    color: white;
+    font-weight: 800;
+    font-size: 14px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.accordion-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.accordion-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.accordion-count {
+    font-size: 12px;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-weight: 500;
+}
+
+.accordion-item.open .accordion-count {
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+/* Mũi tên xoay */
+.accordion-chevron {
+    font-size: 22px;
+    color: #94a3b8;
+    transition: transform 0.22s cubic-bezier(.4,0,.2,1);
+    line-height: 1;
+    user-select: none;
+}
+
+.accordion-item.open .accordion-chevron {
+    transform: rotate(90deg);
+    color: #6366f1;
+}
+
+/* ---- Body (danh sách topic cards) ---- */
+.accordion-body {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px;
+    background: #fbfcff;
+    animation: accordion-slide-in 0.2s ease;
+}
+
+.accordion-item.open > .accordion-body {
+    display: flex;
+}
+
+@keyframes accordion-slide-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Topic Card ---- */
+.topic-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: white;
+    border-radius: 9px;
+    border: 1px solid #e9eef5;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.topic-card:hover {
+    background: #f0f4ff;
+    border-color: #c7d2fe;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+}
+
+.topic-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.topic-card-name {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 3px;
+}
+
+.topic-card-desc {
+    display: block;
+    font-size: 12px;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 340px;
+}
+
+.topic-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Badge trạng thái */
+.badge-active {
+    background: #dcfce7;
+    color: #16a34a;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+}
+
+.badge-inactive {
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+}
+
+.topic-card-order {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 500;
+    min-width: 28px;
+    text-align: center;
+}
+
+.topic-card-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+/* ---- Trạng thái rỗng / không tìm thấy ---- */
+.accordion-empty {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+    padding: 10px 0;
+    font-style: italic;
+}
+
+.accordion-no-result {
+    padding: 40px 20px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+    background: white;
+    border-radius: 12px;
+    border: 1px dashed #e2e8f0;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 600px) {
+    .topic-card {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .topic-card-info {
+        min-width: 100%;
+    }
+
+    .topic-card-desc {
+        max-width: 100%;
+        white-space: normal;
+    }
+}
+
+/* ================================================================
+   BỔ SUNG CHO ACCORDION BÀI HỌC THEO CHỦ ĐỀ
+================================================================ */
+
+.accordion-title-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.accordion-subdesc {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 400;
+}
+
+.badge-topic-level {
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+}
+
+.lesson-order-badge {
+    background: #f1f5f9;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 11px;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+.lesson-card {
+    border-left: 3px solid #3b82f6;
+}
+
+/* ================================================================
+   ACCORDION BÀI HỌC VÀ DANH SÁCH TỪ VỰNG LỒNG BÊN TRONG
+================================================================ */
+
+.lesson-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #3b82f6;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.lesson-item:hover {
+    box-shadow: 0 3px 12px rgba(59, 130, 246, 0.10);
+    border-color: #93c5fd;
+}
+
+.lesson-item.open {
+    border-color: #60a5fa;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.14);
+}
+
+/* Header bài học */
+.lesson-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #ffffff;
+    cursor: pointer;
+    user-select: none;
+    gap: 14px;
+    transition: background 0.15s;
+}
+
+.lesson-header:hover {
+    background: #f8fafc;
+}
+
+.lesson-item.open > .lesson-header {
+    background: #eff6ff;
+    border-bottom: 1px solid #dbeafe;
+}
+
+.lesson-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+
+.lesson-chevron {
+    font-size: 16px;
+    font-weight: 700;
+    color: #94a3b8;
+    line-height: 1;
+    transition: transform 0.2s ease, color 0.2s ease;
+    user-select: none;
+}
+
+.lesson-item.open .lesson-chevron {
+    transform: rotate(90deg);
+    color: #2563eb;
+}
+
+.lesson-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.lesson-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.lesson-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lesson-desc {
+    font-size: 12px;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lesson-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* Pill đếm từ vựng */
+.lesson-vocab-pill {
+    background: #ede9fe;
+    color: #6d28d9;
+    font-weight: 600;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+}
+
+/* Nút thêm từ vựng nhanh */
+.btn-add-vocab-quick {
+    background: #e0e7ff;
+    color: #3730a3;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 11px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.btn-add-vocab-quick:hover {
+    background: #c7d2fe;
+    color: #1e1b4b;
+}
+
+/* Body bài học (chứa danh sách từ vựng) */
+.lesson-body {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 18px;
+    background: #f8fafc;
+    animation: accordion-slide-in 0.2s ease;
+}
+
+.lesson-item.open > .lesson-body {
+    display: flex;
+}
+
+/* Tiêu đề phụ của danh sách từ vựng */
+.vocab-sub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.vocab-sub-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.btn-link-action {
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.btn-link-action:hover {
+    color: #1d4ed8;
+}
+
+/* Bảng danh sách từ vựng con */
+.vocab-subtable-container {
+    overflow-x: auto;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.vocab-subtable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.vocab-subtable th {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.vocab-subtable td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.vocab-subtable tr:last-child td {
+    border-bottom: none;
+}
+
+.vocab-subtable tr:hover td {
+    background: #f8fafc;
+}
+
+.vocab-td-word {
+    font-weight: 600;
+    color: #1e3a8a;
+    white-space: nowrap;
+}
+
+.vocab-td-pronun {
+    color: #64748b;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.vocab-td-meaning {
+    color: #334155;
+    font-weight: 500;
+}
+
+.vocab-type-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #f1f5f9;
+    color: #475569;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+.vocab-td-example {
+    color: #64748b;
+    font-size: 12px;
+    font-style: italic;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vocab-td-actions {
+    white-space: nowrap;
+}
+
+/* Hộp trống khi chưa có từ vựng */
+.vocab-empty-box {
+    padding: 20px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.btn-sm {
+    padding: 6px 14px;
+    font-size: 12px;
+}
+
+/* Responsive cho bài học */
+@media (max-width: 768px) {
+    .lesson-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .lesson-header-left {
+        min-width: 100%;
+    }
+
+    .lesson-header-right {
+        width: 100%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
     }
 }
