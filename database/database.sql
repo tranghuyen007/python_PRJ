@@ -6,15 +6,22 @@ CREATE TABLE users (
     email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
 
+    role TEXT NOT NULL DEFAULT 'USER',
+    status TEXT NOT NULL DEFAULT 'ACTIVE',
+
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    CHECK(role IN ('USER', 'ADMIN')),
+    CHECK(status IN ('ACTIVE', 'LOCKED'))
 );
 
 CREATE TABLE levels (
     level_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     description TEXT,
-
+    is_active INTEGER NOT NULL DEFAULT 1
+    CHECK(is_active IN (0,1)),
     display_order INTEGER NOT NULL
 );
 
@@ -25,6 +32,9 @@ CREATE TABLE topics (
 
     name TEXT NOT NULL,
     description TEXT,
+
+    is_active INTEGER NOT NULL DEFAULT 1
+    CHECK(is_active IN (0,1)),
 
     display_order INTEGER NOT NULL,
 
@@ -42,6 +52,9 @@ CREATE TABLE lessons (
 
     name TEXT NOT NULL,
     description TEXT,
+
+    is_active INTEGER NOT NULL DEFAULT 1
+    CHECK(is_active IN (0,1)),    
 
     display_order INTEGER NOT NULL,
 
@@ -195,10 +208,13 @@ CREATE TABLE words (
     meaning TEXT NOT NULL,
     pronunciation TEXT,
     part_of_speech TEXT,
+
+    is_active INTEGER NOT NULL DEFAULT 1
+    CHECK(is_active IN (0,1)),    
+
     example TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-
 
 CREATE TABLE lesson_words (
     lesson_id INTEGER NOT NULL,
