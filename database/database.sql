@@ -213,6 +213,7 @@ CREATE TABLE words (
     CHECK(is_active IN (0,1)),    
 
     example TEXT,
+    audio_url TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
