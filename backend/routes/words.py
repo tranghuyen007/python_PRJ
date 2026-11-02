@@ -6,6 +6,8 @@ from models.curriculum import Word
 from schemas.curriculum import WordCreate, WordUpdate, WordResponse
 from schemas.common import VisibilityUpdate
 from services.word_service import create_word as create_word_service
+from pathlib import Path
+from app.database import DATABASE_FILE
 
 router = APIRouter(prefix="/words", tags=["Words"])
 
@@ -46,3 +48,38 @@ def set_word_visibility(word_id: int, data: VisibilityUpdate, db: Session = Depe
     if not obj: raise HTTPException(404, "Word not found")
     obj.is_active = int(data.is_active); db.commit(); db.refresh(obj)
     return obj
+
+@router.delete("/{word_id}", status_code=204)
+def delete_word(
+    word_id: int,
+    db: Session = Depends(get_db),
+    _: object = Depends(require_admin)
+):
+    obj = db.query(Word).filter_by(word_id=word_id).first()
+
+    if not obj:
+        raise HTTPException(404, "Word not found")
+
+    # Lưu đường dẫn audio trước khi xoá bản ghi
+    audio_url = obj.audio_url
+
+    try:
+        db.delete(obj)
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="Cannot delete this word because it may be referenced by other records."
+        )
+
+    # Chỉ xoá file audio sau khi database xoá thành công
+    if audio_url:
+        audio_dir = DATABASE_FILE.parent / "uploads" / "audio"
+        filename = Path(audio_url).name
+        audio_file = audio_dir / filename
+
+        if audio_file.parent == audio_dir and audio_file.exists():
+            audio_file.unlink()
+
+    return None
