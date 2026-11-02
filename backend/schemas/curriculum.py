@@ -73,6 +73,7 @@ class WordUpdate(BaseModel):
     part_of_speech: str | None = None
     example: str | None = None
 
+
 class WordResponse(BaseModel):
     word_id: int
     word: str
@@ -81,7 +82,10 @@ class WordResponse(BaseModel):
     part_of_speech: str | None
     is_active: int
     example: str | None
+    audio_url: str | None
+
     model_config = ConfigDict(from_attributes=True)
+
 
 class LessonWordResponse(BaseModel):
     lesson_id: int

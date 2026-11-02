@@ -5,6 +5,7 @@ from app.security import get_current_user, require_admin
 from models.curriculum import Word
 from schemas.curriculum import WordCreate, WordUpdate, WordResponse
 from schemas.common import VisibilityUpdate
+from services.word_service import create_word as create_word_service
 
 router = APIRouter(prefix="/words", tags=["Words"])
 
@@ -22,9 +23,12 @@ def get_word(word_id: int, db: Session = Depends(get_db), _: object = Depends(ge
     return obj
 
 @router.post("/", response_model=WordResponse, status_code=201)
-def create_word(data: WordCreate, db: Session = Depends(get_db), _: object = Depends(require_admin)):
-    obj = Word(**data.model_dump())
-    db.add(obj); db.commit(); db.refresh(obj)
+async def create_word(
+    data: WordCreate,
+    db: Session = Depends(get_db),
+    _: object = Depends(require_admin)
+):
+    obj = await create_word_service(db, data)
     return obj
 
 @router.patch("/{word_id}", response_model=WordResponse)

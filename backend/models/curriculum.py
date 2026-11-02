@@ -52,8 +52,10 @@ class TopicTag(Base):
     tag_id = Column(Integer, ForeignKey("tags.tag_id", ondelete="CASCADE"), nullable=False)
     __table_args__ = (PrimaryKeyConstraint("topic_id", "tag_id"),)
 
+
 class Word(Base):
     __tablename__ = "words"
+
     word_id = Column(Integer, primary_key=True, autoincrement=True)
     word = Column(String, nullable=False, index=True)
     meaning = Column(Text, nullable=False)
@@ -61,8 +63,11 @@ class Word(Base):
     part_of_speech = Column(String)
     is_active = Column(Integer, nullable=False, default=1, server_default="1")
     example = Column(Text)
+    audio_url = Column(String, nullable=True)
     created_at = Column(DateTime, nullable=False, server_default=func.current_timestamp())
+
     __table_args__ = (CheckConstraint("is_active IN (0,1)"),)
+
 
 class LessonWord(Base):
     __tablename__ = "lesson_words"
