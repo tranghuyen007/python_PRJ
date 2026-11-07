@@ -17,7 +17,7 @@ const steps = [
       { value: "hobby",   icon: "🎧", color: "#f1ecfd", title: "Sở thích",         desc: "Hiểu phim, nhạc và điều mình thích" },
       { value: "explore", icon: "🧭", color: "#e8f6ee", title: "Khám phá thêm",    desc: "Học điều mới vì mình muốn thế" }
     ],
-    tip: "Không có lựa chọn đúng hay sai. Bạn có thể đổi mục tiêu bất cứ lúc nào.",
+    //tip: "Không có lựa chọn đúng hay sai. Bạn có thể đổi mục tiêu bất cứ lúc nào.",
     footTitle: "Một lựa chọn nhỏ, một lộ trình phù hợp hơn.",
     footSub: "Tiếp theo: trình độ hiện tại",
     nextLabel: "Tiếp tục"
@@ -36,31 +36,31 @@ const steps = [
     ],
     tip: "Đây không phải bài kiểm tra. Vocabbit sẽ đồng hành từ những từ bạn thấy quen thuộc.",
     footTitle: "Một lựa chọn nhỏ, một lộ trình phù hợp hơn.",
-    footSub: "Tiếp theo: mục tiêu mỗi ngày",
+    footSub: "Tiếp theo: số ngày học mỗi tuần",
     nextLabel: "Tiếp tục"
   },
-  {
-    key: "dailyMinutes",
-    eyebrow: "Mỗi ngày một chút",
-    title: "Mỗi ngày, bạn muốn học bao lâu?",
-    subtitle: "Một nhịp học nhỏ và đều đặn sẽ giúp từ vựng ở lại lâu hơn.",
+    {
+    key: "daysPerWeek",
+    eyebrow: "Nhịp học mỗi tuần",
+    title: "Mỗi tuần, bạn có thể học bao nhiêu ngày?",
+    subtitle: "Chọn số ngày bạn thấy thoải mái. Đều đặn quan trọng hơn học dồn.",
     columns: 4,
-    defaultValue: "10", // chọn sẵn mức được gợi ý
+    defaultValue: "5", // chọn sẵn mức được gợi ý
     options: [
-      { value: "5",  icon: "🌱", color: "#e8f6ee", title: "5 phút",  desc: "Khởi động nhẹ nhàng" },
-      { value: "10", icon: "⏰", color: "#fdf6e3", title: "10 phút", desc: "Đều đặn mỗi ngày", badge: "Gợi ý cho bạn" },
-      { value: "15", icon: "🎯", color: "#fdecec", title: "15 phút", desc: "Thêm một bước tiến" },
-      { value: "20", icon: "🚀", color: "#f1ecfd", title: "20 phút", desc: "Chinh phục mỗi ngày" }
+      { value: "2", icon: "🌱", color: "#e8f6ee", title: "2 ngày", desc: "Nhẹ nhàng, không áp lực" },
+      { value: "3", icon: "📅", color: "#fdf6e3", title: "3 ngày", desc: "Cách ngày một buổi" },
+      { value: "5", icon: "🎯", color: "#fdecec", title: "5 ngày", desc: "Gần như mỗi ngày", badge: "Gợi ý cho bạn" },
+      { value: "7", icon: "🔥", color: "#f1ecfd", title: "7 ngày", desc: "Giữ chuỗi học liên tục" }
     ],
-    encourage: "Không cần học thật nhiều. Chỉ cần quay lại mỗi ngày.",
-    tip: "10 phút mỗi ngày là một khởi đầu vừa sức. Bạn có thể điều chỉnh sau trong Hồ sơ.",
+    encourage: "Không cần học thật nhiều. Chỉ cần giữ nhịp đều mỗi tuần.",
+    tip: "5 ngày mỗi tuần là nhịp vừa sức. Bạn có thể điều chỉnh sau trong Hồ sơ.",
     footTitle: "Bạn đã hoàn tất 3 câu hỏi!",
     footSub: "Tiếp theo: tạo tài khoản để lưu lộ trình của bạn",
     nextLabel: "Tạo tài khoản Vocabbit"
   }
 ];
 
-const answers = {};   // { goal: "talk", level: "A1", dailyMinutes: "10" }
+const answers = {};   // { goal: "talk", level: "A1", daysPerWeek: "5" }
 let current = 0;
 
 const $ = (id) => document.getElementById(id);
@@ -103,7 +103,7 @@ function render() {
   $("encourageText").textContent = step.encourage || "";
 
   // Gợi ý & thanh dưới
-  $("tipText").textContent = step.tip;
+  if ($("tipText")) $("tipText").textContent = step.tip || "";
   $("footTitle").textContent = step.footTitle;
   $("footSub").textContent = step.footSub;
   $("btnNextText").textContent = step.nextLabel;

@@ -14,41 +14,157 @@
 <body>
 
   <!-- ===== Header ===== -->
-  <header>
+  <header class="site-header">
     <a href="/" class="logo">
       <img src="../assets/icons/logo.png" alt="Vocabbit logo" />
       Vocabbit
     </a>
+
+    <button class="lang-btn" id="langBtn" type="button" aria-label="Đổi ngôn ngữ">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M2 12h20" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+      </svg>
+      <span id="langLabel">Tiếng Việt</span>
+    </button>
   </header>
 
-  <!-- ===== Nội dung chính ===== -->
   <main>
-    <div class="hero-art">
-      <div class="circle-bg"></div>
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="hero-art">
+        <div class="circle-bg"></div>
+        <img class="bunny" src="../assets/images/rabbit_welcome_5.png" alt="Thỏ Vocabbit" />
 
-      <!-- Chú thỏ Vocabbit -->
-      <img class="bunny" src="../assets/images/rabbit_welcome.png" alt="Thỏ Vocabbit" />
-
-      <div class="word-card card-hello">
-        <b>hello!</b>
-        <span>xin chào</span>
+        <div class="word-card card-hello">
+          <b>hello!</b>
+          <span>xin chào</span>
+        </div>
+        <div class="word-card card-confident">
+          <b>confident</b>
+          <span>tự tin</span>
+        </div>
       </div>
-      <div class="word-card card-confident">
-        <b>confident</b>
-        <span>tự tin</span>
-      </div>
-    </div>
 
-    <div class="hero-text">
-      <h1 id="title">Cùng nhau khám phá từ vựng mỗi ngày, thêm <span class="highlight">tự tin.</span></h1>
-      <!--<p id="subtitle">
-        Khám phá từ vựng tiếng Anh mỗi ngày theo cách riêng của bạn. 
-      </p>-->
-      <!-- Đổi đường dẫn href cho khớp với trang đăng ký / đăng nhập của bạn -->
-      <a href="onboarding.html" class="btn btn-primary" id="btnStart">Get started</a>
-      <a href="login.html" class="btn btn-secondary" id="btnLogin">I already have an account</a>
-    </div>
+      <div class="hero-text">
+        <!-- <h1 data-i18n="heroTitle">Biến tiếng anh thành thói quen mỗi ngày, học một chút tiến bộ thật nhiều!</h1> -->
+        <h1 data-i18n="heroTitle">Học từ vựng cùng <span class=""><em>Vocabbit</em></span>, học một chút tiến bộ thật nhiều!</h1> 
+        <a href="onboarding.html" class="btn btn-primary" data-i18n="start">Get started</a>
+        <a href="login.html" class="btn btn-secondary" data-i18n="login">I already have an account</a>
+      </div>
+    </section>
+
+    <!-- ===== Tính năng 1: Học từ vựng ===== -->
+    <section class="feature">
+      <div class="feature-inner">
+        <div class="feature-text reveal">
+          <span class="tag" data-i18n="f1Tag">Học từ vựng</span>
+          <h2 data-i18n="f1Title">Học từng từ,<br />hiểu từng nghĩa.</h2>
+          <p data-i18n="f1Desc">
+            Mỗi bài học giới thiệu từ vựng theo chủ đề, kèm phát âm, nghĩa tiếng Việt và câu ví dụ thực tế – để bạn hiểu từ chứ không chỉ học thuộc lòng.
+          </p>
+          <ul class="checklist">
+            <li data-i18n="f1b1">Nghe phát âm chuẩn và luyện đọc theo</li>
+            <li data-i18n="f1b2">Phân loại từ theo chủ đề quen thuộc</li>
+            <li data-i18n="f1b3">Flashcard và câu ví dụ giúp nhớ nghĩa nhanh hơn</li>
+          </ul>
+        </div>
+        <div class="feature-img reveal">
+          <img src="../assets/images/rabbit_reading.png" alt="Thỏ Vocabbit đọc sách" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Tính năng 2: Ôn luyện ===== -->
+    <section class="feature feature-alt">
+      <div class="feature-inner reverse">
+        <div class="feature-text reveal">
+          <span class="tag" data-i18n="f2Tag">Ôn luyện thông minh</span>
+          <h2 data-i18n="f2Title">Luyện tập đa dạng,<br />ghi nhớ lâu dài.</h2>
+          <p data-i18n="f2Desc">
+            Sau khi học xong, từ vựng được ôn lại qua nhiều dạng bài tập khác nhau. Mỗi dạng luyện một kỹ năng riêng, giúp bạn nhớ từ theo nhiều chiều.
+          </p>
+          <ul class="checklist">
+            <li data-i18n="f2b1"><b>Trắc nghiệm</b> — chọn đúng nghĩa của từ</li>
+            <li data-i18n="f2b2"><b>Điền từ</b> — hoàn thành câu bằng từ đúng</li>
+            <li data-i18n="f2b3"><b>Viết từ</b> — gõ lại từ tiếng Anh từ nghĩa tiếng Việt</li>
+          </ul>
+        </div>
+        <div class="feature-img reveal">
+          <img src="../assets/images/rabbit_laptop.png" alt="" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Tính năng 3: Tiến trình ===== -->
+    <section class="feature">
+      <div class="feature-inner">
+        <div class="feature-text reveal">
+          <span class="tag" data-i18n="f3Tag">Theo dõi tiến trình</span>
+          <h2 data-i18n="f3Title">Học mỗi ngày,<br />tiến bộ mỗi ngày.</h2>
+          <p data-i18n="f3Desc">
+            Duy trì thói quen với chuỗi ngày học liên tiếp. Theo dõi số từ đã học, số bài đã hoàn thành và những từ cần ôn lại để thấy rõ mình đang tiến bộ ra sao.
+          </p>
+          <ul class="checklist">
+            <li data-i18n="f3b1">Chuỗi ngày học (streak) để duy trì động lực</li>
+            <li data-i18n="f3b2">Thống kê số từ đã học và bài đã hoàn thành</li>
+            <li data-i18n="f3b3">Gợi ý những từ cần ôn lại đúng lúc</li>
+          </ul>
+        </div>
+        <div class="feature-img reveal">
+          <img src="../assets/images/rabbit_running.png" alt="" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Kêu gọi hành động ===== -->
+    <section class="cta">
+      <h2 data-i18n="ctaTitle">Thêm một từ mới, thêm một bước tiến.</h2>
+      <p data-i18n="ctaSub">Tạo tài khoản miễn phí và bắt đầu bài học đầu tiên cùng Vocabbit.</p>
+      <div class="cta-actions">
+        <a href="onboarding.html" class="btn btn-white" data-i18n="start">Get started</a>
+        <a href="login.html" class="btn btn-outline" data-i18n="login">I already have an account</a>
+      </div>
+    </section>
   </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/" class="logo logo-light">
+          <img src="../assets/icons/logo.png" alt="Vocabbit logo" />
+          Vocabbit
+        </a>
+        <p data-i18n="footDesc">Web học từ vựng tiếng Anh nhẹ nhàng, thú vị cho người mới bắt đầu. Học một chút mỗi ngày cùng bạn thỏ Vocabbit.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4 data-i18n="colLearn">Học tập</h4>
+        <a href="#" data-i18n="lLessons">Bài học từ vựng</a>
+        <a href="#" data-i18n="lReview">Ôn luyện</a>
+        <a href="#" data-i18n="lWrite">Luyện viết từ</a>
+        <a href="#" data-i18n="lProgress">Theo dõi tiến độ</a>
+      </div>
+
+      <div class="footer-col">
+        <h4 data-i18n="colHelp">Hỗ trợ</h4>
+        <a href="#" data-i18n="lFaq">Câu hỏi thường gặp</a>
+        <a href="#" data-i18n="lGuide">Hướng dẫn sử dụng</a>
+        <a href="#" data-i18n="lContact">Liên hệ góp ý</a>
+      </div>
+
+      <div class="footer-col">
+        <h4 data-i18n="colLegal">Pháp lý</h4>
+        <a href="#" data-i18n="lTerms">Điều khoản sử dụng</a>
+        <a href="#" data-i18n="lPrivacy">Chính sách quyền riêng tư</a>
+        <a href="#" data-i18n="lCookie">Chính sách cookie</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">©Vocabbit <span id="year"></span></div>
+  </footer>
 
   <script src="../user/js/welcome.js"></script>
 </body>

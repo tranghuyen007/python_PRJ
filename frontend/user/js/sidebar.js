@@ -2,11 +2,11 @@
 
 // Danh sách menu: "page" phải trùng tên trang trong pages.js
 const menuItems = [
-  { page: "overview",  icon: "overview.png",  label: "Tổng quan" },
+  //{ page: "overview",  icon: "overview.png",  label: "Tổng quan" },
   { page: "learn",     icon: "learn.png",     label: "Học từ mới" },
   { page: "review",    icon: "review.png",    label: "Ôn tập" },
   { page: "pronounce", icon: "pronounce.png", label: "Luyện phát âm" },
-  { page: "wordbook",  icon: "wordbook.png",  label: "Bộ từ của tôi" },
+  //{ page: "wordbook",  icon: "wordbook.png",  label: "Bộ từ của tôi" },
   { page: "profile",   icon: "profile.png",   label: "Hồ sơ" },
 ];
 
@@ -26,7 +26,7 @@ const menuHTML = menuItems.map(item => `
 
 document.getElementById("sidebar").innerHTML = `
   <aside class="sidebar">
-    <a href="#overview" class="logo">
+    <a href="#learn" class="logo">
       <img src="../assets/icons/logo.png" alt="Vocabbit">
       <span>Vocabbit</span>
     </a>
