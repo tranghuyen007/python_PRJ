@@ -16,6 +16,8 @@ const ROUTES = {
 };
 
 const STORAGE_KEY = "vocabbit_onboarding";
+const USER_KEY = "vocabbit_user";    // thông tin tài khoản cho trang Hồ sơ
+const TOKEN_KEY = "vocabbit_token";  // access token từ backend (lesson.js cũng đọc key này)
 
 // ---------------------------------------------------------------
 // 2) ĐỔI GIÁ TRỊ ĐÃ LƯU -> CHỮ HIỂN THỊ (giữ đúng value trong onboarding.js)
@@ -68,6 +70,28 @@ function fillSummary() {
     const check = el.closest(".summary-item")?.querySelector(".summary-check");
     if (check) check.style.visibility = v ? "visible" : "hidden";
   });
+}
+
+// Lưu thông tin tài khoản để trang Hồ sơ hiển thị (tên, gmail, ngày tham gia...)
+// Backend nên trả về { access_token, user: { full_name, email, gender, created_at } }
+function saveUser(user, token) {
+  try {
+    const old = JSON.parse(localStorage.getItem(USER_KEY) || "null");
+    const keep = old && old.email === user.email ? old : {};
+    localStorage.setItem(USER_KEY, JSON.stringify({ ...keep, ...user }));
+    if (token) localStorage.setItem(TOKEN_KEY, token);
+  } catch (err) { /* bỏ qua */ }
+}
+
+function userFromServer(u, fallback) {
+  if (!u) return fallback;
+  return {
+    fullName: u.full_name || fallback.fullName,
+    email: u.email || fallback.email,
+    gender: u.gender || fallback.gender,
+    createdAt: u.created_at || fallback.createdAt,
+    bio: u.bio || fallback.bio || ""
+  };
 }
 
 // ---------------------------------------------------------------
@@ -191,12 +215,21 @@ async function registerWithEmail(form) {
   const btn = form.querySelector('button[type="submit"]');
   setLoading(btn, "Đang tạo tài khoản...");
 
+  const f = form.elements;
+  const newUser = {
+    fullName: f.fullName.value.trim(),
+    email: f.email.value.trim().toLowerCase(),
+    gender: f.gender ? f.gender.value : "",
+    createdAt: new Date().toISOString(),   // ngày đăng ký tài khoản
+    bio: ""
+  };
+
   if (DEMO_MODE) {
+    saveUser(newUser);
     setTimeout(() => (window.location.href = ROUTES.success), 700);
     return;
   }
 
-  const f = form.elements;
   const a = getAnswers();
   try {
     const { ok, data } = await postJSON(ROUTES.register, {
@@ -209,6 +242,7 @@ async function registerWithEmail(form) {
       days_per_week: a.daysPerWeek || ""
     });
     if (ok) {
+      saveUser(userFromServer(data.user, newUser), data.access_token);
       window.location.href = ROUTES.success;
     } else {
       handleServerError(form, data, "Không tạo được tài khoản. Thử lại nhé.");
@@ -228,18 +262,27 @@ async function loginWithEmail(form) {
   const btn = form.querySelector('button[type="submit"]');
   setLoading(btn, "Đang đăng nhập...");
 
+  const f = form.elements;
+  const email = f.email.value.trim().toLowerCase();
+
   if (DEMO_MODE) {
+    // chưa có backend: giữ thông tin cũ nếu cùng gmail, nếu không thì tạo tạm
+    let old = null;
+    try { old = JSON.parse(localStorage.getItem(USER_KEY) || "null"); } catch (err) {}
+    if (!old || old.email !== email) {
+      saveUser({ fullName: email.split("@")[0], email, createdAt: new Date().toISOString(), bio: "" });
+    }
     setTimeout(() => (window.location.href = ROUTES.overview), 700);
     return;
   }
 
-  const f = form.elements;
   try {
     const { ok, data } = await postJSON(ROUTES.login, {
       email: f.email.value.trim().toLowerCase(),
       password: f.password.value
     });
     if (ok) {
+      saveUser(userFromServer(data.user, { email, fullName: email.split("@")[0], createdAt: new Date().toISOString() }), data.access_token);
       window.location.href = ROUTES.overview;
     } else {
       handleServerError(form, data, "Sai mật khẩu. Vui lòng thử lại.");

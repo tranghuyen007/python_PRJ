@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vocabbit – Tạo tài khoản</title>
-  <link rel="icon" type="image/png" href="../assets/icons/favicon.png">
+  <link rel="icon" type="image/png" href="../assets/images/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
@@ -16,7 +16,6 @@
   <!-- ===== Header ===== -->
   <header class="topbar">
     <a href="welcome.html" class="logo">
-      <img src="../assets/icons/logo.png" alt="Vocabbit logo" />
       Vocabbit
     </a>
     <a href="welcome.html" class="topbar-link">
@@ -38,8 +37,6 @@
             <h2>Một khởi đầu thật hợp với bạn.</h2>
           </div>
         </div>
-
-        <p class="lead">Tạo tài khoản để lưu những lựa chọn vừa rồi và bắt đầu hành trình từ vựng của riêng mình.</p>
 
         <ul class="summary-list">
           <li class="summary-item">
@@ -73,11 +70,6 @@
             <svg class="summary-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7" /></svg>
           </li>
         </ul>
-
-        <p class="plan-note">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" /><circle cx="16" cy="6" r="2" /><circle cx="10" cy="12" r="2" /><circle cx="18" cy="18" r="2" /></svg>
-          Bạn luôn có thể thay đổi trong Hồ sơ.
-        </p>
       </section>
 
       <!-- Bên phải: đăng ký bằng Gmail + mật khẩu -->
@@ -87,9 +79,7 @@
           Quay lại mục tiêu
         </a>
 
-        <p class="eyebrow">Chỉ còn một bước nữa</p>
-        <h1>Tạo tài khoản Vocabbit</h1>
-        <p class="lead">Đăng ký tài khoản mới và lưu lộ trình học của bạn.</p>
+        <h1>Đăng ký</h1>
 
         <form id="registerForm" class="auth-form" novalidate>
           <div class="field">
@@ -112,7 +102,7 @@
           <div class="field">
             <label for="email">Gmail</label>
             <input id="email" name="email" type="email" inputmode="email" placeholder="example@gmail.com" autocomplete="email" aria-describedby="emailMsg" />
-            <p class="field-msg" id="emailMsg" aria-live="polite">Gmail phải có dạng example@gmail.com.</p>
+            <p class="field-msg" id="emailMsg" aria-live="polite"></p>
           </div>
 
           <div class="field">
@@ -124,7 +114,7 @@
                 <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10 10 0 0 1 12 19c-6.5 0-10-7-10-7a18 18 0 0 1 5-5.9M9.9 4.2A9 9 0 0 1 12 4c6.5 0 10 7 10 7a18 18 0 0 1-2.2 3.2M14.1 14.1a3 3 0 1 1-4.2-4.2M2 2l20 20" /></svg>
               </button>
             </div>
-            <p class="field-msg" id="passwordMsg" aria-live="polite">Mật khẩu cần ít nhất 8 kí tự.</p>
+            <p class="field-msg" id="passwordMsg" aria-live="polite"></p>
           </div>
 
           <div class="field">
@@ -136,7 +126,7 @@
                 <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10 10 0 0 1 12 19c-6.5 0-10-7-10-7a18 18 0 0 1 5-5.9M9.9 4.2A9 9 0 0 1 12 4c6.5 0 10 7 10 7a18 18 0 0 1-2.2 3.2M14.1 14.1a3 3 0 1 1-4.2-4.2M2 2l20 20" /></svg>
               </button>
             </div>
-            <p class="field-msg" id="confirmMsg" aria-live="polite">Nhập lại mật khẩu để xác nhận.</p>
+            <p class="field-msg" id="confirmMsg" aria-live="polite"></p>
           </div>
 
           <p class="form-error" role="alert"></p>
@@ -160,16 +150,6 @@
       </section>
     </div>
   </main>
-
-  <!-- ===== Footer ===== -->
-  <footer class="site-footer">
-    <span>Mỗi ngày một chút, tự tin hơn mỗi ngày.</span>
-    <nav>
-      <a href="#">Trợ giúp</a>
-      <a href="#">Điều khoản</a>
-      <a href="#">Quyền riêng tư</a>
-    </nav>
-  </footer>
 
   <script src="../user/js/auth.js"></script>
 </body>

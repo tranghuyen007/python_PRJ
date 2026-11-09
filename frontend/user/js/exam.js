@@ -1,13 +1,15 @@
 // ===== exam.js – Bài kiểm tra tổng & bài xếp lớp (index.html#exam/<mã bài>) =====
 //
+//   #exam/gate-a1          : Bài kiểm tra tổng A1                -> đạt 90% mở A2
 //   #exam/gate-elementary  : Bài kiểm tra tổng Sơ cấp (A1 + A2)  -> đạt 90% mở B1
 //   #exam/gate-b1          : Bài kiểm tra tổng B1                -> đạt 90% mở B2
 //   #exam/gate-b2          : Bài kiểm tra tổng B2
-//   #exam/placement-B1     : Bài xếp lớp B1 (A1 -> B1)           -> đạt 90% mở A1..B1
+//   #exam/placement-B1     : Bài kiểm tra cấp độ (A1 -> B1)      -> xếp lớp theo số câu đúng:
+//                            < 2/3 -> A1 · >= 2/3 -> A2 (mở A1, A2) · đúng hết -> B1 (mở A1..B1)
 //
 // - 40 câu ngẫu nhiên, chia đều theo cấp độ, lấy từ các bài đã học (bài xếp lớp: lấy toàn bộ từ).
 // - 4 dạng: Chọn nghĩa · Nghĩa trong ngữ cảnh · Dịch ngữ cảnh · Nhập từ.
-// - Chọn đáp án rồi bấm "Nộp câu trả lời" (hoặc "Không biết"). Đáp án đúng/sai chỉ hiện khi nộp hết.
+// - Chọn đáp án rồi bấm "Nộp câu trả lời". Đáp án đúng/sai chỉ hiện khi nộp hết.
 // - Bài làm dở được lưu, thoát ra rồi quay lại vẫn làm tiếp.
 //
 // Câu hỏi được tạo bằng LessonPage.api.buildQuestions (dùng chung với bài kiểm tra bài học).
@@ -30,7 +32,6 @@ const ExamPage = (() => {
   const I = {
     right: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`,
     info: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="8" r=".6" fill="currentColor"/></svg>`,
-    bulb: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>`,
     check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`,
     x: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></svg>`,
     lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`,
@@ -41,7 +42,6 @@ const ExamPage = (() => {
     const el = document.querySelector(".topbar-title");
     if (el) el.textContent = t;
   }
-  const levelRange = (d) => (d.levels.length > 1 ? `${d.levels[0]}–${d.levels[d.levels.length - 1]}` : d.levels[0]);
   const passNeed = () => Math.ceil(api().config.GATE_PASS * exam.questions.length);
 
   // ---------------------------------------------------------------
@@ -64,7 +64,7 @@ const ExamPage = (() => {
 
     const saved = api().getExam(id);
     exam = saved && Array.isArray(saved.questions) && saved.questions.length ? saved : createExam();
-    if (!exam.questions.length) return message("Chưa đủ từ để kiểm tra", "Hãy hoàn thành các bài học trước nhé.");
+    if (!exam.questions.length) return message("Chưa đủ từ để kiểm tra", "Hãy hoàn thành các unit trước nhé.");
     persist();
     draw();
   }
@@ -144,7 +144,7 @@ const ExamPage = (() => {
     }
 
     let status;
-    if (a.submitted) status = a.given ? "Đã nộp câu trả lời" : "Đã nộp · Không biết";
+    if (a.submitted) status = "Đã nộp câu trả lời";
     else if (q.type === "type") status = a.given ? "Đã nhập · Chưa nộp câu trả lời" : "Chưa nhập câu trả lời";
     else status = a.given ? `Đã chọn ${LETTERS[q.options.indexOf(a.given)]} · Chưa nộp câu trả lời` : "Chưa chọn đáp án";
 
@@ -152,15 +152,9 @@ const ExamPage = (() => {
     const actions = a.submitted ? `
         <span class="st-muted">Câu này đã nộp. Đáp án sẽ hiện khi bạn hoàn tất.</span>
         ${nextOpen >= 0 ? `<button type="button" class="btn btn-primary" data-ex="goto" data-i="${nextOpen}">Đến câu chưa làm ${I.right}</button>` : ""}` : `
-        <button type="button" class="btn btn-outline" data-ex="skip">Không biết</button>
         <button type="button" class="btn btn-primary" data-ex="submit" id="exSubmit" ${a.given && String(a.given).trim() ? "" : "disabled"}>Nộp câu trả lời ${I.right}</button>`;
 
     // ----- khối tiến trình -----
-    const perLevel = def.levels.map((c) => {
-      const idxs = exam.questions.map((x, k) => (x.level === c ? k : -1)).filter((k) => k >= 0);
-      return `${c}: ${idxs.filter((k) => exam.answers[k].submitted).length}/${idxs.length} đã nộp`;
-    }).join(" · ");
-
     const grid = exam.questions.map((_, k) => {
       const cls = k === i ? "cur" : exam.answers[k].submitted ? "done" : "";
       return `<button type="button" class="ex-cell ${cls}" data-ex="goto" data-i="${k}" aria-label="Câu ${k + 1}">${k + 1}</button>`;
@@ -169,7 +163,6 @@ const ExamPage = (() => {
     $("examRoot").innerHTML = `
       <div class="ex-head">
         <div>
-          <p class="st-crumb">${def.kind === "placement" ? "Bài kiểm tra xếp lớp" : "Bài kiểm tra tổng"} · ${levelRange(def)}</p>
           <h1 class="page-title">${esc(def.title)}</h1>
         </div>
       </div>
@@ -178,7 +171,6 @@ const ExamPage = (() => {
         <section class="st-card ex-card">
           <div class="ex-card-top">
             <span class="st-chip">${esc(q.level)} · Câu ${i + 1} / ${n}</span>
-            <span class="st-muted">${def.kind === "placement" ? "Đánh giá vốn từ" : "Kiểm tra vốn từ"} ${levelRange(def)} · ${api().qTypeLabel[q.type]}</span>
           </div>
           <h2 class="ex-q">${esc(q.prompt)}</h2>
           ${q.sentence ? `<div class="ex-sentence">${q.sentence}</div>` : ""}
@@ -190,19 +182,9 @@ const ExamPage = (() => {
         <aside class="st-aside">
           <div class="st-card ex-progress">
             <h3>Tiến trình kiểm tra</h3>
-            <div class="ex-count"><b>${submittedCount}/${n}</b><span>câu đã nộp</span></div>
+            <div class="ex-count"><b>${submittedCount}/${n}</b></div>
             <div class="bar"><span style="width:${pct(submittedCount, n)}%"></span></div>
-            <p class="ex-per-level">${perLevel}</p>
             <div class="ex-cells">${grid}</div>
-            <p class="ex-legend"><span class="lg done"></span> Đã nộp <span class="lg cur"></span> Đang làm <span class="lg"></span> Chưa trả lời</p>
-          </div>
-          <div class="st-tip">
-            <span class="st-tip-ic">${I.bulb}</span>
-            <div>
-              <b>Đáp án chỉ hiển thị sau khi hoàn tất</b>
-              <p>Chọn “Không biết” nếu chưa quen với từ này. Đáp án đúng và kết quả chỉ hiển thị sau khi hoàn tất bài kiểm tra.</p>
-              <p class="ex-threshold">Ngưỡng ${def.unlocks ? "mở khóa" : "đạt"}: ${passNeed()}/${n} · ${api().config.GATE_PASS * 100}% tổng bài.</p>
-            </div>
           </div>
           <button type="button" class="ex-exit" data-ex="exit">Lưu &amp; thoát kiểm tra</button>
         </aside>
@@ -239,6 +221,7 @@ const ExamPage = (() => {
     if (!skip && !(a.given && String(a.given).trim())) return;
     if (skip) a.given = null;
     a.submitted = true;
+    api().logActivity();
     const nxt = nextUnsubmitted(exam.cur);
     if (nxt < 0) return finish();
     exam.cur = nxt;
@@ -255,7 +238,7 @@ const ExamPage = (() => {
     });
     const correct = marks.filter(Boolean).length;
     const score = correct / n;
-    const rec = api().recordTest(exam.id, score);
+    const rec = api().recordTest(exam.id, score, correct, n);
     api().clearExam(exam.id);
     result = { ...rec, correct, n, score, marks, endedAt: Date.now() };
     drawResult();
@@ -284,7 +267,18 @@ const ExamPage = (() => {
     const wrong = exam.questions.map((q, k) => ({ q, k, given: exam.answers[k].given })).filter((x) => !r.marks[x.k]);
 
     let headline, text, actions;
-    if (r.passed) {
+    if (def.kind === "placement") {
+      const lv = r.placedBest || r.placed;
+      const first = api().levels()[0].code;
+      headline = `Bạn được xếp vào cấp độ ${r.placed}`;
+      text = (r.placed === first
+        ? `Bạn đúng ${r.correct}/${r.n} câu. Hãy bắt đầu từ ${first} để xây nền vững chắc nhé.`
+        : `Bạn đúng ${r.correct}/${r.n} câu. Các unit từ ${first} đến ${r.placed} đã được mở để bạn học tự do.`)
+        + (lv !== r.placed ? ` Bạn vẫn giữ mức xếp lớp cao nhất trước đó: ${lv}.` : "");
+      actions = `
+        <button type="button" class="btn btn-outline" data-ex="retake">${I.refresh} Làm lại bài kiểm tra</button>
+        <a href="#learn" class="btn btn-primary">Học ${lv} ngay ${I.right}</a>`;
+    } else if (r.passed) {
       headline = def.kind === "placement" ? "Chúc mừng, bạn đã xếp lớp thành công!" : "Chúc mừng, bạn đã vượt qua!";
       text = r.newly.length
         ? `Đã mở khóa cấp độ ${r.newly.join(", ")}. ${def.kind === "gate" && r.firstPass ? "+100 điểm. " : ""}Tiếp tục hành trình nhé!`
@@ -312,15 +306,16 @@ const ExamPage = (() => {
     $("examRoot").innerHTML = `
       <div class="ex-head">
         <div>
-          <p class="st-crumb">${def.kind === "placement" ? "Bài kiểm tra xếp lớp" : "Bài kiểm tra tổng"} · ${levelRange(def)}</p>
           <h1 class="page-title">Kết quả: ${esc(def.title)}</h1>
         </div>
       </div>
 
-      <section class="st-card ex-summary ${r.passed ? "pass" : "fail"}">
-        <div class="result-ring ex-ring ${r.passed ? "" : "low"}" style="--p:${p}"><b>${p}%<small>câu đúng</small></b></div>
+      <section class="st-card ex-summary ${r.passed || def.kind === "placement" ? "pass" : "fail"}">
+        <div class="result-ring ex-ring ${r.passed || def.kind === "placement" ? "" : "low"}" style="--p:${p}"><b>${p}%<small>câu đúng</small></b></div>
         <div class="ex-sum-text">
-          <span class="ex-sum-chip ${r.passed ? "ok" : "bad"}">${r.passed ? `${I.check} Đạt` : `${I.x} Chưa đạt`} · cần ${passNeed()}/${r.n}</span>
+          ${def.kind === "placement"
+            ? `<span class="ex-sum-chip ok">${I.check} Xếp lớp: ${r.placed}</span>`
+            : `<span class="ex-sum-chip ${r.passed ? "ok" : "bad"}">${r.passed ? `${I.check} Đạt` : `${I.x} Chưa đạt`} · cần ${passNeed()}/${r.n}</span>`}
           <h2>${headline}</h2>
           <p>${text}</p>
           ${r.newly.length ? `<p class="unlock-msg">🔓 Đã mở khóa cấp độ ${r.newly.join(", ")}!</p>` : ""}
@@ -341,7 +336,7 @@ const ExamPage = (() => {
                 <span class="ex-wrong-no">${x.k + 1}</span>
                 <div>
                   <p class="ex-wrong-q"><b>${esc(x.q.w.en)}</b> · ${esc(x.q.w.vi)} <span class="tag tag-soft">${esc(x.q.level)} · ${api().qTypeLabel[x.q.type]}</span></p>
-                  <p class="ex-wrong-a"><span class="bad">${x.given ? `Bạn trả lời: ${esc(x.given)}` : "Bạn chọn: Không biết"}</span>
+                  <p class="ex-wrong-a"><span class="bad">${x.given ? `Bạn trả lời: ${esc(x.given)}` : "Bạn chưa trả lời"}</span>
                   <span class="ok">Đáp án: ${esc(x.q.answer)}</span></p>
                 </div>
               </div>`).join("")}
@@ -369,7 +364,6 @@ const ExamPage = (() => {
       const act = el.dataset.ex;
       if (act === "pick") pick(el.dataset.val);
       else if (act === "submit") submit(false);
-      else if (act === "skip") submit(true);
       else if (act === "goto") { exam.cur = Number(el.dataset.i); persist(); draw(); }
       else if (act === "exit") { persist(); window.location.hash = "#learn"; }
       else if (act === "retake") {

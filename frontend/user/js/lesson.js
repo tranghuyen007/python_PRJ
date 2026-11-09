@@ -7,13 +7,15 @@
 // LUẬT MỞ KHÓA
 // 1) Người mới (onboarding chọn A0 / A1 / A2):
 //    - Học tuần tự: bài N+1 chỉ mở khi bài N đã lật đủ từ + qua bài kiểm tra bài học.
-//    - Xong toàn bộ A1 -> mở A2.
+//    - Xong toàn bộ A1 -> "Bài kiểm tra tổng A1"; đúng >= 90% -> mở A2.
 //    - Xong toàn bộ A1 + A2 (Sơ cấp) -> "Bài kiểm tra tổng Sơ cấp"; đúng >= 90% -> mở B1.
 //    - Xong toàn bộ B1 -> "Bài kiểm tra tổng B1"; đúng >= 90% -> mở B2.
 // 2) Người đã có nền (onboarding chọn B1+):
-//    - Làm "Bài kiểm tra xếp lớp B1" (từ vựng A1 -> B1). Đúng >= 90% -> mở TẤT CẢ bài
-//      từ A1 đến B1 (học tự do). Sau đó lên B2 như trên.
-//    - Chưa đạt / bỏ qua -> học theo lộ trình người mới từ A1, làm lại bài xếp lớp bất cứ lúc nào.
+//    - Làm "Bài kiểm tra cấp độ" (40 câu từ vựng A1 -> B1), xếp lớp theo số câu đúng:
+//        dưới 2/3 số câu -> A1 (học theo lộ trình người mới)
+//        từ 2/3 số câu   -> A2 (mở tự do A1, A2)
+//        đúng hết        -> B1 (mở tự do A1 -> B1). Sau đó lên cấp cao hơn như trên.
+//    - Bỏ qua -> học từ A1, làm lại bài kiểm tra cấp độ bất cứ lúc nào (giữ mức xếp lớp cao nhất).
 
 const LessonPage = (() => {
   // ---------------------------------------------------------------
@@ -29,7 +31,13 @@ const LessonPage = (() => {
     LESSON_QUESTIONS: 10,      // số câu bài kiểm tra cuối mỗi bài học
     GATE_QUESTIONS: 40,        // số câu bài kiểm tra tổng / xếp lớp (exam.js)
     TOPICS_SEQUENTIAL: false,  // true: phải xong chủ đề trước mới mở chủ đề sau
-    BEGINNER_LEVELS: ["A0", "A1", "A2"]
+    BEGINNER_LEVELS: ["A0", "A1", "A2"],
+    // Xếp lớp: đúng >= ratio * số câu -> cấp độ tương ứng (xét từ cao xuống thấp)
+    PLACEMENT_RULES: [
+      { level: "B1", ratio: 1 },
+      { level: "A2", ratio: 2 / 3 },
+      { level: "A1", ratio: 0 }
+    ]
   };
 
   const ROUTES = {
@@ -44,12 +52,13 @@ const LessonPage = (() => {
   };
 
   const GATES = [
+    { id: "gate-a1",         title: "Bài kiểm tra tổng · A1",      requires: ["A1"],       unlocks: "A2", showOn: "A1" },
     { id: "gate-elementary", title: "Bài kiểm tra tổng · Sơ cấp", requires: ["A1", "A2"], unlocks: "B1", showOn: "A2" },
     { id: "gate-b1",         title: "Bài kiểm tra tổng · B1",      requires: ["B1"],       unlocks: "B2", showOn: "B1" },
     { id: "gate-b2",         title: "Bài kiểm tra tổng · B2",      requires: ["B2"],       unlocks: null, showOn: "B2" }
   ];
 
-  const PLACEMENT = { id: "placement-B1", title: "Bài kiểm tra xếp lớp B1", level: "B1", covers: ["A1", "A2", "B1"] };
+  const PLACEMENT = { id: "placement-B1", title: "Bài kiểm tra cấp độ", level: "B1", covers: ["A1", "A2", "B1"] };
 
   // ---------------------------------------------------------------
   // 2) TRẠNG THÁI (giữ nguyên khi chuyển qua lại giữa các trang)
@@ -147,7 +156,42 @@ const LessonPage = (() => {
   }
 
   function emptyProgress() {
-    return { lessons: {}, tests: {}, placement: null, points: 0, streak: 0 };
+    // activity: { "2026-11-09": số lần học trong ngày } – dùng để tính chuỗi ngày học
+    return { lessons: {}, tests: {}, placement: null, points: 0, activity: {} };
+  }
+
+  // ---------------------------------------------------------------
+  // NHẬT KÝ HỌC & CHUỖI NGÀY (theo giờ thực trên máy người dùng)
+  // ---------------------------------------------------------------
+  const dayKey = (d = new Date()) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+
+  // Gọi mỗi khi người dùng thật sự học: xem/lật/nối từ, làm bài kiểm tra, trả lời câu ôn tập...
+  function logActivity() {
+    state.activity = state.activity || {};
+    const k = dayKey();
+    state.activity[k] = (state.activity[k] || 0) + 1;
+  }
+
+  // current: chuỗi hiện tại (hôm nay chưa học thì vẫn giữ chuỗi tính đến hôm qua)
+  // best: chuỗi dài nhất từng đạt · todayDone: hôm nay đã học chưa
+  function streakInfo() {
+    const act = state.activity || {};
+    const today = new Date();
+    const todayDone = !!act[dayKey(today)];
+    let cur = 0;
+    let d = todayDone ? today : addDays(today, -1);
+    while (act[dayKey(d)]) { cur++; d = addDays(d, -1); }
+
+    let best = 0, run = 0, prev = null;
+    Object.keys(act).filter((k) => act[k]).sort().forEach((k) => {
+      const dt = new Date(k + "T00:00:00");
+      run = prev && dayKey(addDays(prev, 1)) === k ? run + 1 : 1;
+      best = Math.max(best, run);
+      prev = dt;
+    });
+    return { current: cur, best: Math.max(best, cur), todayDone };
   }
   function loadProgress() {
     return Object.assign(emptyProgress(), readJSON(KEYS.progress, {}));
@@ -228,15 +272,28 @@ const LessonPage = (() => {
   // ---------------------------------------------------------------
   // 6) LUẬT MỞ KHÓA
   // ---------------------------------------------------------------
+  // Cấp độ được xếp sau bài kiểm tra cấp độ (bản cũ "passed" không có placementLevel = B1)
+  function placedLevel() {
+    if (state.placementLevel) return state.placementLevel;
+    return state.placement === "passed" ? PLACEMENT.level : null;
+  }
+
   function mode() {
     if (!profile.needsPlacement) return "beginner";
-    if (state.placement === "passed") return "advanced";
+    const placed = placedLevel();
+    if (placed) return idx(placed) > 0 ? "advanced" : "beginner";
     if (state.placement === "failed" || state.placement === "skipped") return "beginner";
     return "pending";
   }
 
   function isFreeAccess(code) {
-    return mode() === "advanced" && idx(code) <= idx(PLACEMENT.level);
+    return mode() === "advanced" && idx(code) <= idx(placedLevel());
+  }
+
+  // Số câu đúng -> cấp độ xếp lớp
+  function placeByScore(correct, total) {
+    const rule = CONFIG.PLACEMENT_RULES.find((r) => correct >= Math.ceil(r.ratio * total));
+    return rule ? rule.level : LEVELS[0].code;
   }
 
   function isLevelUnlocked(code) {
@@ -315,7 +372,7 @@ const LessonPage = (() => {
 
   // Điểm & chuỗi ngày trên topbar chung của index.html
   function renderTopbar() {
-    if ($("streakText")) $("streakText").textContent = `${state.streak} ngày liên tiếp`;
+    if ($("streakText")) $("streakText").textContent = `${streakInfo().current} ngày liên tiếp`;
     if ($("pointsText")) $("pointsText").textContent = `${state.points} điểm`;
   }
 
@@ -339,30 +396,27 @@ const LessonPage = (() => {
     if (m === "pending") {
       box.innerHTML = `
         <section class="placement-card">
-          <div class="placement-icon">🚀</div>
           <div class="placement-info">
             <p class="eyebrow">Bạn đã chọn trình độ ${PLACEMENT.level}+</p>
             <h2>Làm nhanh ${PLACEMENT.title}</h2>
-            <p>${CONFIG.GATE_QUESTIONS} câu từ vựng ${PLACEMENT.covers.join(" → ")}. Đúng từ <b>${CONFIG.GATE_PASS * 100}%</b> trở lên,
-               Vocabbit mở khóa toàn bộ bài học từ ${PLACEMENT.covers[0]} đến ${PLACEMENT.level} để bạn học tự do.${bestText}</p>
+            <p>${CONFIG.GATE_QUESTIONS} câu từ vựng ${PLACEMENT.covers.join(" → ")}. Vocabbit dựa vào số câu đúng để xếp bạn vào
+               cấp độ phù hợp và mở khóa các unit từ ${PLACEMENT.covers[0]} đến cấp độ đó.${bestText}</p>
           </div>
           <div class="placement-actions">
-            <button type="button" class="btn btn-primary" data-action="start-placement">${resumeLabel(PLACEMENT.id) || "Làm bài xếp lớp"}</button>
+            <button type="button" class="btn btn-primary" data-action="start-placement">${resumeLabel(PLACEMENT.id) || "Làm bài kiểm tra cấp độ"}</button>
             <button type="button" class="btn btn-ghost" data-action="skip-placement">Mình muốn học từ ${LEVELS[0].code}</button>
           </div>
         </section>`;
     } else if (m === "advanced") {
       box.innerHTML = `
         <div class="notice notice-green">
-          <span>🎉</span>
-          <p>Bạn đã đạt ${PLACEMENT.title} — toàn bộ bài học ${PLACEMENT.covers[0]} → ${PLACEMENT.level} đã mở. Học tiếp ${PLACEMENT.level} hoặc ôn lại bất kỳ bài nào nhé.</p>
+          <p>Bạn được xếp vào cấp độ ${placedLevel()} — toàn bộ unit ${PLACEMENT.covers[0]} → ${placedLevel()} đã mở. Học tiếp ${placedLevel()} hoặc ôn lại bất kỳ unit nào nhé.</p>
         </div>`;
     } else {
       box.innerHTML = `
         <div class="notice">
-          <span>🧭</span>
-          <p>Bạn đang học theo lộ trình từ ${LEVELS[0].code}. Muốn nhảy thẳng lên ${PLACEMENT.level}? Làm lại bài xếp lớp bất cứ lúc nào.${bestText}</p>
-          <button type="button" class="btn btn-sm btn-outline" data-action="start-placement">Làm bài xếp lớp</button>
+          <p>Bạn đang học theo lộ trình từ ${LEVELS[0].code}. Muốn nhảy thẳng lên ${PLACEMENT.level}? Làm lại bài kiểm tra cấp độ bất cứ lúc nào.${bestText}</p>
+          <button type="button" class="btn btn-sm btn-outline" data-action="start-placement">Làm bài kiểm tra cấp độ</button>
         </div>`;
     }
   }
@@ -377,7 +431,7 @@ const LessonPage = (() => {
                 class="level-tab ${active ? "active" : ""} ${locked ? "locked" : ""} ${done ? "done" : ""}"
                 data-action="tab" data-level="${lv.code}">
           <b>${lv.code}</b>
-          <span>${locked ? ICON.lock : done ? ICON.check : ""}${lv.topics.length} chủ đề</span>
+          <span>${locked ? ICON.lock : done ? ICON.check : ""}${lv.topics.length} section</span>
         </button>`;
     }).join("");
   }
@@ -395,7 +449,6 @@ const LessonPage = (() => {
       <div class="lv-badge">${locked ? ICON.lock : lv.code}</div>
       <div class="lv-info">
         <h2>Cấp độ ${lv.code} — ${lv.name}</h2>
-        <p>${lv.topics.length} chủ đề • ${lessons.length} bài học • ${words} từ vựng • ${lv.desc}</p>
         <div class="bar"><span style="width:${p}%"></span></div>
       </div>
       <div class="lv-pct"><b>${p}%</b><small>hoàn thành</small></div>`;
@@ -432,24 +485,24 @@ const LessonPage = (() => {
     if (!isOpen) {
       if (!unlocked) {
         const why = isLevelUnlocked(lv.code)
-          ? `Hoàn thành chủ đề “${lv.topics[ti - 1].name}” để mở khóa`
-          : `Mở khóa cấp độ ${lv.code} để học chủ đề này`;
+          ? `Hoàn thành Section ${ti}: ${lv.topics[ti - 1].name} để mở khóa`
+          : `Mở khóa cấp độ ${lv.code} để học section này`;
         footer = `<div class="tp-foot"><span class="muted">${ICON.lock} ${why}</span></div>`;
       } else {
         let chip = `<span class="muted">Chưa bắt đầu</span>`;
         let btn = "";
         if (allDone) {
-          chip = `<span class="tag tag-green">Đã xong cả chủ đề</span>`;
+          chip = `<span class="tag tag-green">Đã xong cả section</span>`;
           btn = `<button type="button" class="btn btn-sm btn-outline" data-action="open-lesson" data-lesson="${t.lessons[0].id}">Ôn lại</button>`;
         } else if (next) {
           const n = learnedOf(next);
-          if (n > 0) chip = `<span class="tag tag-blue">Bài ${next.no} đang học · ${pct(n, next.words.length)}%</span>`;
-          const label = n > 0 ? `Tiếp tục bài ${next.no}` : `Bắt đầu bài ${next.no}`;
+          if (n > 0) chip = `<span class="tag tag-blue">Unit ${next.no} đang học · ${pct(n, next.words.length)}%</span>`;
+          const label = n > 0 ? `Tiếp tục Unit ${next.no}` : `Bắt đầu Unit ${next.no}`;
           btn = `<button type="button" class="btn btn-sm ${n > 0 || doneCount > 0 ? "btn-primary" : "btn-outline"}" data-action="open-lesson" data-lesson="${next.id}">${label}</button>`;
         }
         footer = `
           <div class="tp-foot">
-            <span class="muted">${doneCount}/${t.lessons.length} bài hoàn thành</span>
+            <span class="muted">${doneCount}/${t.lessons.length} unit hoàn thành</span>
             ${chip}
             <span class="spacer"></span>
             ${btn}
@@ -464,10 +517,8 @@ const LessonPage = (() => {
     return `
       <article class="tp ${isOpen ? "open" : ""} ${unlocked ? "" : "locked"}">
         <button type="button" class="tp-head" data-action="toggle-topic" data-topic="${t.id}" aria-expanded="${isOpen}">
-          <span class="tp-icon" style="background:${t.color}">${t.icon}</span>
           <span class="tp-info">
-            <span class="tp-title">${esc(t.name)} <span class="tag tag-soft">${esc(t.tag)}</span> ${status}</span>
-            <span class="tp-meta">${t.lessons.length} bài học • ${words} từ vựng • ${learned} từ đã học</span>
+            <span class="tp-title">Section ${ti + 1}: ${esc(t.name)} <span class="tag tag-soft">${esc(t.tag)}</span> ${status}</span>
             <span class="tp-progress"><span class="bar"><span style="width:${p}%"></span></span><small>${p}%</small></span>
           </span>
           <span class="tp-chev">${unlocked ? ICON.chevron : ICON.lock}</span>
@@ -506,13 +557,13 @@ const LessonPage = (() => {
     else btn = `<button type="button" class="btn btn-sm ${isCurrent ? "btn-primary" : "btn-outline"}" data-action="open-lesson" data-lesson="${lesson.id}">${n > 0 ? "Tiếp tục" : "Bắt đầu"}</button>`;
 
     const hint = !unlocked && li > 0
-      ? `<p class="ls-hint">Hoàn thành bài ${li} để mở</p>` : "";
+      ? `<p class="ls-hint">Hoàn thành Unit ${li} để mở</p>` : "";
 
     return `
       <div class="lesson ${isCurrent ? "current" : ""} ${done ? "done" : ""} ${unlocked ? "" : "locked"}">
         ${mark}
         <div class="ls-info">
-          <p class="ls-title">Bài ${lesson.no} · ${esc(lesson.title)} ${tag}</p>
+          <p class="ls-title">Unit ${lesson.no} · ${esc(lesson.title)} ${tag}</p>
           <div class="ls-progress"><span class="bar ${done ? "green" : ""}"><span style="width:${p}%"></span></span><small>${p}% · ${n}/${total} từ</small></div>
           ${hint}
         </div>
@@ -539,7 +590,7 @@ const LessonPage = (() => {
       const lessons = allLessons(getLevel(c));
       const d = lessons.filter(lessonDone).length;
       const ok = d === lessons.length;
-      return `<li class="${ok ? "ok" : ""}">${ok ? ICON.check : "<i></i>"} Hoàn thành ${c}: ${d}/${lessons.length} bài</li>`;
+      return `<li class="${ok ? "ok" : ""}">${ok ? ICON.check : "<i></i>"} Hoàn thành ${c}: ${d}/${lessons.length} unit</li>`;
     }).join("");
 
     const best = state.tests[g.id]?.best;
@@ -553,11 +604,9 @@ const LessonPage = (() => {
 
     slot.innerHTML = `
       <section class="gate-card ${status}">
-        <div class="gate-icon">${status === "passed" ? "🏆" : status === "ready" ? "📝" : "🔒"}</div>
         <div class="gate-info">
           <p class="eyebrow">${status === "passed" ? "Đã vượt qua" : "Bài kiểm tra tổng"}</p>
           <h3>${g.title}</h3>
-          <p>${CONFIG.GATE_QUESTIONS} câu từ vựng ${g.requires.join(" + ")} · cần đúng từ <b>${CONFIG.GATE_PASS * 100}%</b> để ${goal}.</p>
           <ul class="gate-check">${checklist}</ul>
           ${bestText}
         </div>
@@ -572,7 +621,7 @@ const LessonPage = (() => {
     const ctx = findLesson(id);
     if (!ctx) return;
     if (!isLessonUnlocked(ctx.lv.code, ctx.ti, ctx.li)) {
-      toast("Bài này đang khóa. Hoàn thành bài trước nhé!");
+      toast("Unit này đang khóa. Hoàn thành unit trước nhé!");
       return;
     }
     window.location.hash = `#study/${id}${step ? "/" + step : ""}`;
@@ -659,8 +708,7 @@ const LessonPage = (() => {
     quiz.answered = false;
     const body = q.type === "type" ? `
       <input id="quizInput" class="quiz-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
-             placeholder="Nhập từ tiếng Anh…">
-      <p class="quiz-hint">Gợi ý: ${esc(q.hint)} · Nhấn Enter để kiểm tra</p>` : `
+             placeholder="Nhập từ tiếng Anh…">` : `
       <div class="quiz-options ${q.type === "translate" ? "one-col" : ""}">
         ${q.options.map((o) => `<button type="button" class="quiz-opt" data-opt="${esc(o)}">${esc(o)}</button>`).join("")}
       </div>`;
@@ -705,8 +753,8 @@ const LessonPage = (() => {
     const fb = $("quizFeedback");
     fb.className = `quiz-feedback ${ok ? "ok" : "bad"}`;
     fb.textContent = ok
-      ? `Chính xác! ${q.w.en} = ${q.w.vi} 🎉`
-      : `Chưa đúng. Đáp án: ${q.answer}${q.type === "translate" ? "" : ` (${q.w.en} = ${q.w.vi})`}`;
+      ? "Chính xác"
+      : "Không chính xác";
     $("quizNext").disabled = false;
     $("quizNext").focus();
   }
@@ -735,8 +783,8 @@ const LessonPage = (() => {
           <b>${Math.round(score * 100)}%</b>
         </div>
         <h3>${passed ? "Tuyệt vời, bạn đã đạt!" : "Chưa đạt rồi, thử lại nhé!"}</h3>
-        <p class="muted">Đúng ${quiz.correct}/${n} câu · cần từ ${Math.round(quiz.pass * 100)}%</p>
-        ${newly.length ? `<p class="unlock-msg">🔓 Đã mở khóa cấp độ ${newly.join(", ")}!</p>` : ""}
+        <p class="muted">Đúng ${quiz.correct}/${n} câu</p>
+        ${newly.length ? `<p class="unlock-msg">Đã mở khóa cấp độ ${newly.join(", ")}!</p>` : ""}
         <p>${result.text}</p>
         <div class="quiz-actions">
           ${actions.map((a, i) => `<button type="button" class="btn ${a.primary ? "btn-primary" : "btn-outline"}" data-result="${i}">${a.label}</button>`).join("")}
@@ -755,20 +803,21 @@ const LessonPage = (() => {
     const items = lesson.words.map((w, idx) => ({ w, lessonId: lesson.id, idx }));
 
     startQuiz({
-      eyebrow: `Kiểm tra bài học · ${t.name}`,
-      title: `Bài ${lesson.no} · ${lesson.title}`,
+      eyebrow: `Kiểm tra unit · Section ${ti + 1}: ${t.name}`,
+      title: `Unit ${lesson.no} · ${lesson.title}`,
       questions: buildQuestions(items, CONFIG.LESSON_QUESTIONS, ["type", "choose", "translate"], pool),
       pass: CONFIG.LESSON_PASS,
       onDone(score, passed) {
         const s = ls(id);
         const firstPass = passed && !s.passed;
+        logActivity();
         setLs(id, { best: Math.max(s.best, score), passed: s.passed || passed });
         if (firstPass) state.points += 20;
         saveProgress();
 
         if (!passed) {
           return {
-            text: `Cần đúng ít nhất ${CONFIG.LESSON_PASS * 100}% để mở bài tiếp theo. Ôn lại flashcard rồi thử lại nhé.`,
+            text: `Cần đúng ít nhất ${CONFIG.LESSON_PASS * 100}% để mở unit tiếp theo. Ôn lại flashcard rồi thử lại nhé.`,
             actions: [
               { label: "Ôn lại flashcard", fn: () => { closeAll(); openStudy(id, 2); } },
               { label: "Làm lại", primary: true, fn: () => startLessonQuiz(id) }
@@ -781,14 +830,14 @@ const LessonPage = (() => {
         const levelFinished = levelDone(lv.code);
         let extra = "";
         if (levelFinished) extra = " Bạn đã học xong cả cấp độ — bài kiểm tra tổng đang chờ bạn!";
-        else if (topicFinished) extra = ` Bạn đã hoàn thành chủ đề ${t.name}!`;
+        else if (topicFinished) extra = ` Bạn đã hoàn thành Section ${ti + 1}: ${t.name}!`;
         return {
           text: (firstPass
-            ? (nxt ? `+20 điểm. Bài ${nxt.no} · ${nxt.title} đã sẵn sàng.` : "+20 điểm.")
-            : "Bạn đã ôn lại bài này thật tốt.") + extra,
+            ? (nxt ? `+20 điểm. Unit ${nxt.no} · ${nxt.title} đã sẵn sàng.` : "+20 điểm.")
+            : "Bạn đã ôn lại unit này thật tốt.") + extra,
           actions: [
             { label: "Đóng", fn: closeAll },
-            nxtOpen ? { label: `Học bài ${nxt.no}`, primary: true, fn: () => { closeAll(); openStudy(nxt.id); } } : null
+            nxtOpen ? { label: `Học Unit ${nxt.no}`, primary: true, fn: () => { closeAll(); openStudy(nxt.id); } } : null
           ]
         };
       }
@@ -799,7 +848,7 @@ const LessonPage = (() => {
   function startGate(gateId) {
     const g = GATES.find((x) => x.id === gateId);
     if (!g || gateStatus(g) === "locked") {
-      toast("Hoàn thành tất cả bài học trước khi làm bài kiểm tra tổng nhé!");
+      toast("Hoàn thành tất cả unit trước khi làm bài kiểm tra tổng nhé!");
       return;
     }
     window.location.hash = `#exam/${g.id}`;
@@ -815,7 +864,7 @@ const LessonPage = (() => {
       return {
         id, kind: "placement", title: PLACEMENT.title, levels: PLACEMENT.covers, unlocks: PLACEMENT.level,
         available: profile.needsPlacement,
-        reason: "Bài xếp lớp dành cho người chọn trình độ B1+ khi trả lời câu hỏi đầu tiên.",
+        reason: "Bài kiểm tra cấp độ dành cho người chọn trình độ B1+ khi trả lời câu hỏi đầu tiên.",
         learnedOnly: false
       };
     }
@@ -830,21 +879,33 @@ const LessonPage = (() => {
     };
   }
 
-  // Ghi kết quả bài kiểm tra lớn -> trả về { passed, newly: [cấp độ vừa mở] }
-  function recordTest(id, score) {
-    const passed = score >= CONFIG.GATE_PASS;
+  // Ghi kết quả bài kiểm tra lớn -> trả về { passed, newly: [cấp độ vừa mở], placed? }
+  // correct/total: số câu đúng / tổng câu (dùng để xếp lớp)
+  function recordTest(id, score, correct, total) {
+    const isPlacement = id === PLACEMENT.id;
+    let placed = null;
+    if (isPlacement) {
+      placed = placeByScore(correct ?? Math.round(score * (total || 1)), total || 1);
+      const prevPlaced = placedLevel();
+      // giữ mức xếp lớp cao nhất từng đạt
+      if (!prevPlaced || idx(placed) > idx(prevPlaced)) state.placementLevel = placed;
+      else state.placementLevel = prevPlaced;
+    }
+    const passed = isPlacement ? idx(placed) > 0 : score >= CONFIG.GATE_PASS;
     const before = unlockedLevels();
     const prev = state.tests[id] || {};
+    logActivity();
     state.tests[id] = { best: Math.max(prev.best || 0, score), last: score, passed: !!prev.passed || passed, at: Date.now() };
-    if (id === PLACEMENT.id) {
-      state.placement = state.placement === "passed" || passed ? "passed" : "failed";
+    if (isPlacement) {
+      state.placement = idx(state.placementLevel) > 0 ? "passed" : "failed";
+      state.tests[id].level = state.placementLevel;
     } else if (passed && !prev.passed) {
       state.points += 100;
     }
     saveProgress();
     const newly = unlockedLevels().filter((c) => !before.includes(c));
     if (newly.length) { activeLevel = newly[newly.length - 1]; openTopicId = null; }
-    return { passed, newly, firstPass: passed && !prev.passed };
+    return { passed, newly, firstPass: passed && !prev.passed, placed, placedBest: isPlacement ? state.placementLevel : null };
   }
 
   // ---------------------------------------------------------------
@@ -898,7 +959,7 @@ const LessonPage = (() => {
         const lv = getLevel(activeLevel);
         const ti = lv.topics.findIndex((t) => t.id === el.dataset.topic);
         if (!isTopicUnlocked(lv.code, ti)) {
-          toast(isLevelUnlocked(lv.code) ? "Hoàn thành chủ đề trước để mở khóa nhé!" : lockReason(lv.code));
+          toast(isLevelUnlocked(lv.code) ? "Hoàn thành section trước để mở khóa nhé!" : lockReason(lv.code));
           return;
         }
         openTopicId = openTopicId === el.dataset.topic ? null : el.dataset.topic;
@@ -958,7 +1019,11 @@ const LessonPage = (() => {
         await loadServerProgress();
       })();
     }
-    return loading.then(() => { profile = loadProfile(); });
+    return loading.then(() => {
+      profile = loadProfile();
+      if (!ensureData.timer) ensureData.timer = setInterval(renderTopbar, 60000); // qua nửa đêm chuỗi tự cập nhật
+      renderTopbar();
+    });
   }
 
   async function mount() {
@@ -985,12 +1050,17 @@ const LessonPage = (() => {
     },
     isLessonDone: (id) => { const c = findLesson(id); return !!c && lessonDone(c.lesson); },
     // Lưu các thông tin phụ (bước đang học, từ đã xem...) – không cộng điểm
-    update(id, patch) { setLs(id, patch); saveProgress(true); },
+    update(id, patch) {
+      if (patch.seen || patch.flips || patch.learned) logActivity(); // xem từ / lật thẻ = có học
+      setLs(id, patch);
+      saveProgress(true);
+    },
     // Từ được nối đúng ở bước 3 -> tăng tiến độ, +5 điểm mỗi từ mới
     markLearned(id, indexes) {
       const s = ls(id);
       const add = indexes.filter((i) => !s.learned.includes(i));
-      if (!add.length) return 0;
+      logActivity();
+      if (!add.length) { saveProgress(true); return 0; }
       setLs(id, { learned: [...s.learned, ...add] });
       state.points += 5 * add.length;
       saveProgress(true);
@@ -1025,7 +1095,37 @@ const LessonPage = (() => {
       state.reviews[topicId] = Object.assign(state.reviews[topicId] || {}, patch);
       saveProgress(true);
     },
-    addPoints(n) { state.points += n; saveProgress(true); },
+    addPoints(n) { state.points += n; logActivity(); saveProgress(true); },
+
+    // ----- dùng cho profile.js (trang Hồ sơ) -----
+    // ghi nhận một lần học (vd: trả lời câu ôn tập, nộp câu bài kiểm tra)
+    logActivity() { logActivity(); saveProgress(true); },
+    streakInfo,
+    dayKey,
+    isDemo: DEMO_MODE,
+    authHeader,
+    stats() {
+      const lessons = LEVELS.flatMap((lv) => allLessons(lv));
+      const done = lessons.filter(lessonDone);
+      const quizPassed = lessons.filter((l) => ls(l.id).passed).length;
+      const gatesPassed = GATES.filter((g) => state.tests[g.id]?.passed);
+      const unlocked = LEVELS.filter((l) => isLevelUnlocked(l.code));
+      const working = [...unlocked].reverse().find((l) => !levelDone(l.code)) || unlocked[unlocked.length - 1];
+      return {
+        wordsLearned: countLearned(lessons),
+        totalWords: countWords(lessons),
+        lessonsDone: done.length,
+        totalLessons: lessons.length,
+        lessonQuizzesPassed: quizPassed,
+        gatesPassed: gatesPassed.map((g) => g.title),
+        placementPassed: !!state.tests[PLACEMENT.id]?.passed,
+        testsPassed: quizPassed + gatesPassed.length + (state.tests[PLACEMENT.id]?.passed ? 1 : 0),
+        currentLevel: working ? { code: working.code, name: working.name, desc: working.desc } : null,
+        points: state.points,
+        activity: { ...(state.activity || {}) },
+        streak: streakInfo()
+      };
+    },
 
     // ----- dùng cho exam.js (bài kiểm tra tổng / xếp lớp) -----
     testDef,

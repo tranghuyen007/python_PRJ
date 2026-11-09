@@ -101,12 +101,13 @@ h1 {
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 12px;
+  text-align: center;
 }
 
 .lead { font-size: 14px; line-height: 1.6; color: var(--gray); }
 .small { font-size: 12px; line-height: 1.6; color: var(--gray); }
 
-.divider { height: 1px; background: var(--border); margin: 24px 0; }
+.divider { height: 1px; margin: 10px 0; }
 
 .back-link {
   display: inline-flex;
@@ -296,7 +297,7 @@ h1 {
   gap: 16px;
   margin-bottom: 18px;
 }
-.plan-head img { width: 82px; height: auto; animation: float 4s ease-in-out infinite; }
+.plan-head img { width: 82px; height: auto; }
 .plan-head h2 { font-size: 21px; font-weight: 800; line-height: 1.25; }
 
 .plan-card .lead { font-size: 13px; margin-bottom: 8px; }
@@ -332,7 +333,7 @@ h1 {
   max-width: 420px;
   text-align: center;
 }
-.login-wrap .bunny { width: 96px; height: auto; margin-bottom: 18px; animation: float 4s ease-in-out infinite; }
+.login-wrap .bunny { width: 96px; height: auto; margin-bottom: 18px; }
 .login-wrap .lead { margin-bottom: 22px; }
 
 .info-box {

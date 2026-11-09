@@ -115,7 +115,6 @@ body {
   width: 72px;
   height: auto;
   flex-shrink: 0;
-  animation: float 4s ease-in-out infinite;
 }
 
 .eyebrow {

@@ -139,7 +139,7 @@ const ReviewPage = (() => {
       const open = api().isLevelOpen(lv.code);
       return `
         <button type="button" class="level-tab ${lv.code === activeLevel ? "active" : ""} ${open ? "" : "locked"}" data-rv="tab" data-level="${lv.code}">
-          <b>${lv.code}</b><span>${open ? "" : I.lock}${lv.topics.length} chủ đề</span>
+          <b>${lv.code}</b><span>${open ? "" : I.lock}${lv.topics.length} section</span>
         </button>`;
     }).join("");
 
@@ -152,10 +152,10 @@ const ReviewPage = (() => {
         <a href="#learn" class="btn btn-sm btn-outline">Đến Học từ mới</a>
       </div>`;
 
-    $("rvTopics").innerHTML = lockNote + lv.topics.map((t) => topicCard(lv, t)).join("");
+    $("rvTopics").innerHTML = lockNote + lv.topics.map((t, ti) => topicCard(lv, t, ti)).join("");
   }
 
-  function topicCard(lv, t) {
+  function topicCard(lv, t, ti) {
     const info = topicInfo(lv, t);
     const r = info.review;
     const open = info.quickOpen || info.fullOpen;
@@ -164,11 +164,9 @@ const ReviewPage = (() => {
       ? `<span class="rv-badge open">${I.check} Đã mở khóa</span>`
       : `<span class="rv-badge">${I.lock} Chưa mở khóa</span>`;
 
-    const meta = `${info.doneLessons.length}/${total} bài hoàn thành • ${info.learnedWords.length} từ đã học • ${info.allWords.length} từ trong chủ đề`;
-
     let body;
     if (!info.levelOpen) {
-      body = `<div class="rv-locked"><span class="rv-lock-ic">${I.lock}</span><div><b>Cấp độ ${lv.code} chưa mở</b><p>Mở khóa cấp độ ở Học từ mới để ôn chủ đề này.</p></div></div>`;
+      body = `<div class="rv-locked"><span class="rv-lock-ic">${I.lock}</span><div><b>Cấp độ ${lv.code} chưa mở</b><p>Hoàn thành cấp độ trước và bài học để mở khóa.</p></div></div>`;
     } else if (!info.quickOpen) {
       const need = Math.max(0, CONFIG.QUICK_MIN_LESSONS - info.doneLessons.length);
       const next = api().nextLessonInTopic(t.id);
@@ -176,15 +174,10 @@ const ReviewPage = (() => {
         <div class="rv-locked">
           <span class="rv-lock-ic">${I.lock}</span>
           <div>
-            <b>Hoàn thành ít nhất ${CONFIG.QUICK_MIN_LESSONS} bài để mở ôn tập chủ đề</b>
-            <p>Bạn cần hoàn thành thêm ${need} bài.</p>
+            <p>Cần hoàn thành thêm ${need} unit để mở khóa.</p>
           </div>
-          ${next ? `<a href="#study/${next.id}" class="btn btn-outline">${I.right} ${info.doneLessons.length || next.no > 1 ? "Học bài tiếp theo" : "Bắt đầu bài 1"}</a>`
+          ${next ? `<a href="#study/${next.id}" class="btn btn-outline">${I.right} ${info.doneLessons.length || next.no > 1 ? "Học unit tiếp theo" : "Bắt đầu Unit 1"}</a>`
                  : `<a href="#learn" class="btn btn-outline">${I.right} Đến Học từ mới</a>`}
-        </div>
-        <div class="rv-chips">
-          <span class="rv-chip">${I.lock} Ôn nhanh ${CONFIG.QUICK_SIZE} từ • Đã khóa</span>
-          <span class="rv-chip">${I.lock} Ôn toàn bộ chủ đề • Đã khóa</span>
         </div>`;
     } else {
       const remainLessons = total - info.doneLessons.length;
@@ -194,19 +187,18 @@ const ReviewPage = (() => {
         <div class="rv-modes">
           <div class="rv-mode primary">
             <h4>${I.bolt} Ôn nhanh ${info.quickSize} từ</h4>
-            <p>Chọn ngẫu nhiên ${info.quickSize} từ bạn đã học.</p>
             <div class="rv-mode-foot">
-              <span>${info.quickSize} câu • khoảng ${Math.max(3, Math.round(info.quickSize / 3))} phút ${quickLast}</span>
+              <span>${quickLast}</span>
               <a href="#review-session/${t.id}/quick" class="btn btn-primary">${I.right} Bắt đầu ôn nhanh</a>
             </div>
           </div>
           <div class="rv-mode ${info.fullOpen ? "" : "locked"}">
-            <h4>${I.layers} Ôn toàn bộ chủ đề</h4>
+            <h4>${I.layers} Ôn toàn bộ section</h4>
             <p>${info.fullOpen
-              ? `Ôn trọn bộ ${info.fullSize} từ của ${total} bài trong chủ đề. Xem tỷ lệ trả lời đúng khi kết thúc.`
-              : `Hoàn thành ${total} bài của chủ đề. Còn ${remainLessons} bài nữa.`}</p>
+              ? `Ôn trọn bộ ${info.fullSize} từ của ${total} unit trong section. Xem tỷ lệ trả lời đúng khi kết thúc.`
+              : `Hoàn thành ${total} unit của section. Còn ${remainLessons} unit nữa.`}</p>
             <div class="rv-mode-foot">
-              <span>${info.fullSize} câu • khoảng ${Math.max(5, Math.round(info.fullSize / 3))} phút ${fullLast}</span>
+              <span>${fullLast}</span>
               ${info.fullOpen
                 ? `<a href="#review-session/${t.id}/full" class="btn btn-outline">${I.right} Ôn toàn bộ</a>`
                 : `<button type="button" class="btn btn-ghost" disabled>${I.lock} Đã khóa</button>`}
@@ -218,10 +210,8 @@ const ReviewPage = (() => {
     return `
       <article class="rv-topic ${open ? "" : "locked"}">
         <div class="rv-topic-head">
-          <span class="rv-topic-ic" style="background:${t.color}">${t.icon}</span>
           <div class="rv-topic-info">
-            <h3>${esc(t.name)} <span class="tag tag-soft">${esc(t.tag)}</span></h3>
-            <p>${meta}</p>
+            <h3>Section ${ti + 1}: ${esc(t.name)} <span class="tag tag-soft">${esc(t.tag)}</span></h3>
           </div>
           ${badge}
         </div>
@@ -243,17 +233,17 @@ const ReviewPage = (() => {
 
     const [topicId, mode = "quick"] = param.split("/");
     const found = findTopic(topicId);
-    if (!found) return message("Không tìm thấy chủ đề", "Chủ đề này không tồn tại.");
+    if (!found) return message("Không tìm thấy section", "Section này không tồn tại.");
     const info = topicInfo(found.lv, found.t);
 
     // lượt "ôn lại từ sai" được tạo từ màn kết quả, giữ nguyên nếu đúng chủ đề
     if (mode === "retry" && session && session.topic.id === topicId && session.retryItems) {
       session = newSession(found, "retry", session.retryItems);
     } else if (mode === "full") {
-      if (!info.fullOpen) return message("Ôn toàn bộ đang khóa", `Hoàn thành tất cả bài của chủ đề ${found.t.name} ở Học từ mới để mở chế độ này.`);
+      if (!info.fullOpen) return message("Ôn toàn bộ đang khóa", `Hoàn thành tất cả unit của section ${found.t.name} ở Học từ mới để mở chế độ này.`);
       session = newSession(found, "full", CONFIG.FULL_NEEDS_ALL ? info.allWords : info.learnedWords);
     } else {
-      if (!info.quickOpen) return message("Ôn nhanh đang khóa", `Hoàn thành ít nhất ${CONFIG.QUICK_MIN_LESSONS} bài của chủ đề ${found.t.name} để mở ôn tập.`);
+      if (!info.quickOpen) return message("Ôn nhanh đang khóa", `Hoàn thành ít nhất ${CONFIG.QUICK_MIN_LESSONS} unit của section ${found.t.name} để mở ôn tập.`);
       session = newSession(found, "quick", shuffle(info.learnedWords).slice(0, CONFIG.QUICK_SIZE));
     }
     drawSession();
@@ -262,7 +252,6 @@ const ReviewPage = (() => {
   function message(title, text) {
     $("sessionRoot").innerHTML = `
       <div class="st-message">
-        <div class="st-msg-icon">🔒</div>
         <h2>${title}</h2><p>${text}</p>
         <a href="#review" class="btn btn-primary">Về trung tâm ôn tập</a>
       </div>`;
@@ -332,25 +321,17 @@ const ReviewPage = (() => {
     if (q.type === "write") main = viewWrite(q);
 
     $("sessionRoot").innerHTML = `
-      <div class="rs-head">
-        <div>
-          <p class="st-crumb">Ôn tập / ${esc(s.topic.name)} · ${esc(s.topic.tag)}</p>
-          <h1 class="page-title">Nhớ lâu hơn, dùng tự tin hơn</h1>
+      <div class="rs-wrap">
+        <div class="rs-progress-row">
+          <span class="rs-mode">${I.refresh} ${modeLabel}</span>
+          <button type="button" class="btn btn-outline btn-sm" data-rv="exit">${I.close} Thoát ôn tập</button>
         </div>
-        <button type="button" class="btn btn-outline" data-rv="exit">${I.close} Thoát ôn tập</button>
-      </div>
-      <div class="rs-progress-row">
-        <span class="rs-mode">${I.refresh} ${modeLabel}</span>
-        <span class="st-muted">Câu ${s.i + 1}/${n} • ${TYPES[q.type].label}</span>
-      </div>
-      <div class="bar rs-bar"><span style="width:${pct(s.i + (s.answered ? 1 : 0), n)}%"></span></div>
+        <div class="bar rs-bar"><span style="width:${pct(s.i + (s.answered ? 1 : 0), n)}%"></span></div>
 
-      <div class="st-grid rs-grid">
         <section class="st-card rs-card">${main}</section>
-        <aside class="st-aside">${asideFor(q)}</aside>
-      </div>
 
-      ${s.answered ? feedbackBar(q) : `<p class="rv-footnote">Từ trả lời sai sẽ được gợi ý trong danh sách cần ôn lại khi kết thúc.</p>`}`;
+        ${s.answered || q.wrongTry ? feedbackBar(q) : ""}
+      </div>`;
 
     if (q.type === "write" && !s.answered) {
       const inp = $("rsInput");
@@ -391,7 +372,6 @@ const ReviewPage = (() => {
       : `<span class="rs-blank"></span>`;
     return `
       <h3 class="rs-q">Điền từ thích hợp vào chỗ trống</h3>
-      <p class="st-muted">Chọn một từ bên dưới để hoàn thành câu.</p>
       <div class="rs-sentence-box">
         <p class="rs-sentence">${before}${blank}${after}</p>
         ${q.w.exVi ? `<p class="rs-sentence-vi">${esc(q.w.exVi)}</p>` : ""}
@@ -404,8 +384,7 @@ const ReviewPage = (() => {
           return `<button type="button" class="rs-chip ${cls}" data-rv="fill" data-val="${esc(o)}" ${done ? "disabled" : ""}>
                     ${esc(o)} ${cls === "ok" ? I.check : cls === "bad" ? I.x : ""}</button>`;
         }).join("")}
-      </div>
-      ${done && !q.correct ? `<div class="rs-tags"><span class="rs-tag bad">Bạn chọn: ${esc(q.given)}</span><span class="rs-tag ok">Đáp án: ${esc(q.answer)}</span></div>` : ""}`;
+      </div>`;
   }
 
   function viewWrite(q) {
@@ -415,19 +394,15 @@ const ReviewPage = (() => {
       : "";
     return `
       <h3 class="rs-q">Viết từ tiếng Anh tương ứng</h3>
-      <p class="st-muted">Đọc nghĩa tiếng Việt, rồi nhập từ tiếng Anh.</p>
       <div class="rs-word-box">
         ${q.w.pos ? `<p class="rs-pos">${POS[q.w.pos] || esc(q.w.pos)}</p>` : ""}
         <p class="rs-word vi">${esc(q.w.vi)}</p>
         ${q.w.exVi ? `<p class="rs-ipa">Ngữ cảnh: ${esc(q.w.exVi)}</p>` : ""}
       </div>
       <label class="rs-input-label" for="rsInput">Câu trả lời của bạn</label>
-      <input id="rsInput" class="rs-input ${done ? (q.correct ? "ok" : "bad") : ""}" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
-             placeholder="Nhập từ tiếng Anh…" value="${esc(q.given ?? session.draft ?? "")}" ${done ? "disabled" : ""}>
-      <div class="rs-input-foot">
-        <span>Nhấn Enter để kiểm tra • Không phân biệt hoa thường</span>
-        ${hintText ? `<span class="rs-hint-text">Gợi ý: ${esc(hintText)}</span>` : ""}
-      </div>
+      <input id="rsInput" class="rs-input ${done ? "ok" : q.wrongTry ? "bad" : ""}" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+             placeholder="Nhập từ tiếng Anh…" value="${esc(done ? q.given : session.draft ?? "")}" ${done ? "disabled" : ""}>
+      ${hintText ? `<div class="rs-input-foot"><span class="rs-hint-text">Gợi ý: ${esc(hintText)}</span></div>` : ""}
       ${done ? "" : `
       <div class="rs-write-actions">
         <button type="button" class="btn btn-outline" data-rv="hint" ${q.hints >= q.answer.length - 1 ? "disabled" : ""}>${I.bulb} Cho tôi gợi ý</button>
@@ -435,50 +410,15 @@ const ReviewPage = (() => {
       </div>`}`;
   }
 
-  function asideFor(q) {
-    const tips = {
-      choose: ["Nhìn nghĩa, nhớ ngữ cảnh", "Sau mỗi đáp án, hãy đọc câu mẫu để nhớ cách dùng từ."],
-      fill: ["Nhớ theo cụm từ", "Đọc cả câu và nghĩ xem hành động nào hợp ngữ cảnh. Nhớ cả cụm giúp bạn dùng từ tự nhiên hơn."],
-      write: ["Hãy thử trước khi xem gợi ý", "Tự viết lại từ giúp bạn nhớ chính tả tốt hơn. Gợi ý sẽ mở từng chữ cái."]
-    };
-    const desc = {
-      choose: `Lượt ôn chỉ dùng những từ trong các bài bạn đã hoàn thành.`,
-      fill: `Thử hình dung hành động trong câu trước khi chọn từ.`,
-      write: `Viết đúng chính tả là bước nhớ sâu nhất.`
-    };
-    const [tTitle, tText] = tips[q.type];
-    return `
-      <div class="st-card st-side">
-        <span class="rv-learned">Từ bạn đã học</span>
-        <h3>${esc(q.lesson.title)}</h3>
-        <p class="st-muted">Bài ${q.lesson.no} • ${esc(session.topic.name)}</p>
-        <p>${desc[q.type]}</p>
-      </div>
-      <div class="st-tip">
-        <span class="st-tip-ic">${I.bulb}</span>
-        <div><b>${tTitle}</b><p>${tText}</p></div>
-      </div>
-      <p class="st-small">Thanh trên cùng là tiến độ lượt ôn, không phải tỷ lệ trả lời đúng.</p>`;
-  }
-
   function feedbackBar(q) {
-    const isLast = session.i === session.questions.length - 1;
-    const ex = q.w.ex ? `<p>${esc(q.w.ex)}</p>` : q.w.exVi ? `<p>${esc(q.w.exVi)}</p>` : "";
-    let title;
-    if (q.correct) {
-      title = `Chính xác! ${esc(q.w.en)} = ${esc(q.w.vi)}${q.hints ? ` <small>(dùng ${q.hints} gợi ý)</small>` : ""}`;
-    } else if (q.type === "choose") {
-      title = `Chưa đúng. “${esc(q.w.en)}” nghĩa là “${esc(q.w.vi)}”.`;
-    } else if (q.type === "fill") {
-      title = `Chưa đúng. Câu này cần từ “${esc(q.answer)}” (${esc(q.w.vi)}).`;
-    } else {
-      title = `Chưa đúng. Đáp án là “${esc(q.answer)}”${q.given ? `, bạn viết “${esc(q.given)}”` : ""}.`;
-    }
+    // câu viết từ: đúng ở lần thử nào cũng hiện "Chính xác"; sai thì vẫn được nhập lại hoặc bấm Tiếp tục
+    const ok = q.type === "write" ? !!q.solved : q.correct;
+    const title = ok ? "Chính xác" : "Không chính xác";
     return `
-      <div class="rs-feedback ${q.correct ? "ok" : "bad"}">
-        <span class="rs-fb-ic">${q.correct ? I.checkCircle : I.xCircle}</span>
-        <div class="rs-fb-text"><b>${title}</b>${ex}</div>
-        <button type="button" class="btn btn-primary" data-rv="next" id="rsNext">${I.right} ${isLast ? "Xem kết quả" : q.correct ? "Câu tiếp theo" : "Đã hiểu, tiếp tục"}</button>
+      <div class="rs-feedback ${ok ? "ok" : "bad"}">
+        <span class="rs-fb-ic">${ok ? I.checkCircle : I.xCircle}</span>
+        <div class="rs-fb-text"><b>${title}</b></div>
+        <button type="button" class="btn ${q.wrongTry && !q.solved ? "btn-outline" : "btn-primary"}" data-rv="next" id="rsNext">${I.right} Tiếp tục</button>
       </div>`;
   }
 
@@ -489,17 +429,47 @@ const ReviewPage = (() => {
     const s = session;
     if (s.answered) return;
     const q = s.questions[s.i];
+
+    // Câu viết từ: sai thì cho nhập lại (không biết thì bấm "Tiếp tục").
+    // Chỉ lần thử ĐẦU TIÊN được tính điểm & thống kê; sai lần đầu -> từ vào danh sách cần ôn lại.
+    if (q.type === "write") {
+      const ok = norm(given) === norm(q.answer);
+      const first = !q.tries;
+      q.tries = (q.tries || 0) + 1;
+      q.given = given;
+      if (first) q.correct = ok;
+      if (!ok) {
+        q.wrongTry = true;
+        s.draft = given;
+        if (first) api().logActivity();
+        drawSession();
+        const inp = $("rsInput");
+        if (inp) { inp.focus(); inp.select(); }
+        return;
+      }
+      q.solved = true;
+      q.wrongTry = false;
+      s.answered = true;
+      s.draft = "";
+      if (first) api().addPoints(CONFIG.POINTS_PER_CORRECT);
+      drawSession();
+      setTimeout(() => $("rsNext")?.focus(), 0);
+      return;
+    }
+
     q.given = given;
     q.correct = q.type === "choose" ? given === q.answer : norm(given) === norm(q.answer);
     s.answered = true;
     s.draft = "";
     if (q.correct) api().addPoints(CONFIG.POINTS_PER_CORRECT);
+    else api().logActivity(); // trả lời sai vẫn tính là có học trong ngày (chuỗi ngày)
     drawSession();
     setTimeout(() => $("rsNext")?.focus(), 0);
   }
 
   function next() {
     const s = session;
+    s.draft = "";
     if (s.i + 1 < s.questions.length) {
       s.i++;
       s.answered = false;
@@ -547,7 +517,7 @@ const ReviewPage = (() => {
     const msg = s.score >= 90 ? ["Xuất sắc!", "Bạn nhớ gần như trọn vẹn. Giữ nhịp ôn đều để từ vựng thành phản xạ nhé."]
       : s.score >= 70 ? ["Bạn đã nhớ được rất nhiều!", "Chỉ cần ôn lại vài từ là bạn sẽ vững hơn nữa."]
       : s.score >= 50 ? ["Bạn đang tiến bộ!", "Hãy ôn lại các từ sai rồi thử thêm một lượt nhé."]
-      : ["Mỗi lần sai là một lần nhớ!", "Đừng nản, quay lại bài học hoặc ôn từ sai ngay để nhớ chắc hơn."];
+      : ["Mỗi lần sai là một lần nhớ!", "Đừng nản, quay lại unit hoặc ôn từ sai ngay để nhớ chắc hơn."];
 
     const typeStats = Object.keys(TYPES).map((k) => {
       const qs = s.questions.filter((q) => q.type === k);
@@ -556,7 +526,7 @@ const ReviewPage = (() => {
     }).filter((x) => x.total);
 
     const best = s.mode === "full" ? api().getReview(s.topic.id).full?.best : null;
-    const modeName = s.mode === "full" ? "Ôn toàn bộ chủ đề" : s.mode === "retry" ? "Ôn lại từ sai" : "Ôn nhanh";
+    const modeName = s.mode === "full" ? "Ôn toàn bộ section" : s.mode === "retry" ? "Ôn lại từ sai" : "Ôn nhanh";
 
     $("sessionRoot").innerHTML = `
       <div class="rr-head">
@@ -572,9 +542,9 @@ const ReviewPage = (() => {
           <b>${s.score}%<small>câu trả lời đúng</small></b>
         </div>
         <div class="rr-msg">
-          <span class="rr-chip">${I.sparkle} ${s.mode === "full" ? "Tỷ lệ đúng toàn chủ đề" : "Kết quả lượt ôn"}</span>
+          <span class="rr-chip">${I.sparkle} ${s.mode === "full" ? "Tỷ lệ đúng toàn section" : "Kết quả lượt ôn"}</span>
           <h2>${msg[0]}</h2>
-          <p>${msg[1]}${best !== null && best !== undefined ? ` Điểm cao nhất của chủ đề: <b>${best}%</b>.` : ""}</p>
+          <p>${msg[1]}${best !== null && best !== undefined ? ` Điểm cao nhất của section: <b>${best}%</b>.` : ""}</p>
         </div>
         <div class="rr-stats">
           <div><b>${correct}/${n}</b><span>Câu đúng</span></div>
@@ -586,7 +556,7 @@ const ReviewPage = (() => {
       <div class="st-grid rr-grid">
         <section class="st-card">
           <div class="rr-list-head">
-            <h3>${wrongWords.length ? `${wrongWords.length} từ cần ôn lại` : "Không có từ nào sai 🎉"}</h3>
+            <h3>${wrongWords.length ? `${wrongWords.length} từ cần ôn lại` : "Không có từ nào sai"}</h3>
             ${wrongWords.length ? `<span class="rv-badge warn">Cần ôn</span>` : ""}
           </div>
           ${wrongWords.length ? `
@@ -599,7 +569,7 @@ const ReviewPage = (() => {
                 </div>
                 <button type="button" class="rs-sound" data-rv="speak" data-text="${esc(x.w.en)}" aria-label="Nghe">${I.sound}</button>
               </div>`).join("")}
-          </div>` : `<p class="st-muted">Bạn trả lời đúng tất cả các câu. Thử chế độ ôn toàn bộ hoặc học bài mới nhé!</p>`}
+          </div>` : `<p class="st-muted">Bạn trả lời đúng tất cả các câu. Thử chế độ ôn toàn bộ hoặc học unit mới nhé!</p>`}
         </section>
         <aside class="st-card">
           <h3 class="rr-side-title">Theo dạng câu hỏi</h3>
@@ -658,6 +628,11 @@ const ReviewPage = (() => {
       }
       else if (a === "retry") goSession(`${session.topic.id}/retry`);
       else if (a === "again") goSession(`${session.topic.id}/${session.mode === "retry" ? "quick" : session.mode}`);
+    });
+
+    // nhập lại sau khi sai: bỏ viền đỏ khi bắt đầu gõ
+    document.addEventListener("input", (e) => {
+      if (e.target.id === "rsInput") e.target.classList.remove("bad");
     });
 
     document.addEventListener("keydown", (e) => {

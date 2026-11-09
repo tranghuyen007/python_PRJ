@@ -82,7 +82,7 @@ const Pages = {
           <p>${t.desc}</p>
           ${progressBar((t.done / t.total) * 100)}
           <div class="topic-foot">
-            <span>${t.done}/${t.total} bài hoàn thành</span>
+            <span>${t.done}/${t.total} unit hoàn thành</span>
             <span class="arrow">${Icons.arrow}</span>
           </div>
         </a>
@@ -96,9 +96,9 @@ const Pages = {
           <!-- Tiếp tục bài học -->
           <div class="card continue-card">
             <div class="continue-info">
-              <span class="eyebrow">Tiếp tục bài học</span>
+              <span class="eyebrow">Tiếp tục unit</span>
               <h2>${l.title}</h2>
-              <p class="meta">${l.topic} • Bài ${l.lessonNo} • ${l.words} từ</p>
+              <p class="meta">${l.topic} • Unit ${l.lessonNo} • ${l.words} từ</p>
               <div class="progress-row">
                 ${progressBar(lessonPercent)}
                 <span>${lessonPercent}%</span>
@@ -126,14 +126,14 @@ const Pages = {
                 ? `Chỉ thêm ${minutesLeft} phút để đạt mục tiêu. Bạn đang làm rất tốt!`
                 : "Bạn đã đạt mục tiêu hôm nay. Tuyệt vời!"}
             </p>
-            <span class="badge badge-green">${u.wordsLearned} từ đã học • ${u.lessonsDone} bài hoàn thành</span>
+            <span class="badge badge-green">${u.wordsLearned} từ đã học • ${u.lessonsDone} unit hoàn thành</span>
           </div>
         </section>
 
         <section>
           <div class="section-head">
-            <h2>Học theo chủ đề</h2>
-            <a href="#learn" class="link">Xem tất cả chủ đề →</a>
+            <h2>Học theo section</h2>
+            <a href="#learn" class="link">Xem tất cả section →</a>
           </div>
           <div class="topic-grid">${topicCards}</div>
         </section>
@@ -163,13 +163,13 @@ const Pages = {
   // Trang Học từ mới: giao diện + logic nằm trong lesson.js (LessonPage)
   learn: {
     title: "Học từ mới",
-    crumb: "Học từ mới / Duyệt chủ đề",
+    crumb: "Học từ mới / Duyệt section",
     render: () => LessonPage.render(),
     mount: () => LessonPage.mount(),
   },
   // Trang học 1 bài (3 bước). Mở bằng #study/<mã bài>, vd: #study/a1-family-3
   study: {
-    title: "Học bài",
+    title: "Học unit",
     crumb: "Học từ mới / Khám phá từ",
     menu: "learn",
     render: (param) => StudyPage.render(param),
@@ -186,7 +186,7 @@ const Pages = {
   // Trung tâm ôn tập (review.js)
   review: {
     title: "Ôn tập",
-    crumb: "Ôn tập / Chọn chủ đề",
+    crumb: "Ôn tập / Chọn section",
     render: () => ReviewPage.render(),
     mount: () => ReviewPage.mount(),
   },
@@ -206,8 +206,10 @@ const Pages = {
     title: "Bộ từ của tôi",
     render: () => comingSoon("Bộ từ của tôi", "Những từ bạn đã lưu lại."),
   },
+  // Hồ sơ người dùng (profile.js)
   profile: {
     title: "Hồ sơ",
-    render: () => comingSoon("Hồ sơ", "Thông tin tài khoản và mục tiêu học tập."),
+    render: () => ProfilePage.render(),
+    mount: () => ProfilePage.mount(),
   },
 };

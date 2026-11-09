@@ -5,57 +5,42 @@
 const steps = [
   {
     key: "goal",
-    eyebrow: "Hiểu bạn hơn",
     title: "Bạn muốn học từ vựng để làm gì?",
-    subtitle: "Chọn lý do phù hợp nhất. Vocabbit sẽ gợi ý chủ đề gần với bạn.",
     columns: 3,
     options: [
-      { value: "study",   icon: "📚", color: "#f1ecfd", title: "Học tập",          desc: "Vững từ vựng, học tốt hơn" },
-      { value: "work",    icon: "💼", color: "#fdf1e6", title: "Công việc",        desc: "Tự tin trong môi trường quốc tế" },
-      { value: "travel",  icon: "✈️", color: "#e8f1fd", title: "Du lịch",          desc: "Khám phá thế giới dễ dàng hơn" },
-      { value: "talk",    icon: "💬", color: "#eef4fd", title: "Giao tiếp tự tin", desc: "Kết nối và trò chuyện tự nhiên" },
-      { value: "hobby",   icon: "🎧", color: "#f1ecfd", title: "Sở thích",         desc: "Hiểu phim, nhạc và điều mình thích" },
-      { value: "explore", icon: "🧭", color: "#e8f6ee", title: "Khám phá thêm",    desc: "Học điều mới vì mình muốn thế" }
+      { value: "study",   title: "Học tập",          desc: "Vững từ vựng, học tốt hơn" },
+      { value: "work",    title: "Công việc",        desc: "Tự tin trong môi trường quốc tế" },
+      { value: "travel",  title: "Du lịch",          desc: "Khám phá thế giới dễ dàng hơn" },
+      { value: "talk",    title: "Giao tiếp tự tin", desc: "Kết nối và trò chuyện tự nhiên" },
+      { value: "hobby",   title: "Sở thích",         desc: "Hiểu phim, nhạc và điều mình thích" },
+      { value: "explore", title: "Khám phá thêm",    desc: "Học điều mới vì mình muốn thế" }
     ],
-    //tip: "Không có lựa chọn đúng hay sai. Bạn có thể đổi mục tiêu bất cứ lúc nào.",
-    footTitle: "Một lựa chọn nhỏ, một lộ trình phù hợp hơn.",
-    footSub: "Tiếp theo: trình độ hiện tại",
     nextLabel: "Tiếp tục"
   },
   {
     key: "level",
-    eyebrow: "Điểm xuất phát",
     title: "Vốn từ tiếng Anh của bạn thế nào?",
-    subtitle: "Chọn mức gần với bạn nhất để bắt đầu vừa sức, không áp lực.",
     columns: 2,
     options: [
-      { value: "A0", icon: "🌱", color: "#e8f6ee", title: "Mới bắt đầu · A0",        desc: "Mình mới làm quen với tiếng Anh." },
-      { value: "A1", icon: "🌿", color: "#e8f6ee", title: "Cơ bản · A1",             desc: "Mình biết một số từ và câu quen thuộc." },
-      { value: "A2", icon: "🌳", color: "#e8f6ee", title: "Sơ trung cấp · A2",       desc: "Mình hiểu được các tình huống hằng ngày." },
-      { value: "B1", icon: "🚀", color: "#f1ecfd", title: "Trung cấp trở lên · B1+", desc: "Mình muốn mở rộng và dùng từ linh hoạt hơn." }
+      { value: "A0", title: "Mới bắt đầu · A0",        desc: "Mình mới làm quen với tiếng Anh." },
+      { value: "A1", title: "Cơ bản · A1",             desc: "Mình biết một số từ và câu quen thuộc." },
+      { value: "A2", title: "Sơ trung cấp · A2",       desc: "Mình hiểu được các tình huống hằng ngày." },
+      { value: "B1", title: "Trung cấp trở lên · B1+", desc: "Mình muốn mở rộng và dùng từ linh hoạt hơn." }
     ],
     tip: "Đây không phải bài kiểm tra. Vocabbit sẽ đồng hành từ những từ bạn thấy quen thuộc.",
-    footTitle: "Một lựa chọn nhỏ, một lộ trình phù hợp hơn.",
-    footSub: "Tiếp theo: số ngày học mỗi tuần",
     nextLabel: "Tiếp tục"
   },
     {
     key: "daysPerWeek",
-    eyebrow: "Nhịp học mỗi tuần",
     title: "Mỗi tuần, bạn có thể học bao nhiêu ngày?",
-    subtitle: "Chọn số ngày bạn thấy thoải mái. Đều đặn quan trọng hơn học dồn.",
     columns: 4,
-    defaultValue: "5", // chọn sẵn mức được gợi ý
     options: [
-      { value: "2", icon: "🌱", color: "#e8f6ee", title: "2 ngày", desc: "Nhẹ nhàng, không áp lực" },
-      { value: "3", icon: "📅", color: "#fdf6e3", title: "3 ngày", desc: "Cách ngày một buổi" },
-      { value: "5", icon: "🎯", color: "#fdecec", title: "5 ngày", desc: "Gần như mỗi ngày", badge: "Gợi ý cho bạn" },
-      { value: "7", icon: "🔥", color: "#f1ecfd", title: "7 ngày", desc: "Giữ chuỗi học liên tục" }
+      { value: "2", title: "2 ngày", desc: "Nhẹ nhàng, không áp lực" },
+      { value: "3", title: "3 ngày", desc: "Cách ngày một buổi" },
+      { value: "5", title: "5 ngày", desc: "Gần như mỗi ngày", badge: "Gợi ý cho bạn" },
+      { value: "7", title: "7 ngày", desc: "Giữ chuỗi học liên tục" }
     ],
-    encourage: "Không cần học thật nhiều. Chỉ cần giữ nhịp đều mỗi tuần.",
     tip: "5 ngày mỗi tuần là nhịp vừa sức. Bạn có thể điều chỉnh sau trong Hồ sơ.",
-    footTitle: "Bạn đã hoàn tất 3 câu hỏi!",
-    footSub: "Tiếp theo: tạo tài khoản để lưu lộ trình của bạn",
     nextLabel: "Tạo tài khoản Vocabbit"
   }
 ];
@@ -90,7 +75,6 @@ function render() {
     return `
       <button type="button" class="option ${on ? "selected" : ""}"
               role="radio" aria-checked="${on}" data-value="${o.value}">
-        <span class="option-icon" style="background:${o.color}">${o.icon}</span>
         <span class="option-check"></span>
         <span class="option-title">${o.title}</span>
         <span class="option-desc">${o.desc}</span>

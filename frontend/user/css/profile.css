@@ -1,0 +1,98 @@
+/* ===== profile.css – trang Hồ sơ =====
+   Nạp sau lesson.css: dùng lại .btn, .lp-icon-btn... Mọi style riêng nằm trong .profile */
+
+#content > .profile { max-width: 1080px; margin: 0 auto; }
+.profile .btn svg { width: 15px; height: 15px; }
+
+.profile .pf-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
+.profile .pf-main, .profile .pf-aside { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.profile .pf-card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; padding: 20px 22px; box-shadow: var(--shadow); }
+.profile .pf-card h3 { font-size: 17px; font-weight: 900; margin-bottom: 12px; }
+.profile .pf-section { font-size: 19px; font-weight: 900; margin: 0 px 0 -4px; }
+
+/* ---------- Thẻ hồ sơ ---------- */
+.profile .pf-profile { padding: 0; overflow: hidden; }
+.profile .pf-banner {
+  position: relative; display: flex; justify-content: space-between; align-items: center; height: 66px; padding: 0 22px;
+  background: linear-gradient(100deg, #e9f2fe, #f2f7fe 60%, #e4effd); color: var(--blue); font-size: 13px; font-weight: 800; overflow: hidden;
+}
+.profile .pf-banner::after {
+  content: ""; position: absolute; right: 70px; top: -40px; width: 130px; height: 130px; border-radius: 50%;
+  border: 18px solid rgba(59, 142, 240, .08);
+}
+.profile .pf-body { display: flex; align-items: flex-start; gap: 22px; padding: 22px; }
+.profile .pf-avatar {
+  display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; flex-shrink: 0;
+  background: var(--blue-light); color: var(--blue); font-size: 28px; font-weight: 900; border: 3px solid var(--white); box-shadow: 0 0 0 1px #d6e6fb;
+}
+.profile .pf-info { flex: 1; min-width: 0; }
+.profile .pf-info h2 { font-size: 24px; font-weight: 900; }
+.profile .pf-handle { color: var(--gray); font-size: 13px; margin-bottom: 6px; }
+.profile .pf-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray); margin-top: 3px; word-break: break-all; }
+.profile .pf-meta svg { width: 14px; height: 14px; color: var(--blue); }
+.profile .pf-edit { padding: 8px 14px; font-size: 13px; }
+
+/* ---------- Thống kê ---------- */
+.profile .pf-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.profile .pf-stat { padding: 18px; }
+.profile .pf-stat-top { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.profile .pf-num { font-size: 34px; font-weight: 900; margin: 12px 0 6px; line-height: 1; }
+.profile .pf-num small { font-size: 13px; font-weight: 700; color: var(--gray); margin-left: 6px; }
+.profile .pf-stat-title { font-size: 13px; font-weight: 800; }
+
+/* ---------- Tuần học ---------- */
+.profile .pf-week-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.profile .pf-week-head h3 { margin: 0; }
+.profile .pf-week-head span { font-size: 12px; color: var(--gray); }
+.profile .pf-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.profile .pf-day { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; color: var(--gray); font-weight: 700; }
+.profile .pf-day i {
+  display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+  background: #f1f4f9; color: var(--blue);
+}
+.profile .pf-day i svg { width: 17px; height: 17px; }
+.profile .pf-day.done i { background: var(--blue-light); }
+.profile .pf-day.today i { background: var(--white); border: 2px dashed var(--blue); color: #9cc2f5; }
+.profile .pf-day.today span { color: var(--blue); }
+.profile .pf-day.today.done i { background: var(--blue); border: 0; color: var(--white); box-shadow: 0 3px 0 var(--blue-dark); }
+.profile .pf-day.miss i { background: #f6f7fa; }
+.profile .pf-day.future i { background: #fafbfd; border: 1px dashed #dfe5ee; }
+.profile .pf-week-foot { display: flex; justify-content: flex-end; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+.profile .pf-target { padding: 5px 12px; border-radius: 99px; background: #f1f4f9; color: var(--gray); font-size: 12px; font-weight: 800; white-space: nowrap; }
+.profile .pf-target.ok { background: var(--green-light); color: var(--green-dark); }
+
+/* ---------- Cột phải ---------- */
+.profile .pf-ic { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--blue-light); color: var(--blue); flex-shrink: 0; }
+.profile .pf-ic svg { width: 18px; height: 18px; }
+
+.profile .pf-miles { display: flex; flex-direction: column; gap: 12px; }
+.profile .pf-mile { display: flex; gap: 12px; align-items: center; }
+.profile .pf-mile b { font-size: 13px; }
+.profile .pf-mile p { font-size: 12px; color: var(--gray); }
+.profile .pf-mile:not(.done) .pf-ic { background: #f1f4f9; color: #a0abbc; }
+.profile .pf-mile:not(.done) b { color: var(--gray); }
+
+
+/* ---------- Modal chỉnh sửa ---------- */
+.profile .pf-modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 20px; background: rgba(23, 41, 77, .45); }
+.profile .pf-modal[hidden] { display: none; }
+.profile .pf-modal-box { width: min(440px, 100%); background: var(--white); border-radius: 20px; padding: 22px 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 20px 60px rgba(23, 41, 77, .25); }
+.profile .pf-modal-head { display: flex; justify-content: space-between; align-items: center; }
+.profile .pf-modal-head h3 { font-size: 18px; font-weight: 900; }
+.profile .pf-modal-box label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 800; }
+.profile .pf-modal-box input, .profile .pf-modal-box textarea {
+  padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--border); font: inherit; font-weight: 600; color: var(--navy); outline: none; resize: vertical;
+}
+.profile .pf-modal-box input:focus, .profile .pf-modal-box textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #dbe9fc; }
+.profile .pf-modal-box input:disabled { background: #f6f8fb; color: var(--gray); }
+.profile .pf-err { min-height: 16px; font-size: 12px; color: var(--red); font-weight: 700; }
+.profile .pf-modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+@media (max-width: 980px) {
+  .profile .pf-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .profile .pf-stats { grid-template-columns: 1fr; }
+  .profile .pf-body { flex-wrap: wrap; }
+  .profile .pf-day i { width: 32px; height: 32px; }
+}

@@ -28,18 +28,18 @@
 .side-menu a:hover { background: #f3f6fb; }
 .side-menu a.active { background: var(--blue-light); color: var(--blue); font-weight:800; box-shadow: inset 0 0 0 1.5px #cfe2fb; }
 
-/* Thẻ mục tiêu hằng ngày */
-.daily-card { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: #fafcff; }
-.daily-icon { width: 26px; height: 26px; color: var(--blue); }
-.daily-card h4 { margin: 10px 0 6px; font-size: 14px; font-weight: 800; }
-.daily-card p { margin-bottom: 12px; font-size: 12px; color: var(--gray); line-height: 1.5; }
-.daily-text { display: block; margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--blue); }
 
-.help-link {
-  margin-top: auto; padding: 10px 8px; font-size: 13px;
-  color: var(--gray); text-decoration: none;
+.side-foot { margin-top: auto; }
+/* Nút đăng xuất: cùng kiểu với các mục menu */
+.logout-btn {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 10px 12px; border: none; border-radius: 12px; background: none; cursor: pointer;
+  font: inherit; font-size: 15px; font-weight: 800; color: var(--gray); text-align: left;
+  transition: background 0.15s;
 }
-.help-link:hover { color: var(--blue); }
+.logout-btn svg { width: 26px; height: 26px; padding: 2px; flex-shrink: 0; }
+.logout-btn:hover { background: #f3f6fb; }
+.logout-btn:active { background: var(--blue-light); color: var(--blue); box-shadow: inset 0 0 0 1.5px #cfe2fb; }
 
 /* ---------- Thanh tiến độ (dùng chung) ---------- */
 .progress { height: 6px; background: #e6ecf5; border-radius: 99px; overflow: hidden; }
@@ -78,7 +78,8 @@
 /* ---------- Màn hình nhỏ ---------- */
 @media (max-width: 900px) {
   .sidebar { width: 76px; padding: 20px 10px; }
-  .logo span, .side-menu a span, .daily-card, .help-link { display: none; }
+  .logo span, .side-menu a span, .logout-btn span { display: none; }
+  .logout-btn { justify-content: center; padding: 10px; }
   .logo { margin: 0 0 24px; justify-content: center; }
   .side-menu a { justify-content: center; padding: 10px; }
   .topbar { padding: 0 16px; }

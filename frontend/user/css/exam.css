@@ -56,9 +56,7 @@
 .exam .ex-progress h3 { font-size: 16px; font-weight: 900; }
 .exam .ex-count { display: flex; align-items: baseline; justify-content: space-between; margin: 8px 0 8px; }
 .exam .ex-count b { font-size: 28px; font-weight: 900; color: var(--blue); }
-.exam .ex-count span { font-size: 12px; color: var(--gray); }
-.exam .ex-per-level { font-size: 12px; font-weight: 800; margin: 10px 0 12px; }
-.exam .ex-cells { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+.exam .ex-cells { margin-top: 14px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
 .exam .ex-cell {
   height: 34px; border-radius: 8px; background: #f1f4f9; color: var(--gray);
   font: inherit; font-size: 12px; font-weight: 800; transition: background .12s;
@@ -66,11 +64,6 @@
 .exam .ex-cell:hover { background: #e6ecf5; }
 .exam .ex-cell.done { background: var(--blue-light); color: var(--blue-dark); }
 .exam .ex-cell.cur { background: var(--blue); color: var(--white); box-shadow: 0 2px 0 var(--blue-dark); }
-.exam .ex-legend { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 12px; font-size: 11px; color: var(--gray); }
-.exam .ex-legend .lg { width: 10px; height: 10px; border-radius: 3px; background: #f1f4f9; border: 1px solid #dfe5ee; margin-left: 4px; }
-.exam .ex-legend .lg.done { background: var(--blue-light); border-color: #cfe2fb; }
-.exam .ex-legend .lg.cur { background: var(--blue); border-color: var(--blue); }
-.exam .ex-threshold { margin-top: 8px; font-weight: 800; color: var(--navy) !important; font-size: 12px; }
 .exam .ex-exit { align-self: center; padding: 8px; font: inherit; font-size: 13px; font-weight: 800; color: var(--blue); }
 .exam .ex-exit:hover { text-decoration: underline; }
 

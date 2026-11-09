@@ -2,7 +2,7 @@
 //
 // 3 bước:
 //   1. Khám phá từ   : loại từ, phiên âm, nghe phát âm, nghĩa tiếng Việt, câu ngữ cảnh
-//   2. Lật flashcard : nhớ nghĩa trước rồi lật thẻ để kiểm tra
+//   2. Flashcard     : nhớ nghĩa trước rồi lật thẻ để kiểm tra
 //   3. Nối từ & nghĩa: ghép hết các cặp rồi bấm Kiểm tra. Từ nối ĐÚNG mới được tính vào tiến độ.
 // Nối đúng tất cả từ -> làm bài kiểm tra bài học (của lesson.js) để mở bài tiếp theo.
 //
@@ -13,7 +13,7 @@ const StudyPage = (() => {
 
   const STEPS = [
     { n: 1, label: "Khám phá từ" },
-    { n: 2, label: "Lật flashcard" },
+    { n: 2, label: "Flashcard" },
     { n: 3, label: "Nối từ & nghĩa" }
   ];
   const POS = {
@@ -104,7 +104,7 @@ const StudyPage = (() => {
   // Router gọi
   // ---------------------------------------------------------------
   function render() {
-    return `<div class="learn study" id="studyRoot"><p class="st-loading">Đang tải bài học…</p></div>`;
+    return `<div class="learn study" id="studyRoot"><p class="st-loading">Đang tải unit…</p></div>`;
   }
 
   async function mount(param = "") {
@@ -114,8 +114,8 @@ const StudyPage = (() => {
 
     const [id, s] = param.split("/");
     const found = api().findLesson(id);
-    if (!found) { $("studyRoot").innerHTML = messageView("Không tìm thấy bài học", "Bài học này không tồn tại hoặc đã bị xoá."); return; }
-    if (!api().isLessonOpen(id)) { $("studyRoot").innerHTML = messageView("Bài học đang khóa", "Hoàn thành bài trước (học đủ từ + qua bài kiểm tra) để mở bài này nhé."); return; }
+    if (!found) { $("studyRoot").innerHTML = messageView("Không tìm thấy unit", "Unit này không tồn tại hoặc đã bị xoá."); return; }
+    if (!api().isLessonOpen(id)) { $("studyRoot").innerHTML = messageView("Unit đang khóa", "Hoàn thành unit trước (học đủ từ + qua bài kiểm tra) để mở unit này nhé."); return; }
 
     const isNew = !ctx || ctx.lesson.id !== id;
     ctx = found;
@@ -136,7 +136,7 @@ const StudyPage = (() => {
         <div class="st-msg-icon">🔒</div>
         <h2>${title}</h2>
         <p>${text}</p>
-        <a href="#learn" class="btn btn-primary">${I.left} Về danh sách chủ đề</a>
+        <a href="#learn" class="btn btn-primary">${I.left} Về danh sách section</a>
       </div>`;
   }
 
@@ -155,21 +155,21 @@ const StudyPage = (() => {
   }
 
   function headHTML() {
-    const { t, lesson } = ctx;
+    const { t, ti, lesson } = ctx;
     const n = st().learned.length;
     const total = words().length;
     const p = pct(n, total);
     return `
       <div class="st-head">
         <div class="st-title">
-          <p class="st-crumb">${esc(t.icon)} ${esc(t.name)} · ${esc(t.tag)} <span>/</span> Bài ${lesson.no}</p>
+          <p class="st-crumb">${esc(t.icon)} Section ${ti + 1}: ${esc(t.name)} · ${esc(t.tag)} <span>/</span> Unit ${lesson.no}</p>
           <h1 class="page-title">${esc(lesson.title)}</h1>
         </div>
         <div class="st-progress">
-          <div class="st-progress-top"><span>Hoàn thành bài · ${n}/${total} từ</span><b>${p}%</b></div>
+          <div class="st-progress-top"><b>${p}%</b></div>
           <div class="bar"><span style="width:${p}%"></span></div>
         </div>
-        <a href="#learn" class="btn btn-outline st-exit">${I.close} Lưu &amp; thoát</a>
+        <a href="#learn" class="btn st-text-btn st-exit">${I.close} Lưu &amp; thoát</a>
       </div>`;
   }
 
@@ -225,44 +225,40 @@ const StudyPage = (() => {
 
     return `
       <div class="st-grid">
-        <section class="st-card st-explore">
-          <div class="st-card-top">
-            <span class="st-chip">Từ ${wIdx + 1} / ${list.length}</span>
-            <span class="st-muted">Bước 1 • Khám phá</span>
+        <div class="st-col">
+          <section class="st-card st-explore">
+            <div class="st-card-top">
+              <span class="st-chip">Từ ${wIdx + 1} / ${list.length}</span>
+            </div>
+            <h2 class="st-word-big">${esc(w.en)}</h2>
+            <div class="st-meta">${meta}</div>
+            <hr>
+            <p class="st-label">Nghĩa tiếng Việt</p>
+            <p class="st-meaning">${esc(w.vi)}</p>
+            ${w.note ? `<p class="st-note">${esc(w.note)}</p>` : ""}
+            ${context}
+          </section>
+
+          <div class="st-foot">
+            <button type="button" class="btn btn-outline" data-st="prev-word" ${wIdx === 0 ? "disabled" : ""}>${I.left} Từ trước</button>
+            ${isLast
+              ? `<button type="button" class="btn btn-primary" data-st="goto" data-step="2">Sang bước Flashcard ${I.right}</button>`
+              : `<button type="button" class="btn btn-primary" data-st="next-word">${I.right} Từ tiếp theo</button>`}
           </div>
-          <h2 class="st-word-big">${esc(w.en)}</h2>
-          <div class="st-meta">${meta}</div>
-          <hr>
-          <p class="st-label">Nghĩa tiếng Việt</p>
-          <p class="st-meaning">${esc(w.vi)}</p>
-          ${w.note ? `<p class="st-note">${esc(w.note)}</p>` : ""}
-          ${context}
-        </section>
+        </div>
+
 
         <aside class="st-aside">
           <div class="st-card st-list-card">
-            <h3>${list.length} từ của bài học</h3>
-            <p class="st-muted">Đã xem ${seen.size} • Còn ${list.length - seen.size} từ</p>
+            <h3>${list.length} từ của unit</h3>
             <div class="st-word-list">${wordList}</div>
           </div>
-          <div class="st-tip">
-            <span class="st-tip-ic">${I.bulb}</span>
-            <div><b>Nghe rồi đọc theo</b><p>Nhấn nghe mẫu, sau đó đọc to thật chậm một lần nhé.</p></div>
-          </div>
         </aside>
-      </div>
-
-      <div class="st-foot">
-        <button type="button" class="btn btn-outline" data-st="prev-word" ${wIdx === 0 ? "disabled" : ""}>${I.left} Từ trước</button>
-        <p class="st-foot-note">Tiến độ dựa trên số từ nối đúng ở bước 3, không phải số từ đã xem.</p>
-        ${isLast
-          ? `<button type="button" class="btn btn-primary" data-st="goto" data-step="2">Sang bước Lật flashcard ${I.right}</button>`
-          : `<button type="button" class="btn btn-primary" data-st="next-word">${I.right} Từ tiếp theo</button>`}
       </div>`;
   }
 
   // ---------------------------------------------------------------
-  // BƯỚC 2 – Lật flashcard
+  // BƯỚC 2 – Flashcard
   // ---------------------------------------------------------------
   function stepFlash() {
     const list = words();
@@ -299,36 +295,8 @@ const StudyPage = (() => {
 
     const dots = list.map((_, i) => `<span class="fc-dot ${i === cIdx ? "on" : ""}"></span>`).join("");
 
-    const aside = flipped ? `
-      <div class="st-card st-side">
-        <span class="st-side-ic">${I.heart}</span>
-        <h3>Kết nối với cuộc sống</h3>
-        <p>Nghĩ một tình huống thật trong ngày của bạn có dùng từ này. Liên tưởng càng gần gũi, nhớ càng lâu.</p>
-        <span class="st-side-chip">Mặt sau • Đã hiện nghĩa</span>
-      </div>
-      <div class="st-tip">
-        <span class="st-tip-ic">${I.bulb}</span>
-        <div><b>Thử nói câu của bạn</b><p>Đặt một câu ngắn với từ “${esc(w.en)}”, rồi đọc to thành tiếng nhé.</p></div>
-      </div>` : `
-      <div class="st-card st-side">
-        <span class="st-side-ic">${I.brain}</span>
-        <h3>Nhớ chủ động, nhớ lâu hơn</h3>
-        <p>Nhìn từ tiếng Anh và tự nói nghĩa tiếng Việt. Sau đó lật thẻ để kiểm tra trí nhớ của mình.</p>
-        <span class="st-side-chip">Mặt trước • Chưa hiện nghĩa</span>
-      </div>
-      <div class="st-tip">
-        <span class="st-tip-ic">${I.bulb}</span>
-        <div><b>Một mẹo nhỏ</b><p>Hãy liên tưởng từ với một hoạt động thật trong ngày của bạn.</p></div>
-      </div>`;
-
     return `
-      <div class="st-section-head">
-        <h2>${flipped ? "Đúng như bạn đã nhớ chứ?" : "Bạn còn nhớ nghĩa của từ này?"}</h2>
-        <p class="st-muted">${flipped ? "Đọc nghĩa, nghe lại rồi tiếp tục khi bạn sẵn sàng." : "Thử nhớ trước khi lật thẻ. Không cần vội, bạn đang học mà!"}</p>
-      </div>
-
-      <div class="st-grid">
-        <div>
+      <div class="fc-wrap">
           <div class="fc-card ${flipped ? "flipped" : ""}" data-st="flip" role="button" tabindex="0" aria-label="Lật thẻ">
             <div class="fc-inner">${front}${back}</div>
           </div>
@@ -341,15 +309,10 @@ const StudyPage = (() => {
                 : `<button type="button" class="btn btn-primary" data-st="next-card">Thẻ tiếp theo ${I.right}</button>`)
               : `<button type="button" class="btn btn-primary" data-st="flip">${I.flip} Lật thẻ</button>`}
           </div>
-        </div>
-        <aside class="st-aside">
-          ${aside}
-          <p class="st-small">Lật thẻ không tự động tăng tiến độ. Hoàn thành bước nối từ để cập nhật tiến độ.</p>
-        </aside>
       </div>
 
       <div class="st-foot end">
-        <button type="button" class="btn btn-outline" data-st="goto" data-step="3">${I.right} Đến bước nối từ</button>
+        <button type="button" class="btn st-text-btn" data-st="goto" data-step="3">${I.right} Đến bước nối từ</button>
       </div>`;
   }
 
@@ -418,55 +381,36 @@ const StudyPage = (() => {
       }).join("");
     }
 
-    // Cột phụ bên phải
-    let aside;
-    if (allDone) {
-      const s = st();
-      const next = api().nextLessonOf(ctx.lesson.id);
-      aside = s.passed ? `
-        <div class="st-card st-side good">
-          <span class="st-side-ic">${I.trophy}</span>
-          <h3>Bài học đã hoàn thành 🎉</h3>
-          <p>Bạn đã qua bài kiểm tra với ${Math.round(s.best * 100)}%. ${next ? `Bài ${next.no} đã sẵn sàng.` : "Quay lại danh sách để chọn bài khác nhé."}</p>
-          ${next ? `<a href="#study/${next.id}/1" class="btn btn-primary">Học bài ${next.no} ${I.right}</a>` : ""}
-          <a href="#learn" class="btn btn-outline">Về danh sách chủ đề</a>
-          <button type="button" class="btn btn-ghost" data-st="quiz">Làm lại bài kiểm tra</button>
-        </div>` : `
-        <div class="st-card st-side good">
-          <span class="st-side-ic">${I.trophy}</span>
-          <h3>Tuyệt vời! Đã nối đúng cả ${total} từ</h3>
-          <p>Bước cuối: làm bài kiểm tra bài học. Đúng từ <b>${api().config.LESSON_PASS * 100}%</b> để mở bài tiếp theo.</p>
-          <button type="button" class="btn btn-primary" data-st="quiz">Làm bài kiểm tra bài học</button>
+    // Hàng nút dưới bảng nối từ (thay cho khung bên phải)
+    const s = st();
+    const next = api().nextLessonOf(ctx.lesson.id);
+    const canCheck = !match.checked && pairedCount === total && Object.keys(match.result).length < total;
+    let actions;
+    if (allDone && s.passed) {
+      actions = `
+        <span class="st-muted">Đã qua bài kiểm tra · ${Math.round(s.best * 100)}%</span>
+        <div class="m-btns">
+          <button type="button" class="btn btn-ghost btn-sm" data-st="replay">Luyện ghép lại</button>
+          <button type="button" class="btn btn-outline" data-st="quiz">Làm lại bài kiểm tra</button>
+          ${next ? `<a href="#study/${next.id}/1" class="btn btn-primary">Học Unit ${next.no} ${I.right}</a>` : `<a href="#learn" class="btn btn-primary">Về danh sách section</a>`}
+        </div>`;
+    } else if (allDone) {
+      actions = `
+        <span class="st-muted">Đã nối đúng cả ${total} từ · đúng từ ${api().config.LESSON_PASS * 100}% bài kiểm tra để mở unit tiếp theo</span>
+        <div class="m-btns">
+          <button type="button" class="btn btn-ghost btn-sm" data-st="replay">Luyện ghép lại</button>
+          <button type="button" class="btn btn-primary" data-st="quiz">Làm bài kiểm tra unit</button>
         </div>`;
     } else if (match.checked && wrong.length) {
-      const hw = list[wrong[0]];
-      aside = `
-        <div class="st-card st-side warn">
-          <span class="st-tag-orange">Cần ôn thêm ${wrong.length} từ</span>
-          <h3>Sai một chút, nhớ thêm một chút</h3>
-          <p>Các từ nối đúng đã được lưu vào tiến độ. Ghép lại những cặp sai để hoàn thành bài nhé.</p>
-          <button type="button" class="btn btn-primary" data-st="retry">Ghép lại câu sai</button>
-        </div>
-        <div class="st-tip warn">
-          <span class="st-tip-ic">${I.bulb}</span>
-          <div><b>Gợi ý cho “${esc(hw.en)}”</b>
-            <p>${hw.ex ? `Câu ví dụ: <i>${esc(hw.ex)}</i>` : `Nghĩa bắt đầu bằng chữ “${esc(hw.vi.charAt(0))}…”.`}</p></div>
-        </div>`;
+      actions = `
+        <span class="st-muted">Sai ${wrong.length} cặp · các cặp đúng đã được lưu vào tiến độ</span>
+        <button type="button" class="btn btn-primary" data-st="retry">Ghép lại câu sai</button>`;
     } else {
-      aside = `
-        <div class="st-card st-side">
-          <span class="st-side-ic">${I.target}</span>
-          <h3>Cách chơi</h3>
-          <p>Chọn một từ ở cột trái, rồi chọn nghĩa ở cột phải. Bấm vào nghĩa đã ghép để gỡ ra. Ghép đủ ${total} cặp rồi bấm <b>Kiểm tra</b>.</p>
-          <span class="st-side-chip">Đã ghép ${pairedCount}/${total}</span>
-        </div>
-        <div class="st-tip">
-          <span class="st-tip-ic">${I.bulb}</span>
-          <div><b>Mẹo ghép nhanh</b><p>Làm những từ bạn chắc chắn trước, các từ còn lại sẽ dễ đoán hơn.</p></div>
-        </div>`;
+      actions = `
+        <span class="st-muted">Đã ghép ${pairedCount}/${total} cặp</span>
+        <button type="button" class="btn btn-primary" data-st="check" ${canCheck ? "" : "disabled"}>${I.check} Kiểm tra</button>`;
     }
 
-    const canCheck = !match.checked && pairedCount === total && Object.keys(match.result).length < total;
     const legend = match.checked || learnedN ? `
       <div class="m-legend">
         <span class="m-leg ok">${I.check} Đúng · Đã hoàn thành</span>
@@ -475,36 +419,17 @@ const StudyPage = (() => {
 
     return `
       <div class="st-section-head row">
-        <div>
-          <h2>Ghép từ tiếng Anh với nghĩa tiếng Việt</h2>
-          <p class="st-muted">Chọn một từ ở cột trái, rồi chọn nghĩa đúng ở cột phải.</p>
-        </div>
         <span class="st-badge">${I.check} ${learnedN}/${total} đã đúng</span>
       </div>
 
-      <div class="st-grid">
-        <section class="st-card m-card">
+      <section class="st-card m-card">
           ${legend}
           <div class="m-cols">
             <div><p class="st-label">Từ tiếng Anh</p><div class="m-list">${left}</div></div>
             <div><p class="st-label">Nghĩa tiếng Việt</p><div class="m-list">${right}</div></div>
           </div>
-          ${allDone ? `<div class="m-actions"><button type="button" class="btn btn-ghost btn-sm" data-st="replay">Luyện ghép lại từ đầu</button></div>` : `
-          <div class="m-actions">
-            <span class="st-muted">Đã ghép ${pairedCount}/${total} cặp</span>
-            <button type="button" class="btn btn-primary" data-st="check" ${canCheck ? "" : "disabled"}>${I.check} Kiểm tra</button>
-          </div>`}
-        </section>
-        <aside class="st-aside">${aside}</aside>
-      </div>
-
-      <div class="st-done-bar">
-        <div>
-          <b>Bài học hoàn thành ${pct(learnedN, total)}% · ${learnedN}/${total} từ</b>
-          <p>${allDone ? "Đã nối đúng tất cả từ. Làm bài kiểm tra để mở bài tiếp theo." : "Nối đúng tất cả từ để làm bài kiểm tra và mở bài tiếp theo."}</p>
-        </div>
-        <a href="#learn" class="btn btn-outline">Lưu &amp; thoát</a>
-      </div>`;
+          <div class="m-actions">${actions}</div>
+      </section>`;
   }
 
   function pickEn(i) {

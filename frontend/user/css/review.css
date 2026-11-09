@@ -16,12 +16,9 @@
 
 .review .rv-topics { display: flex; flex-direction: column; gap: 16px; }
 .review .rv-topic { background: var(--white); border: 1px solid var(--border); border-radius: 18px; padding: 20px 22px; box-shadow: var(--shadow); }
-.review .rv-topic-head { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-.review .rv-topic-ic { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; font-size: 24px; flex-shrink: 0; }
-.review .rv-topic.locked .rv-topic-ic { filter: grayscale(.7); opacity: .7; }
+.review .rv-topic-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
 .review .rv-topic-info { flex: 1; min-width: 0; }
 .review .rv-topic-info h3 { font-size: 18px; font-weight: 900; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.review .rv-topic-info p { font-size: 12px; color: var(--gray); margin-top: 2px; }
 
 .review .rv-badge { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 99px; font-size: 11px; font-weight: 800; background: #f1f4f9; color: var(--gray); white-space: nowrap; }
 .review .rv-badge svg { width: 12px; height: 12px; }
@@ -32,10 +29,10 @@
 .review .rv-mode { display: flex; flex-direction: column; padding: 18px; border-radius: 14px; border: 1px solid var(--border); background: #fbfcfe; }
 .review .rv-mode.primary { background: var(--blue-light); border-color: #cfe2fb; }
 .review .rv-mode.locked { opacity: .75; }
-.review .rv-mode h4 { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 900; }
+.review .rv-mode h4 { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 900; margin-bottom: 14px; }
 .review .rv-mode h4 svg { width: 18px; height: 18px; color: var(--blue); }
-.review .rv-mode p { font-size: 13px; color: var(--gray); margin: 6px 0 14px; flex: 1; }
-.review .rv-mode-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.review .rv-mode p { font-size: 13px; color: var(--gray); margin: -8px 0 14px; }
+.review .rv-mode-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .review .rv-mode-foot > span { font-size: 12px; color: var(--gray); display: flex; flex-direction: column; gap: 2px; }
 .review .rv-last { color: var(--green-dark); font-weight: 800; }
 

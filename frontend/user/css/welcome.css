@@ -178,7 +178,7 @@ img { max-width: 100%; display: block; }
   line-height: 1.2;
   margin-bottom: 40px;
   text-align: center;
-  color: var(--blue);
+  color: var(--gray);
 }   
 
 .hero-sub {
