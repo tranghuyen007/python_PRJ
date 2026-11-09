@@ -1,5 +1,10 @@
 from datetime import date, datetime
 from pydantic import BaseModel, ConfigDict, Field
+from typing import Literal
+
+class LessonPageProgressUpdate(BaseModel):
+    stage: Literal["VOCABULARY", "FLASHCARD", "MATCHING"]
+    page_number: int = Field(ge=1)
 
 class LessonProgressUpdate(BaseModel):
     completed_items: int = Field(ge=0)

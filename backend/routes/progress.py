@@ -7,6 +7,8 @@ from models.progress import UserLessonProgress, UserTopicProgress, UserWordProgr
 from models.curriculum import Lesson, Topic
 from schemas.progress import LessonProgressUpdate, LessonProgressResponse, TopicProgressResponse
 from services.progress_service import update_lesson_progress
+from schemas.progress import LessonPageProgressUpdate
+from services.progress_service import record_lesson_page
 
 router = APIRouter(prefix="/progress", tags=["Progress"])
 
@@ -43,3 +45,23 @@ def progress_overview(db: Session = Depends(get_db), user: User = Depends(get_cu
         "words_learned": sum(int(x.learned) for x in words),
         "words_mastered": sum(int(x.mastered) for x in words),
     }
+
+@router.post("/lessons/{lesson_id}/page")
+def save_lesson_page_progress(
+    lesson_id: int,
+    data: LessonPageProgressUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    try:
+        return record_lesson_page(
+            db=db,
+            user_id=user.user_id,
+            lesson_id=lesson_id,
+            stage=data.stage,
+            page_number=data.page_number,
+        )
+    except LookupError as e:
+        raise HTTPException(404, str(e)) from e
+    except ValueError as e:
+        raise HTTPException(422, str(e)) from e
