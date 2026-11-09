@@ -1,0 +1,207 @@
+/* ===== study.css – trang học 1 bài (3 bước) =====
+   Nạp sau lesson.css: dùng lại .btn, .bar, .tag... của .learn. Mọi style nằm trong .study */
+
+#content > .study { max-width: 1080px; margin: 0 auto; }
+.study .st-loading { color: var(--gray); padding: 40px 0; text-align: center; }
+.study .st-muted { color: var(--gray); font-size: 13px; }
+.study .st-small { font-size: 12px; color: var(--gray); margin-top: 10px; line-height: 1.5; }
+.study .st-label { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--gray); margin-bottom: 6px; }
+.study .btn svg { width: 15px; height: 15px; }
+.study hr { border: 0; border-top: 1px solid #edf0f5; margin: 18px 0; }
+
+/* ---------- Đầu trang ---------- */
+.study .st-head { display: flex; align-items: center; gap: 24px; margin-bottom: 18px; }
+.study .st-title { flex: 1; min-width: 0; }
+.study .st-crumb { font-size: 12px; font-weight: 700; color: var(--gray); }
+.study .st-crumb span { color: #b5c0d0; margin: 0 2px; }
+.study .st-head .page-title { margin: 2px 0 0; font-size: 26px; font-weight: 900; }
+.study .st-progress { width: 240px; }
+.study .st-progress-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--gray); font-weight: 700; margin-bottom: 6px; }
+.study .st-progress-top b { color: var(--blue); }
+.study .st-exit { padding: 9px 14px; }
+
+/* ---------- 3 bước ---------- */
+.study .st-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.study .st-step {
+  display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px;
+  background: var(--white); border: 1.5px solid var(--border); font: inherit; font-size: 13px; font-weight: 800; color: var(--gray);
+  text-align: left; transition: border-color .15s, background .15s;
+}
+.study .st-step:hover { border-color: var(--blue); }
+.study .st-step-no {
+  display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+  background: #eef1f6; color: var(--gray); font-size: 12px; font-weight: 900; flex-shrink: 0;
+}
+.study .st-step-no svg { width: 12px; height: 12px; }
+.study .st-step.active { background: var(--blue-light); border-color: #b8d4f8; color: var(--blue-dark); }
+.study .st-step.active .st-step-no { background: var(--blue); color: var(--white); }
+.study .st-step.done:not(.active) .st-step-no { background: var(--green-light); color: var(--green); }
+
+/* ---------- Lưới chính + cột phụ ---------- */
+.study .st-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; align-items: start; }
+.study .st-aside { display: flex; flex-direction: column; gap: 14px; }
+.study .st-card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; padding: 22px 24px; box-shadow: var(--shadow); }
+.study .st-chip {
+  display: inline-flex; padding: 4px 10px; border-radius: 99px; background: var(--blue-light); color: var(--blue-dark);
+  font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em;
+}
+.study .st-section-head { margin-bottom: 14px; }
+.study .st-section-head.row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.study .st-section-head h2 { font-size: 20px; font-weight: 900; }
+.study .st-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 99px; background: var(--green-light); color: var(--green-dark); font-size: 12px; font-weight: 800; white-space: nowrap; }
+.study .st-badge svg { width: 12px; height: 12px; }
+
+/* ---------- Bước 1: khám phá ---------- */
+.study .st-card-top { display: flex; justify-content: space-between; align-items: center; }
+.study .st-word-big { font-size: 46px; font-weight: 900; margin: 18px 0 12px; letter-spacing: -.01em; }
+.study .st-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.study .st-pos { padding: 5px 10px; border-radius: 8px; background: #f1f4f9; font-size: 12px; font-weight: 800; color: var(--gray); }
+.study .st-ipa { font-size: 16px; color: var(--gray); }
+.study .st-sound {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px;
+  background: var(--blue-light); color: var(--blue-dark); font: inherit; font-size: 13px; font-weight: 800;
+}
+.study .st-sound:hover { background: #dfeafc; }
+.study .st-sound svg { width: 16px; height: 16px; }
+.study .st-meaning { font-size: 22px; font-weight: 900; }
+.study .st-note { color: var(--gray); font-size: 13px; margin-top: 4px; }
+.study .st-context { margin-top: 18px; padding: 16px 18px; border-radius: 14px; background: var(--blue-light); border: 1px solid #d6e6fb; }
+.study .st-context .st-label { color: var(--blue); }
+.study .st-ex { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.study .st-ex mark, .study .fc-ex mark { background: none; color: var(--blue); font-weight: 900; }
+.study .st-ex-vi { font-size: 13px; color: var(--gray); margin-top: 4px; }
+.study .st-mini-sound { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--blue); }
+.study .st-mini-sound:hover { background: #dfeafc; }
+.study .st-mini-sound svg { width: 15px; height: 15px; }
+
+.study .st-list-card { padding: 18px; }
+.study .st-list-card h3 { font-size: 15px; font-weight: 900; }
+.study .st-word-list { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; }
+.study .st-word {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px;
+  font: inherit; font-size: 13px; font-weight: 700; color: var(--navy); text-align: left;
+}
+.study .st-word:hover { background: #f4f7fc; }
+.study .st-word-ic {
+  display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid #cfd7e3; flex-shrink: 0; color: var(--white);
+}
+.study .st-word-ic svg { width: 10px; height: 10px; }
+.study .st-word.seen .st-word-ic { background: var(--green); border-color: var(--green); }
+.study .st-word.current { background: var(--blue-light); color: var(--blue-dark); box-shadow: inset 0 0 0 1.5px #cfe2fb; }
+.study .st-word.current .st-word-ic { border: 0; color: var(--blue); }
+.study .st-word.current .st-word-ic svg { width: 18px; height: 18px; }
+
+.study .st-tip {
+  display: flex; gap: 10px; padding: 14px 16px; border-radius: 14px;
+  background: var(--blue-light); border: 1px solid #d6e6fb; font-size: 13px;
+}
+.study .st-tip b { color: var(--blue-dark); }
+.study .st-tip p { color: var(--gray); margin-top: 2px; }
+.study .st-tip-ic { color: var(--blue); }
+.study .st-tip-ic svg { width: 20px; height: 20px; }
+.study .st-tip.warn { background: #fff4f4; border-color: #f7d4d5; }
+.study .st-tip.warn b, .study .st-tip.warn .st-tip-ic { color: var(--red); }
+
+.study .st-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 20px; }
+.study .st-foot.end { justify-content: flex-end; }
+.study .st-foot-note { flex: 1; text-align: center; font-size: 12px; color: var(--gray); }
+
+/* ---------- Bước 2: flashcard ---------- */
+.study .fc-card { position: relative; height: 340px; perspective: 1200px; cursor: pointer; outline: none; }
+.study .fc-inner { position: absolute; inset: 0; transition: transform .5s; transform-style: preserve-3d; }
+.study .fc-card.flipped .fc-inner { transform: rotateY(180deg); }
+.study .fc-face {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 20px 24px; border-radius: 20px; background: var(--white); border: 1.5px solid #cfe0f7;
+  box-shadow: 0 4px 0 #e2ebf7, var(--shadow); backface-visibility: hidden; text-align: center;
+}
+.study .fc-card:focus-visible .fc-face { box-shadow: 0 0 0 3px #cfe2fb; }
+.study .fc-back { transform: rotateY(180deg); background: linear-gradient(180deg, #f7fbff, #ffffff); }
+.study .fc-top { position: absolute; top: 16px; left: 18px; right: 18px; display: flex; justify-content: space-between; align-items: center; }
+.study .fc-save { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; color: var(--gray); }
+.study .fc-save:hover { background: #f1f4f9; }
+.study .fc-save svg { width: 18px; height: 18px; }
+.study .fc-save.on { color: var(--blue); }
+.study .fc-save.on svg { fill: currentColor; }
+.study .fc-word { font-size: 48px; font-weight: 900; }
+.study .fc-word.sm { font-size: 32px; }
+.study .fc-sound { display: grid; place-items: center; width: 40px; height: 40px; margin-top: 14px; border-radius: 50%; background: var(--blue-light); color: var(--blue); }
+.study .fc-sound svg { width: 18px; height: 18px; }
+.study .fc-hint { position: absolute; bottom: 18px; display: flex; align-items: center; gap: 6px; color: var(--blue); font-size: 13px; font-weight: 700; }
+.study .fc-hint svg { width: 14px; height: 14px; }
+.study .fc-sub { color: var(--gray); font-size: 13px; margin-top: 4px; }
+.study .fc-meaning { font-size: 24px; font-weight: 900; color: var(--navy); margin-top: 14px; }
+.study .fc-ex { font-size: 14px; color: var(--gray); margin-top: 6px; }
+.study .fc-actions { display: flex; align-items: center; gap: 14px; margin-top: 18px; }
+.study .fc-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; }
+.study .fc-dots { display: flex; gap: 6px; }
+.study .fc-dot { width: 7px; height: 7px; border-radius: 99px; background: #d6deea; transition: width .2s; }
+.study .fc-dot.on { width: 20px; background: var(--blue); }
+
+.study .st-side { display: flex; flex-direction: column; gap: 8px; padding: 20px; }
+.study .st-side h3 { font-size: 16px; font-weight: 900; }
+.study .st-side p { color: var(--gray); font-size: 13px; line-height: 1.5; }
+.study .st-side .btn { width: 100%; margin-top: 4px; }
+.study .st-side-ic { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--blue-light); color: var(--blue); }
+.study .st-side-ic svg { width: 22px; height: 22px; }
+.study .st-side-chip { align-self: flex-start; margin-top: 4px; padding: 4px 10px; border-radius: 99px; background: #f1f4f9; font-size: 11px; font-weight: 800; color: var(--gray); }
+.study .st-side.good { border-color: #c9ead8; }
+.study .st-side.good .st-side-ic { background: var(--green-light); color: var(--green); }
+.study .st-side.warn { border-color: #f7d4d5; }
+.study .st-tag-orange { align-self: flex-start; padding: 4px 10px; border-radius: 99px; background: #fff0f0; color: var(--red); font-size: 11px; font-weight: 800; }
+
+/* ---------- Bước 3: nối từ ---------- */
+.study .m-card { padding: 20px 22px; }
+.study .m-legend { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.study .m-leg { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 800; }
+.study .m-leg svg { width: 11px; height: 11px; }
+.study .m-leg.ok { background: var(--green-light); color: var(--green-dark); }
+.study .m-leg.bad { background: #fff0f0; color: var(--red); }
+.study .m-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.study .m-list { display: flex; flex-direction: column; gap: 8px; }
+.study .m-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; padding: 9px 14px;
+  border-radius: 12px; background: var(--white); border: 1.5px solid var(--border); box-shadow: 0 2px 0 #e8edf4;
+  font: inherit; font-size: 14px; font-weight: 800; color: var(--navy); text-align: left; transition: border-color .12s, background .12s;
+}
+.study button.m-item:hover:not(:disabled) { border-color: var(--blue); }
+.study .m-item small { display: block; font-size: 11px; font-weight: 700; color: var(--blue); margin-top: 1px; }
+.study .m-ic { display: inline-flex; align-items: center; flex-shrink: 0; }
+.study .m-ic svg { width: 14px; height: 14px; }
+.study .m-ic small { margin: 0; padding: 2px 8px; border-radius: 99px; background: var(--blue-light); }
+.study .m-item.sel { border-color: var(--blue); background: var(--blue-light); box-shadow: 0 0 0 3px #dbe9fc; }
+.study .m-item.paired, .study .m-item.used { border-color: #b8d4f8; background: #f7fbff; }
+.study .m-item.used > span:first-child { color: var(--gray); }
+.study .m-item.ok { border-color: #a9dcc0; background: var(--green-light); color: var(--green-dark); box-shadow: 0 2px 0 #c6e9d5; cursor: default; }
+.study .m-item.bad { border-color: #f3b4b6; background: #fff4f4; color: #b4262b; box-shadow: 0 2px 0 #f7d4d5; }
+.study .m-item:disabled { cursor: default; }
+.study .m-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #edf0f5; }
+
+.study .st-done-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 18px; padding: 16px 20px;
+  background: var(--blue-light); border: 1px solid #d6e6fb; border-radius: 16px;
+}
+.study .st-done-bar b { color: var(--blue-dark); }
+.study .st-done-bar p { color: var(--gray); font-size: 13px; }
+
+/* ---------- Thông báo khóa / không tìm thấy ---------- */
+.study .st-message { max-width: 460px; margin: 60px auto; text-align: center; background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 32px; box-shadow: var(--shadow); }
+.study .st-msg-icon { font-size: 40px; }
+.study .st-message h2 { font-size: 20px; font-weight: 900; margin: 8px 0 4px; }
+.study .st-message p { color: var(--gray); margin-bottom: 18px; }
+
+/* ---------- Màn hình nhỏ ---------- */
+@media (max-width: 980px) {
+  .study .st-grid { grid-template-columns: 1fr; }
+  .study .st-head { flex-wrap: wrap; }
+  .study .st-progress { width: 100%; order: 3; }
+}
+@media (max-width: 640px) {
+  .study .st-steps { grid-template-columns: 1fr; }
+  .study .st-word-big, .study .fc-word { font-size: 36px; }
+  .study .m-cols { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .study .m-item { font-size: 13px; padding: 8px 10px; }
+  .study .st-foot-note { display: none; }
+  .study .st-done-bar { flex-direction: column; align-items: flex-start; }
+}
