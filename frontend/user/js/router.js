@@ -17,7 +17,7 @@ function renderPage() {
   const page = Pages[pageName];
 
   contentEl.innerHTML = page.render(param);
-  document.title = `${page.title} – Vocabbit`;
+  document.title = `Vocabbit - ${page.title}`;
   if (topbarTitleEl) topbarTitleEl.textContent = page.crumb || page.title;
   setActiveMenu(page.menu || pageName);   // trang con (vd: study) tô sáng mục menu cha
   window.scrollTo({ top: 0 });

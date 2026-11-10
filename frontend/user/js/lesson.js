@@ -448,7 +448,7 @@ const LessonPage = (() => {
     card.innerHTML = `
       <div class="lv-badge">${locked ? ICON.lock : lv.code}</div>
       <div class="lv-info">
-        <h2>Cấp độ ${lv.code} — ${lv.name}</h2>
+        <h2>Cấp độ ${lv.name}</h2>
         <div class="bar"><span style="width:${p}%"></span></div>
       </div>
       <div class="lv-pct"><b>${p}%</b><small>hoàn thành</small></div>`;
@@ -479,7 +479,7 @@ const LessonPage = (() => {
 
     let status = "";
     if (unlocked && allDone) status = `<span class="tag tag-green">Hoàn thành</span>`;
-    else if (unlocked && (learned > 0 || doneCount > 0)) status = `<span class="tag tag-blue">Đang học</span>`;
+    else if (unlocked && (learned > 0 || doneCount > 0)) status = `<span class="tag tag-yellow">Đang học</span>`;
 
     let footer = "";
     if (!isOpen) {
@@ -496,7 +496,7 @@ const LessonPage = (() => {
           btn = `<button type="button" class="btn btn-sm btn-outline" data-action="open-lesson" data-lesson="${t.lessons[0].id}">Ôn lại</button>`;
         } else if (next) {
           const n = learnedOf(next);
-          if (n > 0) chip = `<span class="tag tag-blue">Unit ${next.no} đang học · ${pct(n, next.words.length)}%</span>`;
+          if (n > 0) chip = `<span class="tag tag-yellow">Unit ${next.no} đang học · ${pct(n, next.words.length)}%</span>`;
           const label = n > 0 ? `Tiếp tục Unit ${next.no}` : `Bắt đầu Unit ${next.no}`;
           btn = `<button type="button" class="btn btn-sm ${n > 0 || doneCount > 0 ? "btn-primary" : "btn-outline"}" data-action="open-lesson" data-lesson="${next.id}">${label}</button>`;
         }
@@ -545,9 +545,9 @@ const LessonPage = (() => {
         : `<span class="ls-mark ${isCurrent ? "current" : ""}">${lesson.no}</span>`;
 
     let tag = "";
-    if (done) tag = `<span class="tag tag-green">Kiểm tra ${Math.round(s.best * 100)}%</span>`;
+    if (done) tag = `<span class="tag tag-green">Hoàn thành</span>`; // qua bài kiểm tra unit (>= 8/10 câu)
     else if (waitingQuiz) tag = `<span class="tag tag-orange">Chờ kiểm tra</span>`;
-    else if (isCurrent) tag = `<span class="tag tag-blue">${n > 0 ? "Đang học" : "Tiếp theo"}</span>`;
+    else if (isCurrent) tag = `<span class="tag ${n > 0 ? "tag-yellow" : "tag-blue"}">${n > 0 ? "Đang học" : "Tiếp theo"}</span>`;
 
 
     let btn;

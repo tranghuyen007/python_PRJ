@@ -74,6 +74,7 @@ function L(title, words) {
   };
 }
 
+// name: tên section (tiếng Anh) · tag: nhóm phân loại (Gia đình, Trường học, Bạn bè, Xã hội, Đời sống, Công việc, Khoa học)
 function T(id, icon, color, name, tag, lessons) {
   return {
     id, icon, color, name, tag,
@@ -86,35 +87,35 @@ const VOCAB_LEVELS = [
   {
     code: "A1", name: "Sơ cấp", desc: "Dành cho người mới bắt đầu",
     topics: [
-      T("a1-family", "🏠", "#fdf1e6", "Family", "Gia đình", [
+      T("a1-family", "🏠", "#fdf1e6", "Family Life and Relationships", "Gia đình", [
         L("Members of the Family", "father=bố|mother=mẹ|sister=chị/em gái|brother=anh/em trai|son=con trai|daughter=con gái|baby=em bé|family=gia đình"),
         L("Family Roles", "parent=bố hoặc mẹ|child=đứa con|grandpa=ông|grandma=bà|uncle=chú/bác/cậu|aunt=cô/dì|cousin=anh chị em họ|wife=vợ"),
         L("Daily Family Routines", "wake=thức dậy|sleep=ngủ|eat=ăn|play=chơi|cook=nấu ăn|wash=rửa, giặt|clean=dọn dẹp|watch=xem"),
         L("Family Celebrations", "birthday=sinh nhật|party=bữa tiệc|gift=món quà|candle=cây nến|cake=bánh kem|celebrate=ăn mừng|wish=lời chúc|dinner=bữa tối"),
         L("Family Feelings", "love=yêu thương|hug=ôm|miss=nhớ|care=quan tâm|happy=vui vẻ|proud=tự hào|kind=tử tế|together=cùng nhau")
       ]),
-      T("a1-school", "🏫", "#fdf6e3", "School", "Trường học", [
+      T("a1-school", "🏫", "#fdf6e3", "School Days and Classroom Life", "Trường học", [
         L("In the Classroom", "teacher=giáo viên|student=học sinh|desk=bàn học|chair=ghế|board=bảng|book=quyển sách|pen=bút mực|pencil=bút chì"),
         L("School Subjects", "math=môn toán|science=khoa học|history=lịch sử|art=mỹ thuật|music=âm nhạc|English=tiếng Anh|geography=địa lý|sport=thể thao"),
         L("School Places", "library=thư viện|classroom=lớp học|canteen=căn tin|playground=sân chơi|office=văn phòng|gate=cổng|hall=hội trường|lab=phòng thí nghiệm"),
         L("Homework & Exams", "homework=bài tập về nhà|exam=bài thi|test=bài kiểm tra|answer=câu trả lời|question=câu hỏi|score=điểm số|pass=vượt qua|study=học"),
         L("A School Day", "bell=chuông|break=giờ ra chơi|lesson=bài học|lunch=bữa trưa|uniform=đồng phục|bag=cặp sách|bus=xe buýt|late=muộn")
       ]),
-      T("a1-social", "📱", "#eef4fd", "Social Media", "Mạng xã hội", [
+      T("a1-social", "📱", "#eef4fd", "Staying Connected on Social Media", "Xã hội", [
         L("Getting Online", "phone=điện thoại|app=ứng dụng|internet=mạng internet|account=tài khoản|password=mật khẩu|login=đăng nhập|profile=trang cá nhân|online=trực tuyến"),
         L("Posting", "post=bài đăng|photo=bức ảnh|video=đoạn phim|caption=chú thích|share=chia sẻ|upload=tải lên|story=tin ngắn|tag=gắn thẻ"),
         L("Reactions", "like=thích|comment=bình luận|reply=trả lời|follow=theo dõi|emoji=biểu tượng cảm xúc|message=tin nhắn|chat=trò chuyện|block=chặn"),
         L("Being Safe Online", "private=riêng tư|public=công khai|safe=an toàn|fake=giả mạo|report=báo cáo|delete=xóa|link=đường dẫn|warning=cảnh báo"),
         L("Trends", "trend=xu hướng|viral=lan truyền mạnh|famous=nổi tiếng|fan=người hâm mộ|channel=kênh|news=tin tức|view=lượt xem|popular=phổ biến")
       ]),
-      T("a1-friends", "👫", "#f1ecfd", "Friends", "Bạn bè", [
+      T("a1-friends", "👫", "#f1ecfd", "Making and Keeping Friends", "Bạn bè", [
         L("Making Friends", "friend=bạn|meet=gặp gỡ|name=tên|smile=mỉm cười|hello=xin chào|introduce=giới thiệu|nice=dễ chịu|classmate=bạn cùng lớp"),
         L("Describing Friends", "tall=cao|short=thấp|funny=hài hước|friendly=thân thiện|smart=thông minh|shy=nhút nhát|quiet=ít nói|honest=trung thực"),
         L("Hanging Out", "cinema=rạp chiếu phim|park=công viên|coffee=cà phê|game=trò chơi|walk=đi dạo|visit=ghé thăm|weekend=cuối tuần|fun=niềm vui"),
         L("Helping Each Other", "help=giúp đỡ|borrow=mượn|lend=cho mượn|support=ủng hộ|advice=lời khuyên|promise=lời hứa|sorry=xin lỗi|thank=cảm ơn"),
         L("Friendship", "best friend=bạn thân|team=đội nhóm|secret=bí mật|memory=kỷ niệm|laugh=cười lớn|argue=cãi nhau|forgive=tha thứ|loyal=trung thành")
       ]),
-      T("a1-daily", "☀️", "#e8f6ee", "Daily Life", "Đời sống hằng ngày", [
+      T("a1-daily", "☀️", "#e8f6ee", "Everyday Life and Routines", "Đời sống", [
         L("Morning Routine", "brush=chải, đánh (răng)|shower=tắm vòi sen|dress=mặc quần áo|breakfast=bữa sáng|towel=khăn tắm|mirror=gương|alarm=báo thức|comb=cái lược"),
         L("At Home", "kitchen=nhà bếp|bedroom=phòng ngủ|bathroom=phòng tắm|door=cửa ra vào|window=cửa sổ|table=cái bàn|sofa=ghế sô-pha|lamp=đèn bàn"),
         L("Food & Drinks", "rice=cơm, gạo|bread=bánh mì|water=nước|milk=sữa|egg=trứng|fruit=trái cây|tea=trà|soup=món canh"),
@@ -128,17 +129,17 @@ const VOCAB_LEVELS = [
   {
     code: "A2", name: "Sơ cấp", desc: "Dùng được trong tình huống hằng ngày",
     topics: [
-      T("a2-travel", "✈️", "#e8f1fd", "Travel", "Du lịch", [
+      T("a2-travel", "✈️", "#e8f1fd", "Travelling and Getting Around", "Đời sống", [
         L("At the Airport", "airport=sân bay|ticket=vé|passport=hộ chiếu|luggage=hành lý|flight=chuyến bay|boarding=lên máy bay|delay=sự trì hoãn|departure=khởi hành"),
         L("Hotel Stay", "hotel=khách sạn|reception=quầy lễ tân|room=phòng|key=chìa khóa|reservation=sự đặt chỗ|check in=nhận phòng|check out=trả phòng|guest=khách"),
         L("Asking for Directions", "map=bản đồ|street=đường phố|corner=góc đường|straight=thẳng|left=bên trái|right=bên phải|near=gần|far=xa")
       ]),
-      T("a2-health", "🩺", "#fdecec", "Health", "Sức khỏe", [
+      T("a2-health", "🩺", "#fdecec", "Health and Wellbeing", "Đời sống", [
         L("The Body", "head=đầu|hand=bàn tay|leg=chân|eye=mắt|ear=tai|mouth=miệng|nose=mũi|back=lưng"),
         L("Feeling Ill", "sick=ốm|fever=sốt|cough=ho|headache=đau đầu|tired=mệt mỏi|pain=cơn đau|rest=nghỉ ngơi|medicine=thuốc"),
         L("Healthy Habits", "exercise=tập thể dục|healthy=khỏe mạnh|diet=chế độ ăn|vegetable=rau củ|run=chạy|swim=bơi|relax=thư giãn|habit=thói quen")
       ]),
-      T("a2-work", "💼", "#fdf1e6", "Work", "Công việc", [
+      T("a2-work", "💼", "#fdf1e6", "Jobs and the Workplace", "Công việc", [
         L("Jobs", "doctor=bác sĩ|nurse=y tá|engineer=kỹ sư|farmer=nông dân|driver=tài xế|chef=đầu bếp|police=cảnh sát|worker=công nhân"),
         L("At the Office", "computer=máy tính|meeting=cuộc họp|boss=sếp|colleague=đồng nghiệp|email=thư điện tử|printer=máy in|schedule=lịch trình|project=dự án"),
         L("Work Life", "salary=tiền lương|job=công việc|busy=bận rộn|deadline=hạn chót|interview=phỏng vấn|career=sự nghiệp|skill=kỹ năng|hire=tuyển dụng")
@@ -150,17 +151,17 @@ const VOCAB_LEVELS = [
   {
     code: "B1", name: "Trung cấp", desc: "Mở rộng vốn từ, diễn đạt ý kiến",
     topics: [
-      T("b1-environment", "🌿", "#e8f6ee", "Environment", "Môi trường", [
+      T("b1-environment", "🌿", "#e8f6ee", "Protecting Our Environment", "Xã hội", [
         L("Nature", "forest=rừng|ocean=đại dương|river=sông|mountain=núi|climate=khí hậu|wildlife=động vật hoang dã|desert=sa mạc|island=hòn đảo"),
         L("Pollution", "pollution=sự ô nhiễm|waste=rác thải|plastic=nhựa|smoke=khói|chemical=hóa chất|damage=thiệt hại|dirty=bẩn|harmful=có hại"),
         L("Protecting the Planet", "recycle=tái chế|reduce=giảm bớt|reuse=tái sử dụng|energy=năng lượng|solar=thuộc mặt trời|protect=bảo vệ|save=tiết kiệm|sustainable=bền vững")
       ]),
-      T("b1-technology", "💻", "#eef4fd", "Technology", "Công nghệ", [
+      T("b1-technology", "💻", "#eef4fd", "Technology in Everyday Life", "Khoa học", [
         L("Devices", "laptop=máy tính xách tay|screen=màn hình|keyboard=bàn phím|battery=pin|charger=bộ sạc|device=thiết bị|camera=máy ảnh|speaker=loa"),
         L("Digital Skills", "software=phần mềm|download=tải xuống|install=cài đặt|update=cập nhật|data=dữ liệu|search=tìm kiếm|file=tệp tin|website=trang web"),
         L("Innovation", "invent=phát minh|robot=người máy|artificial=nhân tạo|develop=phát triển|research=nghiên cứu|future=tương lai|digital=kỹ thuật số|automatic=tự động")
       ]),
-      T("b1-communication", "💬", "#f1ecfd", "Communication", "Giao tiếp", [
+      T("b1-communication", "💬", "#f1ecfd", "Sharing Opinions and Feelings", "Xã hội", [
         L("Conversations", "opinion=ý kiến|agree=đồng ý|disagree=không đồng ý|explain=giải thích|suggest=gợi ý|discuss=thảo luận|mention=đề cập|respond=phản hồi"),
         L("Emotions", "anxious=lo lắng|confident=tự tin|disappointed=thất vọng|excited=hào hứng|embarrassed=xấu hổ|grateful=biết ơn|jealous=ghen tị|relieved=nhẹ nhõm"),
         L("Persuasion", "convince=thuyết phục|argument=lập luận|evidence=bằng chứng|benefit=lợi ích|reason=lý do|compare=so sánh|prefer=thích hơn|recommend=đề xuất")
@@ -172,17 +173,17 @@ const VOCAB_LEVELS = [
   {
     code: "B2", name: "Trung cao cấp", desc: "Dùng từ linh hoạt, chuyên sâu hơn",
     topics: [
-      T("b2-business", "📈", "#fdf6e3", "Business", "Kinh doanh", [
+      T("b2-business", "📈", "#fdf6e3", "Business and the Economy", "Công việc", [
         L("Companies", "company=công ty|customer=khách hàng|profit=lợi nhuận|revenue=doanh thu|competitor=đối thủ cạnh tranh|brand=thương hiệu|strategy=chiến lược|investment=sự đầu tư"),
         L("Negotiation", "negotiate=đàm phán|contract=hợp đồng|offer=lời đề nghị|deal=thỏa thuận|compromise=thỏa hiệp|budget=ngân sách|discount=giảm giá|condition=điều kiện"),
         L("E-commerce", "e-commerce=thương mại điện tử|checkout=thanh toán|delivery=giao hàng|refund=hoàn tiền|inventory=hàng tồn kho|review=đánh giá|shipping=vận chuyển|platform=nền tảng")
       ]),
-      T("b2-society", "🏙️", "#eef4fd", "Society", "Xã hội", [
+      T("b2-society", "🏙️", "#eef4fd", "Community, Culture and Social Issues", "Xã hội", [
         L("Community", "community=cộng đồng|citizen=công dân|volunteer=tình nguyện viên|government=chính phủ|law=luật pháp|rights=các quyền|population=dân số|tradition=truyền thống"),
         L("Social Issues", "poverty=nghèo đói|unemployment=thất nghiệp|equality=bình đẳng|crime=tội phạm|education=giáo dục|housing=nhà ở|inflation=lạm phát|discrimination=phân biệt đối xử"),
         L("Culture", "heritage=di sản|festival=lễ hội|custom=phong tục|identity=bản sắc|diverse=đa dạng|generation=thế hệ|influence=ảnh hưởng|values=giá trị")
       ]),
-      T("b2-science", "🔬", "#e8f6ee", "Science", "Khoa học", [
+      T("b2-science", "🔬", "#e8f6ee", "Science and Discovery", "Khoa học", [
         L("Research", "experiment=thí nghiệm|hypothesis=giả thuyết|result=kết quả|analyze=phân tích|method=phương pháp|theory=lý thuyết|observe=quan sát|conclusion=kết luận"),
         L("Space", "planet=hành tinh|galaxy=thiên hà|orbit=quỹ đạo|gravity=trọng lực|astronaut=phi hành gia|telescope=kính thiên văn|universe=vũ trụ|satellite=vệ tinh"),
         L("Health Science", "vaccine=vắc-xin|virus=vi-rút|cell=tế bào|gene=gen|immune=miễn dịch|disease=bệnh tật|treatment=điều trị|prevent=phòng ngừa")
