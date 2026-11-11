@@ -67,11 +67,26 @@ def record_lesson_page(
         raise ValueError("This lesson has no active words")
 
     total_pages = 2 * word_count + 1
+    learned_word_ids = []
 
     if stage == "VOCABULARY":
         if page_number > word_count:
             raise ValueError("Invalid vocabulary page_number")
         reached_page = page_number
+        learned_word_ids = [
+            row[0]
+            for row in (
+                db.query(LessonWord.word_id)
+                .join(Word, Word.word_id == LessonWord.word_id)
+                .filter(
+                    LessonWord.lesson_id == lesson_id,
+                    Word.is_active == 1,
+                )
+                .order_by(LessonWord.display_order, LessonWord.word_id)
+                .limit(page_number)
+                .all()
+            )
+        ]
 
     elif stage == "FLASHCARD":
         if page_number > word_count:
@@ -90,6 +105,28 @@ def record_lesson_page(
         user_id=user_id,
         lesson_id=lesson_id,
     ).first()
+
+    newly_learned_count = 0
+    if learned_word_ids:
+        word_progress = (
+            db.query(UserWordProgress)
+            .filter(
+                UserWordProgress.user_id == user_id,
+                UserWordProgress.word_id.in_(learned_word_ids),
+            )
+            .all()
+        )
+        progress_by_word_id = {progress.word_id: progress for progress in word_progress}
+        for word_id in learned_word_ids:
+            progress = progress_by_word_id.get(word_id)
+            if progress is None:
+                db.add(UserWordProgress(user_id=user_id, word_id=word_id, learned=1))
+                newly_learned_count += 1
+            elif not progress.learned:
+                progress.learned = 1
+                newly_learned_count += 1
+        if newly_learned_count:
+            get_or_create_daily(db, user_id).learned_count += newly_learned_count
 
     if row is None:
         row = UserLessonProgress(

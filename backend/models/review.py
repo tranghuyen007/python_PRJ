@@ -1,5 +1,6 @@
 from sqlalchemy import (
-    Column, Integer, String, DateTime, ForeignKey, UniqueConstraint, CheckConstraint, func
+    Column, Integer, String, DateTime, ForeignKey, UniqueConstraint, CheckConstraint,
+    JSON, func
 )
 from app.database import Base
 
@@ -18,6 +19,17 @@ class ReviewSession(Base):
         CheckConstraint("total_items >= 0 AND correct_count >= 0 AND correct_count <= total_items"),
     )
 
+    @property
+    def review_mode(self):
+        return "QUICK" if self.review_type == "NORMAL" else "FULL_TOPIC"
+
+    @property
+    def accuracy_percent(self):
+        if self.total_items == 0:
+            return 0
+        return round(self.correct_count * 100 / self.total_items, 2)
+
+
 class ReviewSessionItem(Base):
     __tablename__ = "review_session_items"
     session_item_id = Column(Integer, primary_key=True, autoincrement=True)
@@ -26,6 +38,7 @@ class ReviewSessionItem(Base):
     is_answered = Column(Integer, nullable=False, default=0, server_default="0")
     is_correct = Column(Integer, nullable=False, default=0, server_default="0")
     answered_at = Column(DateTime)
+    question_data = Column(JSON)
     __table_args__ = (
         UniqueConstraint("review_session_id", "word_id"),
         CheckConstraint("is_answered IN (0,1) AND is_correct IN (0,1)"),

@@ -4,7 +4,7 @@ from app.database import get_db
 from app.security import get_current_user
 from models.user import User
 from models.review import ReviewSession, ReviewSessionItem
-from models.curriculum import Topic, Word
+from models.curriculum import Word
 from models.progress import UserWordProgress
 from schemas.review import ReviewSessionCreate, ReviewSessionResponse, ReviewAnswer, ReviewItemResponse
 from services.review_service import start_review, submit_answer, complete_review
@@ -44,7 +44,7 @@ def get_review_items(session_id: int, db: Session = Depends(get_db), user: User 
 @router.post("/sessions/{session_id}/answers", response_model=ReviewItemResponse)
 def answer_review_item(session_id: int, data: ReviewAnswer, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     try:
-        return submit_answer(db, user.user_id, session_id, data.word_id, data.is_correct)
+        return submit_answer(db, user.user_id, session_id, data.word_id, data.answer)
     except LookupError as e: raise HTTPException(404, str(e)) from e
     except ValueError as e: raise HTTPException(409, str(e)) from e
 
