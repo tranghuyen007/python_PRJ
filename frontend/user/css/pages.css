@@ -1,0 +1,163 @@
+/* ===== pages.css — giao diện phần nội dung của các trang ===== */
+
+/* ---------- Dùng chung ---------- */
+.page-enter { animation: pageIn 0.25s ease; }
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.page-title { font-size: 30px; font-weight: 800; margin-bottom: 6px; }
+.page-sub { font-size: 14px; color: var(--gray); margin-bottom: 28px; }
+
+section { margin-bottom: 28px; }
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.badge {
+  display: inline-block; padding: 4px 10px; border-radius: 8px;
+  font-size: 11px; font-weight: 700; white-space: nowrap;
+}
+.badge-blue  { background: var(--blue-light); color: var(--blue); }
+.badge-green { background: var(--green-light); color: var(--green); }
+.badge-gray  { background: #f0f2f6; color: var(--gray); }
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 20px; border-radius: 12px;
+  background: var(--blue); color: var(--white);
+  font-size: 14px; font-weight: 800; text-decoration: none;
+  box-shadow: 0 4px 0 var(--blue-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn-primary svg { width: 16px; height: 16px; }
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-primary:active { transform: translateY(4px); box-shadow: 0 0 0 var(--blue-dark); }
+
+.link { font-size: 13px; font-weight: 700; color: var(--blue); text-decoration: none; }
+.link:hover { text-decoration: underline; }
+
+/* ---------- Tổng quan: hàng trên ---------- */
+.overview-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+.continue-card {
+  display: flex; align-items: center; gap: 20px;
+  background: linear-gradient(135deg, #eef4fd 0%, #f7faff 100%);
+  border-color: #dce8fb;
+  padding: 24px 28px;
+}
+.continue-info { flex: 1; }
+.eyebrow {
+  display: inline-block; padding: 4px 10px; border-radius: 8px;
+  background: var(--white); color: var(--blue);
+  font-size: 11px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.continue-card h2 { font-size: 24px; font-weight: 800; margin: 14px 0 6px; }
+.meta { font-size: 13px; color: var(--gray); }
+
+.progress-row { display: flex; align-items: center; gap: 12px; margin: 14px 0 20px; max-width: 320px; }
+.progress-row .progress { flex: 1; }
+.progress-row span { font-size: 12px; font-weight: 800; color: var(--blue); }
+
+.continue-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.hint { font-size: 12px; color: var(--gray); }
+
+.continue-art {
+  width: 190px; height: 160px; flex-shrink: 0;
+  display: grid; place-items: center;
+  background: radial-gradient(circle, #ffffff 0%, #dfeafc 70%);
+  border-radius: 20px;
+}
+.continue-art img { width: 140px; height: auto; mix-blend-mode: multiply; animation: float 4s ease-in-out infinite; }
+@keyframes float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -8px; }
+}
+
+.today-card { display: flex; flex-direction: column; gap: 12px; }
+.today-head { display: flex; justify-content: space-between; align-items: center; }
+.today-head h3 { font-size: 15px; font-weight: 800; }
+.today-sun svg { width: 20px; height: 20px; color: var(--blue); }
+.today-num { font-size: 32px; font-weight: 900; color: var(--blue); }
+.today-text { font-size: 13px; color: var(--gray); line-height: 1.5; }
+.today-card .badge { align-self: flex-start; }
+
+/* ---------- Tổng quan: học theo chủ đề ---------- */
+.section-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 14px;
+}
+.section-head h2 { font-size: 20px; font-weight: 800; }
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.topic-card {
+  display: flex; flex-direction: column; gap: 8px;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.topic-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(23, 41, 77, 0.08); border-color: #cfdcf2; }
+.topic-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.topic-card h3 { font-size: 16px; font-weight: 800; }
+.topic-card p { font-size: 13px; color: var(--gray); margin-bottom: 6px; }
+.topic-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; color: var(--gray); margin-top: 4px;
+}
+.arrow svg { width: 16px; height: 16px; color: var(--blue); }
+
+.icon-box {
+  width: 40px; height: 40px; display: grid; place-items: center;
+  border-radius: 12px; background: var(--blue-light); color: var(--blue);
+}
+.icon-box svg { width: 20px; height: 20px; }
+
+/* ---------- Tổng quan: lối tắt dưới cùng ---------- */
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.shortcut-card {
+  display: flex; gap: 16px; align-items: flex-start;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.shortcut-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(23, 41, 77, 0.08); }
+.shortcut-icon { color: var(--blue); padding-top: 2px; }
+.shortcut-icon svg { width: 24px; height: 24px; }
+.shortcut-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+.shortcut-card p { font-size: 13px; color: var(--gray); margin-bottom: 8px; }
+
+/* ---------- Trang đang xây dựng ---------- */
+.empty-card {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  text-align: center; padding: 48px 24px;
+}
+.empty-card img { width: 140px; height: auto; mix-blend-mode: multiply; margin-bottom: 8px; }
+.empty-card h3 { font-size: 18px; font-weight: 800; }
+.empty-card p { font-size: 14px; color: var(--gray); margin-bottom: 12px; }
+
+/* ---------- Màn hình nhỏ ---------- */
+@media (max-width: 1100px) {
+  .overview-top { grid-template-columns: 1fr; }
+  .topic-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 700px) {
+  .topic-grid, .shortcut-grid { grid-template-columns: 1fr; }
+  .continue-art { display: none; }
+  .page-title { font-size: 24px; }
+}
