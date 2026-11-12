@@ -31,12 +31,14 @@ class User(Base):
         String,
         nullable=False,
         default="USER",
+        server_default="USER",
     )
 
     status = Column(
         String,
         nullable=False,
-        default="ACTIVE"
+        default="ACTIVE",
+        server_default="ACTIVE",
     )
 
     created_at = Column(
