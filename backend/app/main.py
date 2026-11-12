@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.database import Base, engine
+from app.database import Base, engine, migrate_review_features
 from models import user, curriculum, progress, review  # register SQLAlchemy models
 from routes.auth import router as auth_router
 from routes.user import router as user_router
@@ -23,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Tạo database tables nếu chưa tồn tại
 Base.metadata.create_all(bind=engine)
+migrate_review_features()
 
 app = FastAPI(title="Learning Application API", version="1.0.0")
 

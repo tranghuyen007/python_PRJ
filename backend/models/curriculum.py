@@ -22,9 +22,11 @@ class Topic(Base):
     description = Column(Text)
     is_active = Column(Integer, nullable=False, default=1, server_default="1")
     display_order = Column(Integer, nullable=False, default=0, server_default="0")
+    quick_review_limit = Column(Integer, nullable=False, default=15, server_default="15")
     __table_args__ = (
         UniqueConstraint("level_id", "name", name="uq_topics_level_name"),
         CheckConstraint("is_active IN (0,1)"),
+        CheckConstraint("quick_review_limit >= 1"),
     )
 
 class Lesson(Base):

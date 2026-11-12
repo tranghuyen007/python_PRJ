@@ -24,12 +24,14 @@ class TopicCreate(BaseModel):
     name: str = Field(min_length=1, max_length=150)
     description: str | None = None
     display_order: int = 0
+    quick_review_limit: int = Field(default=15, ge=1)
 
 class TopicUpdate(BaseModel):
     level_id: int | None = None
     name: str | None = Field(default=None, min_length=1, max_length=150)
     description: str | None = None
     display_order: int | None = None
+    quick_review_limit: int | None = Field(default=None, ge=1)
 
 class TopicResponse(BaseModel):
     topic_id: int
@@ -38,6 +40,7 @@ class TopicResponse(BaseModel):
     description: str | None
     is_active: int
     display_order: int
+    quick_review_limit: int = 15
     model_config = ConfigDict(from_attributes=True)
 
 class LessonCreate(BaseModel):

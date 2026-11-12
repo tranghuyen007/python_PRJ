@@ -46,7 +46,7 @@ Open http://127.0.0.1:8000/docs.
 
 ## Important: preserve your current database
 
-The default DB path is `backend/database.db`. This project does **not** delete the existing DB. `create_all()` creates missing tables but does not migrate existing table definitions. Back up your current database before using this backend with it. If the existing schema differs from these models, use Alembic migrations or a deliberate migration plan rather than deleting the DB.
+The default DB path is `backend/database.db`. This project does **not** delete the existing DB. `create_all()` creates missing tables but does not generally migrate existing table definitions. Startup applies only the narrow, additive review-feature migration documented below. Back up your current database before using this backend with it. If the existing schema differs from these models, use Alembic migrations or a deliberate migration plan rather than deleting the DB.
 
 ## Create the first ADMIN
 
@@ -82,11 +82,52 @@ Save it as a temporary local file, run it once, then delete the temporary script
 
 Admin operations require a valid Bearer token for a user whose role is `ADMIN`. The current `/users/` list endpoint is also admin-only.
 
+## Topic review settings and review sessions
+
+Admins can set `quick_review_limit` when creating a topic or update it with
+`PATCH /topics/{topic_id}`, for example:
+
+```json
+{ "quick_review_limit": 15 }
+```
+
+The value defaults to 15 and must be at least 1. Quick review (`review_type:
+"QUICK"`) randomly selects up to that many words the user has learned in active
+lessons in the topic. It is available after learning at least one such word;
+there is no minimum-lesson requirement. Full-topic review
+(`review_type: "FULL_TOPIC"`) includes every active word assigned to active
+lessons in the topic.
+
+Create a session with `POST /reviews/sessions`, then fetch its randomly
+initialized questions from `GET /reviews/sessions/{session_id}/items`. Each
+item's `question_data.method` is one of:
+
+- `MULTIPLE_CHOICE_MEANING`: English word, pronunciation/audio, and four
+  Vietnamese meaning choices.
+- `FILL_BLANK`: an English cloze sentence and four English word choices.
+- `TYPE_MEANING`: English word and pronunciation/audio; the user types its
+  Vietnamese meaning.
+
+Submit the selected option or typed meaning as
+`POST /reviews/sessions/{session_id}/answers` with
+`{ "word_id": 1, "answer": "..." }`. The backend validates the answer instead
+of trusting a client-supplied correctness flag. Distractors and question method
+are randomized and saved per session, so re-fetching a session returns the same
+questions. Cloze questions use the word's `example` when it contains that word;
+otherwise a local sentence template is used. Supplying natural example
+sentences for vocabulary is recommended.
+Reaching a vocabulary page through `POST /progress/lessons/{lesson_id}/page`
+also records the words through that page as learned, which supplies the quick
+review pool. Existing lesson page progress is also considered when building
+the quick-review pool. Session responses include `review_mode`,
+`accuracy_percent`, `correct_count`, and `total_items` for the results display.
+
 ## Design notes and limitations
 
 - Hiding content is preferred to hard deletion once users have progress/history.
 - `PUT /lessons/{lesson_id}/words` replaces the lesson's assigned word list.
 - Review scheduling is a simple starter rule, not a production spaced-repetition algorithm.
+- Existing SQLite databases receive the two additive review columns automatically at startup; no data is deleted.
 - `user_topic_progress` is defined but is not yet automatically recalculated from every word/lesson operation.
 - Activity counters are starter implementations and may need to be incremented for each product-specific learning action.
 - Use a strong `JWT_SECRET_KEY` from environment variables before deployment; the built-in fallback is development-only.
