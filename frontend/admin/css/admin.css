@@ -1,4 +1,4 @@
-﻿
+
 * {
     margin: 0;
     padding: 0;
@@ -1187,6 +1187,49 @@ th {
 .btn-sm {
     padding: 6px 14px;
     font-size: 12px;
+}
+
+/* ================================================================
+   NÚT PHÁT ÂM (TTS)
+================================================================ */
+
+.pronun-cell {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.btn-speak {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
+    border: none;
+    border-radius: 5px;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.btn-speak:hover {
+    background: #bae6fd;
+    transform: scale(1.12);
+}
+
+.btn-speak--playing {
+    background: #fef9c3;
+    color: #a16207;
+    animation: speak-pulse 0.7s ease infinite alternate;
+}
+
+@keyframes speak-pulse {
+    from { opacity: 1; }
+    to   { opacity: 0.55; }
 }
 
 /* Responsive cho bài học */

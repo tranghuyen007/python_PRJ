@@ -13,9 +13,9 @@
    HẰNG SỐ / CẤU HÌNH
 ================================================================ */
 
-const STORAGE_KEY_USERS     = "vocabbit_admin_users";
-const STORAGE_KEY_SESSION   = "vocabbit_admin_session";
-const ADMIN_DASHBOARD       = "index.html";   // Trang admin sau khi đăng nhập
+const STORAGE_KEY_USERS = "vocabbit_admin_users";
+const STORAGE_KEY_SESSION = "vocabbit_admin_session";
+const ADMIN_DASHBOARD = "index.html";   // Trang admin sau khi đăng nhập
 
 /* ================================================================
    TIỆN ÍCH
@@ -47,7 +47,7 @@ async function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password + "vocabbit_salt_2026");
     const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    const hashArray  = Array.from(new Uint8Array(hashBuffer));
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
     return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
@@ -59,12 +59,12 @@ function isValidEmail(email) {
 /** Kiểm tra độ mạnh mật khẩu → trả về {score: 0-4, label} */
 function checkPasswordStrength(password) {
     let score = 0;
-    if (password.length >= 8)                        score++;
-    if (/[A-Z]/.test(password))                      score++;
-    if (/[0-9]/.test(password))                      score++;
-    if (/[^A-Za-z0-9]/.test(password))               score++;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
 
-    const labels  = ["", "Yếu", "Trung bình", "Mạnh", "Rất mạnh"];
+    const labels = ["", "Yếu", "Trung bình", "Mạnh", "Rất mạnh"];
     const classes = ["", "weak", "fair", "good", "strong"];
     return { score, label: labels[score], cls: classes[score], pct: score * 25 };
 }
@@ -112,7 +112,7 @@ function showToast(type, title, message) {
 
 /** Bật / tắt trạng thái loading của nút */
 function setLoading(btnId, spinnerId, loading) {
-    const btn     = document.getElementById(btnId);
+    const btn = document.getElementById(btnId);
     const spinner = document.getElementById(spinnerId);
     if (!btn || !spinner) return;
     btn.disabled = loading;
@@ -141,8 +141,8 @@ function fakeDelay(ms = 800) {
 ================================================================ */
 
 document.getElementById("goto-register").addEventListener("click", () => showPanel("panel-register"));
-document.getElementById("goto-login").addEventListener("click",    () => showPanel("panel-login"));
-document.getElementById("goto-forgot").addEventListener("click",   () => {
+document.getElementById("goto-login").addEventListener("click", () => showPanel("panel-login"));
+document.getElementById("goto-forgot").addEventListener("click", () => {
     showPanel("panel-forgot");
     // Reset về bước 1
     document.getElementById("forgot-step-1").classList.remove("hidden");
@@ -160,7 +160,7 @@ document.querySelectorAll(".btn-toggle-pw").forEach(function (btn) {
         const input = document.getElementById(btn.dataset.target);
         if (!input) return;
         const isText = input.type === "text";
-        input.type   = isText ? "password" : "text";
+        input.type = isText ? "password" : "text";
         btn.textContent = isText ? "👁" : "🙈";
     });
 });
@@ -174,7 +174,7 @@ const loginForm = document.getElementById("login-form");
 loginForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const email    = document.getElementById("login-email").value.trim();
+    const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
     const remember = document.getElementById("login-remember").checked;
 
@@ -201,41 +201,49 @@ loginForm.addEventListener("submit", async function (e) {
     setLoading("btn-login", "login-spinner", true);
 
     try {
-        /* --- GỌI API THỰC (thay thế đoạn giả lập bên dưới) ---
-        const res = await fetch("/api/admin/login", {
+        // Gọi đúng URL từ Swagger
+        const res = await fetch("http://127.0.0.1:8000/auth/login", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
+            headers: { 
+                "Content-Type": "application/json" 
+            },
+            // Gửi "identifier" và "password" đúng chuẩn Swagger yêu cầu
+            body: JSON.stringify({ 
+                identifier: email, 
+                password: password 
+            })
         });
+
         const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || "Đăng nhập thất bại");
-        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify({ token: data.access_token, email }));
-        */
-
-        // ---- Demo: kiểm tra localStorage ----
-        await fakeDelay();
-
-        const users    = getUsers();
-        const hash     = await hashPassword(password);
-        const matched  = users.find(u => u.email === email && u.password === hash);
-
-        if (!matched) {
-            setError("login-password-error", "Email hoặc mật khẩu không đúng.");
+        
+        // Nếu Backend báo lỗi (sai tài khoản/mật khẩu)
+        if (!res.ok) {
+            setError("login-password-error", data.detail || "Tài khoản hoặc mật khẩu không đúng.");
             markInput("login-password", true);
             return;
         }
 
-        const sessionData = { email: matched.email, name: matched.name };
+        // Lưu thông tin phiên đăng nhập (kèm Token & hạn 30 phút)
+        const EXPIRE_IN_MS = 30 * 60 * 1000; // 30 phút tính bằng millisecond
+        const sessionData = {
+            token: data.access_token || data.token,
+            email: email,
+            name: "Quản trị viên",
+            expiresAt: Date.now() + EXPIRE_IN_MS // Lưu thời điểm hết hạn
+        };
+        
         if (remember) {
             localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(sessionData));
         } else {
             sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(sessionData));
         }
 
-        showToast("success", "Đăng nhập thành công", "Chào mừng " + matched.name + "!");
+        showToast("success", "Đăng nhập thành công", "Đang chuyển hướng...");
         setTimeout(() => window.location.replace(ADMIN_DASHBOARD), 900);
+        
     } catch (err) {
-        showToast("error", "Lỗi", err.message || "Không thể kết nối máy chủ.");
+        console.error("Lỗi mạng:", err);
+        showToast("error", "Lỗi kết nối", "Không thể kết nối máy chủ Python.");
     } finally {
         setLoading("btn-login", "login-spinner", false);
     }
@@ -246,19 +254,19 @@ loginForm.addEventListener("submit", async function (e) {
 ================================================================ */
 
 const regPasswordInput = document.getElementById("reg-password");
-const strengthFill     = document.getElementById("strength-fill");
-const strengthLabel    = document.getElementById("strength-label");
+const strengthFill = document.getElementById("strength-fill");
+const strengthLabel = document.getElementById("strength-label");
 
 // Cập nhật thanh độ mạnh mật khẩu
 regPasswordInput.addEventListener("input", function () {
     const result = checkPasswordStrength(this.value);
     strengthFill.style.width = result.pct + "%";
-    strengthFill.className   = "strength-fill " + result.cls;
+    strengthFill.className = "strength-fill " + result.cls;
     strengthLabel.textContent = result.label;
     strengthLabel.style.color = result.pct >= 75 ? "#22c55e"
-                              : result.pct >= 50  ? "#3b82f6"
-                              : result.pct >= 25  ? "#f59e0b"
-                              : "#ef4444";
+        : result.pct >= 50 ? "#3b82f6"
+            : result.pct >= 25 ? "#f59e0b"
+                : "#ef4444";
 });
 
 const registerForm = document.getElementById("register-form");
@@ -266,10 +274,10 @@ const registerForm = document.getElementById("register-form");
 registerForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const name     = document.getElementById("reg-name").value.trim();
-    const email    = document.getElementById("reg-email").value.trim();
+    const name = document.getElementById("reg-name").value.trim();
+    const email = document.getElementById("reg-email").value.trim();
     const password = document.getElementById("reg-password").value;
-    const confirm  = document.getElementById("reg-confirm").value;
+    const confirm = document.getElementById("reg-confirm").value;
 
     clearErrors(["reg-name-error", "reg-email-error", "reg-password-error", "reg-confirm-error"]);
 
@@ -357,9 +365,9 @@ registerForm.addEventListener("submit", async function (e) {
    QUÊN MẬT KHẨU — Bước 1: Gửi mã OTP
 ================================================================ */
 
-let forgotEmail  = "";
+let forgotEmail = "";
 let otpGenerated = "";
-let resendTimer  = null;
+let resendTimer = null;
 
 const forgotForm = document.getElementById("forgot-form");
 
@@ -400,7 +408,7 @@ forgotForm.addEventListener("submit", async function (e) {
         }
 
         // Tạo OTP giả 6 chữ số
-        forgotEmail  = email;
+        forgotEmail = email;
         otpGenerated = String(Math.floor(100000 + Math.random() * 900000));
 
         // Hiển thị OTP trên console (demo)
@@ -428,8 +436,8 @@ const otpForm = document.getElementById("otp-form");
 otpForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const otp       = document.getElementById("otp-code").value.trim();
-    const newPw     = document.getElementById("new-password").value;
+    const otp = document.getElementById("otp-code").value.trim();
+    const newPw = document.getElementById("new-password").value;
     const newConfirm = document.getElementById("new-confirm").value;
 
     clearErrors(["otp-error", "new-password-error", "new-confirm-error"]);
@@ -482,8 +490,8 @@ otpForm.addEventListener("submit", async function (e) {
         await fakeDelay();
 
         const users = getUsers();
-        const hash  = await hashPassword(newPw);
-        const user  = users.find(u => u.email === forgotEmail);
+        const hash = await hashPassword(newPw);
+        const user = users.find(u => u.email === forgotEmail);
         if (user) {
             user.password = hash;
             saveUsers(users);
@@ -492,7 +500,7 @@ otpForm.addEventListener("submit", async function (e) {
         showToast("success", "Thành công", "Mật khẩu đã được đặt lại. Vui lòng đăng nhập.");
         otpForm.reset();
         otpGenerated = "";
-        forgotEmail  = "";
+        forgotEmail = "";
         clearResendCountdown();
         setTimeout(() => showPanel("panel-login"), 1200);
     } catch (err) {
@@ -507,10 +515,10 @@ otpForm.addEventListener("submit", async function (e) {
 ================================================================ */
 
 function startResendCountdown(seconds = 60) {
-    const btn       = document.getElementById("btn-resend");
+    const btn = document.getElementById("btn-resend");
     const countdown = document.getElementById("resend-countdown");
-    btn.disabled    = true;
-    let remaining   = seconds;
+    btn.disabled = true;
+    let remaining = seconds;
 
     resendTimer = setInterval(function () {
         remaining--;
@@ -526,7 +534,7 @@ function clearResendCountdown() {
         clearInterval(resendTimer);
         resendTimer = null;
     }
-    const btn       = document.getElementById("btn-resend");
+    const btn = document.getElementById("btn-resend");
     const countdown = document.getElementById("resend-countdown");
     if (btn) btn.disabled = false;
     if (countdown) countdown.textContent = "";

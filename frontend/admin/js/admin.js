@@ -1,39 +1,102 @@
 /* ================================================================
-   KIỂM TRA SESSION — Bảo vệ trang admin
+   1. CẤU HÌNH API & HÀM CHUNG GỌI BACKEND
 ================================================================ */
+const API_BASE_URL = "http://127.0.0.1:8000";
+const STORAGE_KEY_SESSION = "vocabbit_admin_session";
 
+// Lấy Token xác thực đã lưu từ lúc Đăng nhập
+function getAdminToken() {
+    const rawSession = localStorage.getItem(STORAGE_KEY_SESSION) || sessionStorage.getItem(STORAGE_KEY_SESSION);
+    if (!rawSession) return null;
+    try {
+        const session = JSON.parse(rawSession);
+        
+        // Nếu đã quá hạn 30 phút -> Xóa phiên và trả về null
+        if (session.expiresAt && Date.now() > session.expiresAt) {
+            localStorage.removeItem(STORAGE_KEY_SESSION);
+            sessionStorage.removeItem(STORAGE_KEY_SESSION);
+            return null;
+        }
+
+        return session.token || null;
+    } catch (e) {
+        return null;
+    }
+}
+
+// Hàm fetchAPI chung tự động gửi Bearer Token
+async function fetchAPI(endpoint, method = "GET", bodyData = null) {
+    const token = getAdminToken();
+    
+    // Nếu chưa đăng nhập -> Đuổi về trang login
+    if (!token) {
+        alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
+        window.location.replace("login.html");
+        return;
+    }
+
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+
+    const config = { method, headers };
+    if (bodyData) {
+        config.body = JSON.stringify(bodyData);
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+        
+        // Token sai hoặc hết hạn (401 / 403)
+        if (response.status === 401 || response.status === 403) {
+            localStorage.removeItem(STORAGE_KEY_SESSION);
+            sessionStorage.removeItem(STORAGE_KEY_SESSION);
+            window.location.replace("login.html");
+            return;
+        }
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.detail || "Lỗi thao tác API");
+        }
+        return data;
+    } catch (error) {
+        console.error(`Lỗi API [${method} ${endpoint}]:`, error);
+        throw error;
+    }
+}
+
+/* ================================================================
+   2. KIỂM TRA SESSION — BẢO VỆ TRANG ADMIN
+================================================================ */
 (function guardAdminPage() {
     "use strict";
-    const STORAGE_KEY_SESSION = "vocabbit_admin_session";
-    const LOGIN_PAGE          = "login.html";
 
     let sessionLocal   = localStorage.getItem(STORAGE_KEY_SESSION);
     let sessionSession = sessionStorage.getItem(STORAGE_KEY_SESSION);
 
-    // Nếu chưa có phiên đăng nhập, tạo phiên demo mặc định
+    // Nếu chưa đăng nhập thì chuyển về trang login
     if (!sessionLocal && !sessionSession) {
-        const demoUser = { email: "admin@vocabbit.com", name: "Thái Dương Lê" };
-        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(demoUser));
-        sessionLocal = JSON.stringify(demoUser);
+        window.location.replace("login.html");
+        return;
     }
 
     try {
         const raw  = sessionLocal || sessionSession;
         const user = JSON.parse(raw);
         const adminLabel = document.getElementById("admin-label");
-        if (adminLabel && user && user.name) {
-            adminLabel.textContent = user.name;
+        if (adminLabel && user) {
+            adminLabel.textContent = user.name || "Quản trị viên";
         }
     } catch (_) { /* ignore */ }
 })();
 
 /* ================================================================
-   ĐĂNG XUẤT
+   3. ĐĂNG XUẤT
 ================================================================ */
-
 (function setupLogout() {
     "use strict";
-    const STORAGE_KEY_SESSION = "vocabbit_admin_session";
 
     const btn = document.getElementById("btn-logout");
     if (!btn) return;
@@ -49,151 +112,89 @@
 })();
 
 /* ================================================================
-   DỮ LIỆU CỐT LÕI (ĐƯỢC KHAI BÁO TOÀN CỤC Ở ĐẦU FILE)
+   DỮ LIỆU TỪ FASTAPI
 ================================================================ */
 
-let levels = [
-    { id: 1, name: "A1", description: "Sơ cấp" },
-    { id: 2, name: "A2", description: "Tiền trung cấp" },
-    { id: 3, name: "B1", description: "Trung cấp" },
-    { id: 4, name: "B2", description: "Trung cấp cao" },
-    { id: 5, name: "C1", description: "Cao cấp" }
-];
+// Khai báo mảng rỗng (dữ liệu sẽ được nạp từ Backend)
+let levels = [];
+let topics = [];
+let lessons = [];
+let vocabularies = [];
 
-let topics = [
-    {
-        id: 1,
-        name: "Greetings",
-        level: "A1",
-        description: "Chào hỏi",
-        is_active: 1,
-        display_order: 1
-    },
-    {
-        id: 2,
-        name: "Family",
-        level: "A1",
-        description: "Gia đình",
-        is_active: 1,
-        display_order: 2
-    },
-    {
-        id: 3,
-        name: "Food",
-        level: "A1",
-        description: "Thức ăn",
-        is_active: 1,
-        display_order: 3
-    },
-    {
-        id: 4,
-        name: "Travel",
-        level: "A2",
-        description: "Du lịch",
-        is_active: 1,
-        display_order: 1
-    },
-    {
-        id: 5,
-        name: "Education",
-        level: "B1",
-        description: "Giáo dục",
-        is_active: 1,
-        display_order: 1
+// Hàm nạp dữ liệu từ FastAPI
+async function loadAllData() {
+    try {
+        // 1. Tải Levels, Topics, Words (thêm dấu / ở cuối để tránh redirect 307)
+        const rawLevels = await fetchAPI("/levels/") || [];
+        const rawTopics = await fetchAPI("/topics/") || [];
+        const rawWords  = await fetchAPI("/words/") || [];
+
+        // Chuẩn hóa danh sách Cấp độ
+        levels = rawLevels.map(l => ({
+            id: l.level_id || l.id,
+            name: l.name,
+            description: l.description || ""
+        }));
+
+        // Chuẩn hóa danh sách Chủ đề
+        topics = rawTopics.map(t => {
+            const parentLevel = levels.find(l => l.id === t.level_id);
+            return {
+                id: t.topic_id || t.id,
+                name: t.name,
+                level: t.level || (parentLevel ? parentLevel.name : ""),
+                level_id: t.level_id,
+                description: t.description || "",
+                is_active: t.is_active ?? 1,
+                display_order: t.display_order || t.order || 1
+            };
+        });
+
+        // 2. Gọi API lấy bài học theo từng Topic: GET /topics/{topic_id}/lessons
+        lessons = [];
+        for (const topic of topics) {
+            try {
+                const topicLessons = await fetchAPI(`/topics/${topic.id}/lessons`) || [];
+                topicLessons.forEach(l => {
+                    lessons.push({
+                        id: l.lesson_id || l.id,
+                        name: l.name,
+                        topicId: l.topic_id || topic.id,
+                        order: l.display_order || l.order || 1,
+                        description: l.description || "",
+                        is_active: l.is_active ?? 1
+                    });
+                });
+            } catch (err) {
+                console.warn(`Chưa lấy được bài học cho topic ${topic.id}:`, err);
+            }
+        }
+
+        // 3. Chuẩn hóa danh sách Từ vựng
+        vocabularies = rawWords.map(w => ({
+            id: w.word_id || w.id,
+            word: w.word,
+            meaning: w.meaning,
+            pronunciation: w.pronunciation || "",
+            type: w.part_of_speech || w.type || "Khác",
+            lessonId: w.lesson_id || w.lessonId,
+            example: w.example || ""
+        }));
+
+        // 4. Vẽ lại toàn bộ giao diện
+        renderLevels();
+        updateTopicLevelOptions();
+        renderTopics();
+        renderLessonTopicOptions();
+        renderLessons();
+        renderVocabularyLessonOptions();
+        renderVocabularies();
+        renderDashboardStats();
+
+    } catch (error) {
+        console.error("Lỗi khi tải dữ liệu hệ thống:", error);
     }
-];
-
-let lessons = [
-    {
-        id: 1,
-        name: "Basic Greetings",
-        topicId: 1,
-        order: 1,
-        description: "Các từ vựng chào hỏi cơ bản",
-        is_active: 1
-    },
-    {
-        id: 2,
-        name: "Introducing Yourself",
-        topicId: 1,
-        order: 2,
-        description: "Giới thiệu bản thân",
-        is_active: 1
-    },
-    {
-        id: 3,
-        name: "Family Members",
-        topicId: 2,
-        order: 1,
-        description: "Từ vựng về gia đình",
-        is_active: 1
-    },
-    {
-        id: 4,
-        name: "Food and Drinks",
-        topicId: 3,
-        order: 1,
-        description: "Từ vựng về thức ăn và đồ uống",
-        is_active: 1
-    },
-    {
-        id: 5,
-        name: "Planning a Trip",
-        topicId: 4,
-        order: 1,
-        description: "Từ vựng về du lịch",
-        is_active: 1
-    }
-];
-
-let vocabularies = [
-    {
-        id: 1,
-        word: "Hello",
-        meaning: "Xin chào",
-        pronunciation: "/həˈləʊ/",
-        type: "Cụm từ",
-        lessonId: 1,
-        example: "Hello, how are you?"
-    },
-    {
-        id: 2,
-        word: "Goodbye",
-        meaning: "Tạm biệt",
-        pronunciation: "/ˌɡʊdˈbaɪ/",
-        type: "Cụm từ",
-        lessonId: 1,
-        example: "Goodbye, see you tomorrow."
-    },
-    {
-        id: 3,
-        word: "Family",
-        meaning: "Gia đình",
-        pronunciation: "/ˈfæməli/",
-        type: "Danh từ",
-        lessonId: 3,
-        example: "I love my family."
-    },
-    {
-        id: 4,
-        word: "Mother",
-        meaning: "Mẹ",
-        pronunciation: "/ˈmʌðər/",
-        type: "Danh từ",
-        lessonId: 3,
-        example: "My mother is very kind."
-    },
-    {
-        id: 5,
-        word: "Travel",
-        meaning: "Du lịch",
-        pronunciation: "/ˈtrævəl/",
-        type: "Động từ",
-        lessonId: 5,
-        example: "I want to travel around the world."
-    }
-];
-
+}
 /* Biến lưu trạng thái đang sửa */
 let editingLevelId = null;
 let editingTopicId = null;
@@ -1072,8 +1073,22 @@ function renderLessons() {
                         tdWord.textContent = vocab.word;
 
                         const tdPronun = document.createElement("td");
-                        tdPronun.className = "vocab-td-pronun";
-                        tdPronun.textContent = vocab.pronunciation || "-";
+                        tdPronun.className = "vocab-td-pronun pronun-cell";
+                        const pronunSpan = document.createElement("span");
+                        pronunSpan.textContent = vocab.pronunciation || "-";
+                        tdPronun.appendChild(pronunSpan);
+                        if (vocab.word) {
+                            const speakBtn = document.createElement("button");
+                            speakBtn.type = "button";
+                            speakBtn.className = "btn-speak";
+                            speakBtn.title = "Phát âm: " + vocab.word;
+                            speakBtn.textContent = "🔊";
+                            speakBtn.addEventListener("click", function (e) {
+                                e.stopPropagation();
+                                speakWord(vocab.word, speakBtn);
+                            });
+                            tdPronun.appendChild(speakBtn);
+                        }
 
                         const tdMeaning = document.createElement("td");
                         tdMeaning.className = "vocab-td-meaning";
@@ -1282,6 +1297,28 @@ const vocabularyLessonFilter = document.getElementById("vocabulary-lesson-filter
 const addVocabularyButton = document.getElementById("btn-add-vocabulary");
 const cancelVocabularyButton = document.getElementById("btn-cancel-vocabulary");
 
+/* ---- Hàm phát âm thanh (Web Speech API) ---- */
+function speakWord(word, btnEl) {
+    if (!("speechSynthesis" in window)) {
+        alert("Trình duyệt của bạn không hỗ trợ phát âm thanh.");
+        return;
+    }
+    // Hủy phát âm đang chạy
+    window.speechSynthesis.cancel();
+
+    const utter = new SpeechSynthesisUtterance(word);
+    utter.lang = "en-US";
+    utter.rate = 0.9;
+
+    if (btnEl) {
+        btnEl.classList.add("btn-speak--playing");
+        utter.onend = function () { btnEl.classList.remove("btn-speak--playing"); };
+        utter.onerror = function () { btnEl.classList.remove("btn-speak--playing"); };
+    }
+
+    window.speechSynthesis.speak(utter);
+}
+
 function renderVocabularyLessonOptions() {
     if (!vocabularyLessonInput || !vocabularyLessonFilter) return;
 
@@ -1346,21 +1383,55 @@ function renderVocabularies() {
     filteredVocabularies.forEach(function (vocabulary) {
         const row = document.createElement("tr");
 
-        const values = [
-            vocabulary.id,
-            vocabulary.word,
-            vocabulary.meaning,
-            vocabulary.pronunciation || "Chưa có",
-            vocabulary.type,
-            getLessonName(vocabulary.lessonId),
-            vocabulary.example || "Chưa có"
-        ];
+        // ID
+        const tdId = document.createElement("td");
+        tdId.textContent = vocabulary.id;
+        row.appendChild(tdId);
 
-        values.forEach(function (value) {
-            const cell = document.createElement("td");
-            cell.textContent = value;
-            row.appendChild(cell);
-        });
+        // Từ tiếng Anh
+        const tdWord = document.createElement("td");
+        tdWord.textContent = vocabulary.word;
+        row.appendChild(tdWord);
+
+        // Nghĩa tiếng Việt
+        const tdMeaning = document.createElement("td");
+        tdMeaning.textContent = vocabulary.meaning;
+        row.appendChild(tdMeaning);
+
+        // Phiên âm + nút phát âm
+        const tdPronun = document.createElement("td");
+        tdPronun.className = "pronun-cell";
+        const pronunText = document.createElement("span");
+        pronunText.textContent = vocabulary.pronunciation || "Chưa có";
+        tdPronun.appendChild(pronunText);
+        if (vocabulary.word) {
+            const speakBtn = document.createElement("button");
+            speakBtn.type = "button";
+            speakBtn.className = "btn-speak";
+            speakBtn.title = "Phát âm: " + vocabulary.word;
+            speakBtn.textContent = "🔊";
+            speakBtn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                speakWord(vocabulary.word, speakBtn);
+            });
+            tdPronun.appendChild(speakBtn);
+        }
+        row.appendChild(tdPronun);
+
+        // Loại từ
+        const tdType = document.createElement("td");
+        tdType.textContent = vocabulary.type;
+        row.appendChild(tdType);
+
+        // Bài học
+        const tdLesson = document.createElement("td");
+        tdLesson.textContent = getLessonName(vocabulary.lessonId);
+        row.appendChild(tdLesson);
+
+        // Câu ví dụ
+        const tdExample = document.createElement("td");
+        tdExample.textContent = vocabulary.example || "Chưa có";
+        row.appendChild(tdExample);
 
         const actionCell = document.createElement("td");
 
@@ -1579,6 +1650,7 @@ function initApp() {
     renderVocabularyLessonOptions();
     renderVocabularies();
     renderDashboardStats();
+    loadAllData(); // Gọi nạp dữ liệu từ API thay cho dữ liệu mẫu
 }
 
 initApp();
