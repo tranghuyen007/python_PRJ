@@ -9,6 +9,13 @@ from services.word_service import create_word as create_word_service
 from pathlib import Path
 from app.database import DATABASE_FILE
 
+from models.curriculum import (
+    Word,
+    LessonWord,
+)
+from models.progress import UserWordProgress
+from models.review import ReviewSessionItem
+
 router = APIRouter(prefix="/words", tags=["Words"])
 
 @router.get("/", response_model=list[WordResponse])
@@ -60,6 +67,44 @@ def delete_word(
     if not obj:
         raise HTTPException(404, "Word not found")
 
+    # Kiểm tra từ đã được gắn vào bài học chưa
+    lesson_count = (
+        db.query(LessonWord)
+        .filter_by(word_id=word_id)
+        .count()
+    )
+
+    # Kiểm tra tiến độ học của người dùng
+    progress_count = (
+        db.query(UserWordProgress)
+        .filter_by(word_id=word_id)
+        .count()
+    )
+
+    # Kiểm tra lịch sử các câu hỏi ôn tập
+    review_count = (
+        db.query(ReviewSessionItem)
+        .filter_by(word_id=word_id)
+        .count()
+    )
+
+    # Không xóa nếu từ đã có dữ liệu liên quan
+    if lesson_count > 0 or progress_count > 0 or review_count > 0:
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "message": (
+                    "Cannot permanently delete this word "
+                    "because it has related learning data. "
+                    "Please hide this word instead."
+                ),
+                "lesson_count": lesson_count,
+                "progress_count": progress_count,
+                "review_count": review_count,
+                "suggestion": "Set is_active = 0 to hide this word."
+            }
+        )
+
     # Lưu đường dẫn audio trước khi xoá bản ghi
     audio_url = obj.audio_url
 
@@ -73,13 +118,18 @@ def delete_word(
             detail="Cannot delete this word because it may be referenced by other records."
         )
 
-    # Chỉ xoá file audio sau khi database xoá thành công
-    if audio_url:
-        audio_dir = DATABASE_FILE.parent / "uploads" / "audio"
-        filename = Path(audio_url).name
-        audio_file = audio_dir / filename
+    # Chỉ xoá file audio NỘI BỘ sau khi database xoá thành công
+    if audio_url and (
+        audio_url.startswith("/uploads/audio/")
+        or audio_url.startswith("uploads/audio/")
+    ):
+        audio_dir = (DATABASE_FILE.parent / "uploads" / "audio").resolve()
+        audio_file = (audio_dir / Path(audio_url).name).resolve()
 
-        if audio_file.parent == audio_dir and audio_file.exists():
-            audio_file.unlink()
+        if audio_file.parent == audio_dir and audio_file.is_file():
+            try:
+                audio_file.unlink()
+            except OSError:
+                pass
 
     return None
