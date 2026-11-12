@@ -1,0 +1,112 @@
+/* ===== exam.css – Bài kiểm tra tổng & xếp lớp =====
+   Nạp sau lesson.css, study.css: dùng lại .btn, .bar, .st-card, .st-chip, .st-tip, .result-ring...
+   Mọi style riêng nằm trong .exam */
+
+#content > .exam { max-width: 1080px; margin: 0 auto; }
+.exam .btn svg { width: 15px; height: 15px; }
+.exam .st-crumb { font-size: 12px; font-weight: 700; color: var(--gray); }
+.exam .ex-head { margin-bottom: 16px; }
+.exam .ex-head .page-title { font-size: 26px; margin-top: 2px; }
+
+.exam .ex-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; align-items: start; }
+
+/* ---------- Câu hỏi ---------- */
+.exam .ex-card { padding: 22px 24px; }
+.exam .ex-card-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.exam .ex-q { font-size: 20px; font-weight: 900; margin: 16px 0 14px; }
+.exam .ex-sentence {
+  margin-bottom: 16px; padding: 18px 20px; border-radius: 14px; background: #f5f8fd;
+  font-size: 18px; font-weight: 700; line-height: 1.5;
+}
+.exam .ex-sentence mark { background: none; color: var(--blue); font-weight: 900; }
+
+.exam .ex-options { display: flex; flex-direction: column; gap: 10px; }
+.exam .ex-opt {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; text-align: left;
+  background: var(--white); border: 1.5px solid var(--border); font: inherit; font-size: 15px; font-weight: 700;
+  transition: border-color .12s, background .12s;
+}
+.exam .ex-opt:hover:not(:disabled) { border-color: var(--blue); background: #f7fbff; }
+.exam .ex-letter { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: #f1f4f9; color: var(--gray); font-size: 12px; font-weight: 900; flex-shrink: 0; }
+.exam .ex-opt-text { flex: 1; }
+.exam .ex-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #c8d1de; flex-shrink: 0; }
+.exam .ex-opt.sel { border-color: var(--blue); background: var(--blue-light); color: var(--blue-dark); box-shadow: 0 0 0 3px #e3eefc; }
+.exam .ex-opt.sel .ex-letter { background: var(--blue); color: var(--white); }
+.exam .ex-opt.sel .ex-radio { border-color: var(--blue); background: radial-gradient(circle, var(--blue) 0 4px, transparent 5px); }
+.exam .ex-opt:disabled { cursor: default; opacity: .85; }
+
+.exam .ex-input-label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 6px; }
+.exam .ex-input {
+  width: 100%; padding: 13px 16px; border-radius: 12px; border: 1.5px solid var(--border); outline: none;
+  font: inherit; font-size: 17px; font-weight: 700; color: var(--navy);
+}
+.exam .ex-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #dbe9fc; }
+.exam .ex-input:disabled { background: #f6f8fb; }
+.exam .ex-hint { font-size: 12px; color: var(--gray); margin-top: 6px; }
+
+.exam .ex-status { display: flex; align-items: center; gap: 6px; margin-top: 14px; font-size: 12px; color: var(--gray); font-weight: 700; }
+.exam .ex-status svg { width: 14px; height: 14px; color: var(--blue); }
+.exam .ex-actions {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  margin-top: 16px; padding-top: 16px; border-top: 1px solid #edf0f5;
+}
+
+/* ---------- Tiến trình ---------- */
+.exam .ex-progress { padding: 20px; }
+.exam .ex-progress h3 { font-size: 16px; font-weight: 900; }
+.exam .ex-count { display: flex; align-items: baseline; justify-content: space-between; margin: 8px 0 8px; }
+.exam .ex-count b { font-size: 28px; font-weight: 900; color: var(--blue); }
+.exam .ex-cells { margin-top: 14px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+.exam .ex-cell {
+  height: 34px; border-radius: 8px; background: #f1f4f9; color: var(--gray);
+  font: inherit; font-size: 12px; font-weight: 800; transition: background .12s;
+}
+.exam .ex-cell:hover { background: #e6ecf5; }
+.exam .ex-cell.done { background: var(--blue-light); color: var(--blue-dark); }
+.exam .ex-cell.cur { background: var(--blue); color: var(--white); box-shadow: 0 2px 0 var(--blue-dark); }
+.exam .ex-exit { align-self: center; padding: 8px; font: inherit; font-size: 13px; font-weight: 800; color: var(--blue); }
+.exam .ex-exit:hover { text-decoration: underline; }
+
+/* ---------- Kết quả ---------- */
+.exam .ex-summary { display: flex; align-items: center; gap: 24px; margin-bottom: 18px; }
+.exam .ex-summary.pass { border-color: #c9ead8; }
+.exam .ex-ring { width: 130px; height: 130px; margin: 0; flex-shrink: 0; }
+.exam .ex-ring.low { --c: var(--orange); }
+.exam .ex-ring b { width: 104px; height: 104px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 28px; line-height: 1.1; }
+.exam .ex-ring small { font-size: 11px; color: var(--gray); font-weight: 700; }
+.exam .ex-sum-text { flex: 1; }
+.exam .ex-sum-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 800; }
+.exam .ex-sum-chip svg { width: 12px; height: 12px; }
+.exam .ex-sum-chip.ok { background: var(--green-light); color: var(--green-dark); }
+.exam .ex-sum-chip.bad { background: var(--orange-light); color: var(--orange); }
+.exam .ex-sum-text h2 { font-size: 20px; font-weight: 900; margin: 8px 0 4px; }
+.exam .ex-sum-text p { color: var(--gray); font-size: 13px; }
+.exam .ex-sum-stats { display: flex; gap: 26px; padding-left: 24px; border-left: 1px solid #edf0f5; }
+.exam .ex-sum-stats div { text-align: center; }
+.exam .ex-sum-stats b { display: block; font-size: 22px; font-weight: 900; }
+.exam .ex-sum-stats span { font-size: 12px; color: var(--gray); }
+
+.exam .ex-result-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; align-items: start; }
+.exam .ex-sec-title { font-size: 16px; font-weight: 900; margin-bottom: 8px; }
+.exam .ex-wrong-list { display: flex; flex-direction: column; gap: 8px; max-height: 560px; overflow: auto; }
+.exam .ex-wrong { display: flex; gap: 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); background: #fbfcfe; }
+.exam .ex-wrong-no { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: #fff0f0; color: var(--red); font-size: 12px; font-weight: 900; flex-shrink: 0; }
+.exam .ex-wrong-q { font-size: 14px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.exam .ex-wrong-a { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; font-weight: 700; margin-top: 3px; }
+.exam .ex-wrong-a .bad { color: var(--red); }
+.exam .ex-wrong-a .ok { color: var(--green-dark); }
+.exam .rr-type { margin-top: 12px; }
+.exam .rr-type-top { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.exam .rr-type-top b { color: var(--blue); }
+.exam .rr-type small { font-size: 11px; color: var(--gray); }
+.exam .ex-result-foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+
+@media (max-width: 980px) {
+  .exam .ex-grid, .exam .ex-result-grid { grid-template-columns: 1fr; }
+  .exam .ex-summary { flex-wrap: wrap; }
+  .exam .ex-sum-stats { border-left: 0; padding-left: 0; width: 100%; justify-content: space-around; }
+  .exam .ex-cells { grid-template-columns: repeat(10, 1fr); }
+}
+@media (max-width: 560px) {
+  .exam .ex-cells { grid-template-columns: repeat(8, 1fr); }
+}

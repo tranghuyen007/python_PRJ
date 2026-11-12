@@ -52,16 +52,17 @@ function comingSoon(title, desc) {
     <h1 class="page-title">${title}</h1>
     <p class="page-sub">${desc}</p>
     <div class="card empty-card">
-      <img src="assets/icons/rabbit_welcome.png" alt="">
+      <img src="../assets/icons/rabbit_welcome.png" alt="">
       <h3>Trang này đang được xây dựng</h3>
       <p>Thỏ Vocabbit sẽ sớm mở cửa khu vực này cho bạn.</p>
-      <a href="#overview" class="btn-primary">Về Tổng quan</a>
+      <a href="#learn" class="btn-primary">Về Học từ mới</a>
     </div>
   `;
 }
 
 // ---------- Danh sách trang ----------
 const Pages = {
+  // Tổng quan: đã bỏ khỏi sidebar, giữ lại code để dùng sau (vẫn mở được bằng index.html#overview)
   overview: {
     title: "Tổng quan",
     render() {
@@ -81,7 +82,7 @@ const Pages = {
           <p>${t.desc}</p>
           ${progressBar((t.done / t.total) * 100)}
           <div class="topic-foot">
-            <span>${t.done}/${t.total} bài hoàn thành</span>
+            <span>${t.done}/${t.total} unit hoàn thành</span>
             <span class="arrow">${Icons.arrow}</span>
           </div>
         </a>
@@ -95,9 +96,9 @@ const Pages = {
           <!-- Tiếp tục bài học -->
           <div class="card continue-card">
             <div class="continue-info">
-              <span class="eyebrow">Tiếp tục bài học</span>
+              <span class="eyebrow">Tiếp tục unit</span>
               <h2>${l.title}</h2>
-              <p class="meta">${l.topic} • Bài ${l.lessonNo} • ${l.words} từ</p>
+              <p class="meta">${l.topic} • Unit ${l.lessonNo} • ${l.words} từ</p>
               <div class="progress-row">
                 ${progressBar(lessonPercent)}
                 <span>${lessonPercent}%</span>
@@ -108,7 +109,7 @@ const Pages = {
               </div>
             </div>
             <div class="continue-art">
-              <img src="assets/icons/rabbit_welcome.png" alt="">
+              <img src="../assets/icons/rabbit_welcome.png" alt="">
             </div>
           </div>
 
@@ -125,14 +126,14 @@ const Pages = {
                 ? `Chỉ thêm ${minutesLeft} phút để đạt mục tiêu. Bạn đang làm rất tốt!`
                 : "Bạn đã đạt mục tiêu hôm nay. Tuyệt vời!"}
             </p>
-            <span class="badge badge-green">${u.wordsLearned} từ đã học • ${u.lessonsDone} bài hoàn thành</span>
+            <span class="badge badge-green">${u.wordsLearned} từ đã học • ${u.lessonsDone} unit hoàn thành</span>
           </div>
         </section>
 
         <section>
           <div class="section-head">
-            <h2>Học theo chủ đề</h2>
-            <a href="#learn" class="link">Xem tất cả chủ đề →</a>
+            <h2>Học theo section</h2>
+            <a href="#learn" class="link">Xem tất cả section →</a>
           </div>
           <div class="topic-grid">${topicCards}</div>
         </section>
@@ -159,13 +160,43 @@ const Pages = {
     },
   },
 
+  // Trang Học từ mới: giao diện + logic nằm trong lesson.js (LessonPage)
   learn: {
     title: "Học từ mới",
-    render: () => comingSoon("Học từ mới", "Khám phá từ vựng mới theo từng chủ đề."),
+    crumb: "Học từ mới / Duyệt section",
+    render: () => LessonPage.render(),
+    mount: () => LessonPage.mount(),
   },
+  // Trang học 1 bài (3 bước). Mở bằng #study/<mã bài>, vd: #study/a1-family-3
+  study: {
+    title: "Học unit",
+    crumb: "Học từ mới / Khám phá từ",
+    menu: "learn",
+    render: (param) => StudyPage.render(param),
+    mount: (param) => StudyPage.mount(param),
+  },
+  // Bài kiểm tra tổng / xếp lớp (exam.js): #exam/<mã bài>, vd: #exam/gate-elementary
+  exam: {
+    title: "Bài kiểm tra",
+    crumb: "Học từ mới / Bài kiểm tra",
+    menu: "learn",
+    render: () => ExamPage.render(),
+    mount: (param) => ExamPage.mount(param),
+  },
+  // Trung tâm ôn tập (review.js)
   review: {
     title: "Ôn tập",
-    render: () => comingSoon("Ôn tập", "Ôn lại những từ đã học để nhớ lâu hơn."),
+    crumb: "Ôn tập / Chọn section",
+    render: () => ReviewPage.render(),
+    mount: () => ReviewPage.mount(),
+  },
+  // Một lượt ôn: #review-session/<mã chủ đề>/<quick | full>
+  "review-session": {
+    title: "Ôn tập",
+    crumb: "Ôn tập",
+    menu: "review",
+    render: () => ReviewPage.sessionRender(),
+    mount: (param) => ReviewPage.sessionMount(param),
   },
   pronounce: {
     title: "Luyện phát âm",
@@ -175,8 +206,10 @@ const Pages = {
     title: "Bộ từ của tôi",
     render: () => comingSoon("Bộ từ của tôi", "Những từ bạn đã lưu lại."),
   },
+  // Hồ sơ người dùng (profile.js)
   profile: {
     title: "Hồ sơ",
-    render: () => comingSoon("Hồ sơ", "Thông tin tài khoản và mục tiêu học tập."),
+    render: () => ProfilePage.render(),
+    mount: () => ProfilePage.mount(),
   },
 };
