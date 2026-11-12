@@ -59,3 +59,11 @@ app.mount(
     StaticFiles(directory=UPLOAD_DIR),
     name="uploads"
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Cho phép tất cả các port (bao gồm port 5500 của bạn)
+    allow_credentials=True,
+    allow_methods=["*"],  # Cho phép mọi phương thức (GET, POST, PUT, DELETE, OPTIONS)
+    allow_headers=["*"],  # Cho phép mọi Headers
+)
