@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +8,16 @@
 
     <link rel="stylesheet" href="css/admin.css">
 </head>
+
 <body>
+
+    <!-- Toast container -->
+    <div class="toast-container" id="toast-container"></div>
 
     <div class="layout">
 
         <aside class="sidebar">
             <h2>English Vocabbit</h2>
-
-            <p class="menu-title">MENU</p>
 
             <button class="menu-item active" data-page="dashboard">
                 Tổng quan
@@ -46,7 +48,10 @@
                     <p>Quản trị ứng dụng học từ vựng tiếng Anh</p>
                 </div>
 
-                <span class="admin-label">Quản trị viên</span>
+                <div class="topbar-right">
+                    <span class="admin-label" id="admin-label">Quản trị viên</span>
+                    <button id="btn-logout" class="btn-logout" title="Đăng xuất">⏻ Đăng xuất</button>
+                </div>
             </header>
 
             <section id="dashboard" class="page">
@@ -83,18 +88,20 @@
                         chủ đề và bài học của ứng dụng.
                     </p>
                 </div>
-        
+
             </section>
 
-            
-            <section id="levels" class="page hidden">
 
+            <section id="levels" class="page hidden">
                 <div class="section-header">
                     <div>
                         <h2>Danh sách cấp độ</h2>
                         <p>Quản lý các cấp độ tiếng Anh của ứng dụng.</p>
                     </div>
 
+                    <button id="btn-add-level" class="btn-primary">
+                        + Thêm cấp độ
+                    </button>
                 </div>
 
                 <div class="table-container">
@@ -104,20 +111,42 @@
                                 <th>ID</th>
                                 <th>Tên cấp độ</th>
                                 <th>Mô tả</th>
+                                <th>Thao tác</th>
                             </tr>
                         </thead>
 
                         <tbody id="level-list">
-                            <!-- JavaScript sẽ hiển thị dữ liệu tại đây -->
                         </tbody>
                     </table>
                 </div>
 
+                <div id="level-form-container" class="form-container hidden">
+                    <h3 id="level-form-title">Thêm cấp độ</h3>
+
+                    <form id="level-form">
+
+                        <label for="level-name">Tên cấp độ</label>
+                        <input type="text" id="level-name" placeholder="Ví dụ: A1" required>
+                        <label for="level-description">Mô tả</label>
+                        <textarea id="level-description" placeholder="Mô tả cấp độ tiếng Anh..."></textarea>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                Lưu
+                            </button>
+
+                            <button type="button" id="btn-cancel-level" class="btn-secondary">
+                                Hủy
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
 
             </section>
 
 
-            
+
             <section id="topics" class="page hidden">
 
                 <div class="section-header">
@@ -132,49 +161,21 @@
                 </div>
 
                 <div class="topic-toolbar">
-                    <input
-                        type="text"
-                        id="topic-search"
-                        placeholder="Tìm kiếm chủ đề..."
-                    >
-
-                    <select id="topic-level-filter">
-                        <option value="">Tất cả cấp độ</option>
-                        <option value="A1">A1</option>
-                        <option value="A2">A2</option>
-                        <option value="B1">B1</option>
-                        <option value="B2">B2</option>
-                        <option value="C1">C1</option>
-                    </select>
+                    <input type="text" id="topic-search" placeholder="Tìm kiếm chủ đề trong tất cả cấp độ...">
                 </div>
 
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Tên chủ đề</th>
-                                <th>Cấp độ</th>
-                                <th>Mô tả</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
+                <!-- Select ẩn — dùng nội bộ JS để đồng bộ options -->
+                <select id="topic-level-filter" class="hidden"></select>
 
-                        <tbody id="topic-list"></tbody>
-                    </table>
-                </div>
+                <!-- Accordion xếp theo cấp độ -->
+                <div id="topic-accordion" class="accordion-container"></div>
 
                 <div id="topic-form-container" class="form-container hidden">
                     <h3 id="topic-form-title">Thêm chủ đề</h3>
 
                     <form id="topic-form">
                         <label for="topic-name">Tên chủ đề</label>
-                        <input
-                            type="text"
-                            id="topic-name"
-                            placeholder="Ví dụ: Food"
-                            required
-                        >
+                        <input type="text" id="topic-name" placeholder="Ví dụ: Food" required>
 
                         <label for="topic-level">Cấp độ tiếng Anh</label>
                         <select id="topic-level" required>
@@ -187,21 +188,22 @@
                         </select>
 
                         <label for="topic-description">Mô tả</label>
-                        <textarea
-                            id="topic-description"
-                            placeholder="Mô tả chủ đề..."
-                        ></textarea>
+                        <textarea id="topic-description" placeholder="Mô tả chủ đề..."></textarea>
+                        <label for="topic-active">Trạng thái</label>
+                        <select id="topic-active">
+                            <option value="1">Hoạt động</option>
+                            <option value="0">Ngừng hoạt động</option>
+                        </select>
+
+                        <label for="topic-order">Thứ tự hiển thị</label>
+                        <input type="number" id="topic-order" min="1" step="1" value="1" required>
 
                         <div class="form-actions">
                             <button type="submit" class="btn-primary">
                                 Lưu
                             </button>
 
-                            <button
-                                type="button"
-                                id="btn-cancel-topic"
-                                class="btn-secondary"
-                            >
+                            <button type="button" id="btn-cancel-topic" class="btn-secondary">
                                 Hủy
                             </button>
                         </div>
@@ -213,94 +215,66 @@
 
             <section id="lessons" class="page hidden">
 
-                    <div class="section-header">
-                        <div>
-                            <h2>Danh sách bài học</h2>
-                            <p>Quản lý bài học theo từng chủ đề.</p>
-                        </div>
-
-                        <button id="btn-add-lesson" class="btn-primary">
-                            + Thêm bài học
-                        </button>
+                <div class="section-header">
+                    <div>
+                        <h2>Danh sách bài học</h2>
+                        <p>Quản lý bài học theo từng chủ đề.</p>
                     </div>
 
-                    <div class="topic-toolbar">
-                        <input
-                            type="text"
-                            id="lesson-search"
-                            placeholder="Tìm kiếm bài học..."
-                        >
+                    <button id="btn-add-lesson" class="btn-primary">
+                        + Thêm bài học
+                    </button>
+                </div>
 
-                        <select id="lesson-topic-filter">
-                            <option value="">Tất cả chủ đề</option>
+                <!-- Ô tìm kiếm -->
+                <div class="topic-toolbar">
+                    <input type="text" id="lesson-search" placeholder="Tìm kiếm bài học trong tất cả chủ đề...">
+                </div>
+
+                <!-- Select ẩn — dùng nội bộ JS để đồng bộ options chủ đề -->
+                <select id="lesson-topic-filter" class="hidden"></select>
+
+                <!-- Accordion xếp theo chủ đề -->
+                <div id="lesson-form-container" class="form-container hidden">
+                    <h3 id="lesson-form-title">Thêm bài học</h3>
+
+                    <form id="lesson-form">
+                        <label for="lesson-name">Tên bài học</label>
+                        <input type="text" id="lesson-name" placeholder="Ví dụ: Common Food Words" required>
+
+                        <label for="lesson-topic">Chủ đề</label>
+                        <select id="lesson-topic" required>
+                            <option value="">Chọn chủ đề</option>
                         </select>
-                    </div>
 
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên bài học</th>
-                                    <th>Chủ đề</th>
-                                    <th>Lesson</th>
-                                    <th>Mô tả</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
+                        <label for="lesson-order">Lesson</label>
+                        <input type="number" id="lesson-order" min="1" step="1" value="1" required>
 
-                            <tbody id="lesson-list"></tbody>
-                        </table>
-                    </div>
+                        <label for="lesson-description">Mô tả</label>
+                        <textarea id="lesson-description" placeholder="Mô tả nội dung bài học..."></textarea>
+                        <label for="lesson-active">Trạng thái</label>
+                        <select id="lesson-active">
+                            <option value="1">Hoạt động</option>
+                            <option value="0">Ngừng hoạt động</option>
+                        </select>
 
-                    <div id="lesson-form-container" class="form-container hidden">
-                        <h3 id="lesson-form-title">Thêm bài học</h3>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                Lưu
+                            </button>
 
-                        <form id="lesson-form">
-                            <label for="lesson-name">Tên bài học</label>
-                            <input
-                                type="text"
-                                id="lesson-name"
-                                placeholder="Ví dụ: Common Food Words"
-                                required
-                            >
+                            <button type="button" id="btn-cancel-lesson" class="btn-secondary">
+                                Hủy
+                            </button>
+                        </div>
+                    </form>
+                </div>
 
-                            <label for="lesson-topic">Chủ đề</label>
-                            <select id="lesson-topic" required>
-                                <option value="">Chọn chủ đề</option>
-                            </select>
 
-                            <label for="lesson-order">Lesson</label>
-                            <input
-                                type="number"
-                                id="lesson-order"
-                                min="1"
-                                step="1"
-                                value="1"
-                                required
-                            >
 
-                            <label for="lesson-description">Mô tả</label>
-                            <textarea
-                                id="lesson-description"
-                                placeholder="Mô tả nội dung bài học..."
-                            ></textarea>
+                <div id="lesson-accordion" class="accordion-container"></div>
 
-                            <div class="form-actions">
-                                <button type="submit" class="btn-primary">
-                                    Lưu
-                                </button>
 
-                                <button
-                                    type="button"
-                                    id="btn-cancel-lesson"
-                                    class="btn-secondary"
-                                >
-                                    Hủy
-                                </button>
-                            </div>
-                        </form>
-                    </div>
 
             </section>
 
@@ -317,16 +291,55 @@
                 </div>
 
                 <div class="topic-toolbar">
-                    <input
-                        type="text"
-                        id="vocabulary-search"
-                        placeholder="Tìm từ tiếng Anh hoặc nghĩa tiếng Việt..."
-                    >
+                    <input type="text" id="vocabulary-search" placeholder="Tìm từ tiếng Anh hoặc nghĩa tiếng Việt...">
 
                     <select id="vocabulary-lesson-filter">
                         <option value="">Tất cả bài học</option>
                     </select>
                 </div>
+
+                <div id="vocabulary-form-container" class="form-container hidden">
+                    <h3 id="vocabulary-form-title">Thêm từ vựng</h3>
+
+                    <form id="vocabulary-form">
+                        <label for="vocabulary-word">Từ tiếng Anh</label>
+                        <input type="text" id="vocabulary-word" placeholder="Ví dụ: Hello" required>
+
+                        <label for="vocabulary-meaning">Nghĩa tiếng Việt</label>
+                        <input type="text" id="vocabulary-meaning" placeholder="Ví dụ: Xin chào" required>
+
+                        <label for="vocabulary-pronunciation">Phiên âm</label>
+                        <input type="text" id="vocabulary-pronunciation" placeholder="Ví dụ: /həˈləʊ/">
+
+                        <label for="vocabulary-type">Loại từ</label>
+                        <select id="vocabulary-type" required>
+                            <option value="">Chọn loại từ</option>
+                            <option value="Danh từ">Danh từ</option>
+                            <option value="Động từ">Động từ</option>
+                            <option value="Tính từ">Tính từ</option>
+                            <option value="Trạng từ">Trạng từ</option>
+                            <option value="Cụm từ">Cụm từ</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+
+                        <label for="vocabulary-lesson">Bài học</label>
+                        <select id="vocabulary-lesson" required>
+                            <option value="">Chọn bài học</option>
+                        </select>
+
+                        <label for="vocabulary-example">Câu ví dụ</label>
+                        <textarea id="vocabulary-example" placeholder="Ví dụ: Hello, how are you?"></textarea>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Lưu</button>
+                            <button type="button" id="btn-cancel-vocabulary" class="btn-secondary">
+                                Hủy
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
 
                 <div class="table-container">
                     <table>
@@ -347,67 +360,6 @@
                     </table>
                 </div>
 
-                <div id="vocabulary-form-container" class="form-container hidden">
-                    <h3 id="vocabulary-form-title">Thêm từ vựng</h3>
-
-                    <form id="vocabulary-form">
-                        <label for="vocabulary-word">Từ tiếng Anh</label>
-                        <input
-                            type="text"
-                            id="vocabulary-word"
-                            placeholder="Ví dụ: Hello"
-                            required
-                        >
-
-                        <label for="vocabulary-meaning">Nghĩa tiếng Việt</label>
-                        <input
-                            type="text"
-                            id="vocabulary-meaning"
-                            placeholder="Ví dụ: Xin chào"
-                            required
-                        >
-
-                        <label for="vocabulary-pronunciation">Phiên âm</label>
-                        <input
-                            type="text"
-                            id="vocabulary-pronunciation"
-                            placeholder="Ví dụ: /həˈləʊ/"
-                        >
-
-                        <label for="vocabulary-type">Loại từ</label>
-                        <select id="vocabulary-type" required>
-                            <option value="">Chọn loại từ</option>
-                            <option value="Danh từ">Danh từ</option>
-                            <option value="Động từ">Động từ</option>
-                            <option value="Tính từ">Tính từ</option>
-                            <option value="Trạng từ">Trạng từ</option>
-                            <option value="Cụm từ">Cụm từ</option>
-                            <option value="Khác">Khác</option>
-                        </select>
-
-                        <label for="vocabulary-lesson">Bài học</label>
-                        <select id="vocabulary-lesson" required>
-                            <option value="">Chọn bài học</option>
-                        </select>
-
-                        <label for="vocabulary-example">Câu ví dụ</label>
-                        <textarea
-                            id="vocabulary-example"
-                            placeholder="Ví dụ: Hello, how are you?"
-                        ></textarea>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primary">Lưu</button>
-                            <button
-                                type="button"
-                                id="btn-cancel-vocabulary"
-                                class="btn-secondary"
-                            >
-                                Hủy
-                            </button>
-                        </div>
-                    </form>
-                </div>
             </section>
 
         </main>
@@ -416,4 +368,5 @@
 
     <script src="js/admin.js"></script>
 </body>
+
 </html>
