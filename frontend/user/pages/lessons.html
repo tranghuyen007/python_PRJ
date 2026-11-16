@@ -4,30 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vocabbit – Học từ mới</title>
-  <link rel="icon" type="image/png" href="../assets/icons/favicon.png">
+  <link rel="icon" type="image/png" href="../../assets/icons/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="../user/css/lesson.css" />
+  <link rel="stylesheet" href="../css/lesson.css" />
 </head>
 <body>
 <div class="app">
 
   <!-- ===== Sidebar (nếu dùng sidebar.js thì thay cả khối <aside> này) ===== -->
   <aside class="sidebar" id="sidebar">
-    <a href="index.html" class="logo">
-      <img src="../assets/icons/logo.png" alt="Vocabbit logo" />
+    <a href="../index.html" class="logo">
+      <img src="../../assets/icons/logo.png" alt="Vocabbit logo" />
       <span>Vocabbit</span>
     </a>
 
     <nav class="side-nav">
-      <a href="index.html"><img src="../assets/icons/overview.png" alt="" />Tổng quan</a>
-      <a href="lesson.html" class="active" aria-current="page"><img src="../assets/icons/learn.png" alt="" />Học từ mới</a>
-      <a href="review.html"><img src="../assets/icons/review.png" alt="" />Ôn tập</a>
-      <a href="pronounce.html"><img src="../assets/icons/pronounce.png" alt="" />Luyện phát âm</a>
-      <a href="wordbook.html"><img src="../assets/icons/wordbook.png" alt="" />Bộ từ của tôi</a>
-      <a href="profile.html"><img src="../assets/icons/profile.png" alt="" />Hồ sơ</a>
+      <a href="../index.html#overview"><img src="../../assets/icons/overview.png" alt="" />Tổng quan</a>
+      <a href="../index.html#learn" class="active" aria-current="page"><img src="../../assets/icons/learn.png" alt="" />Học từ mới</a>
+      <a href="../index.html#review"><img src="../../assets/icons/review.png" alt="" />Ôn tập</a>
+      <a href="../index.html#pronounce"><img src="../../assets/icons/pronounce.png" alt="" />Luyện phát âm</a>
+      <a href="../index.html#wordbook"><img src="../../assets/icons/wordbook.png" alt="" />Bộ từ của tôi</a>
+      <a href="../index.html#profile"><img src="../../assets/icons/profile.png" alt="" />Hồ sơ</a>
     </nav>
 
     <div class="daily-card">
@@ -92,13 +92,7 @@
       <!-- Bài kiểm tra tổng của cấp độ đang xem -->
       <div id="gateSlot"></div>
 
-      <div class="tip-box">
-        <span class="tip-icon">💡</span>
-        <div>
-          <b>Mỗi bài học gồm 8 từ vựng</b>
-          <p>Lật hết flashcard → làm bài kiểm tra bài học (đúng từ <span id="lessonPassText">80%</span>) để mở bài tiếp theo. Tiến trình được lưu tự động, bạn có thể học tiếp bất cứ lúc nào.</p>
-        </div>
-      </div>
+      
     </main>
   </div>
 </div>
@@ -145,7 +139,7 @@
 
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script src="../user/js/lesson-data.js"></script>
-<script src="../user/js/lesson.js"></script>
+<script src="../js/lesson-data.js"></script>
+<script src="../js/lesson.js"></script>
 </body>
 </html>

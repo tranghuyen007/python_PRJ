@@ -140,7 +140,7 @@ $("btnBack").addEventListener("click", () => {
     current--;
     render();
   } else {
-    window.location.href = "welcome.html";
+    window.location.href = "../pages/welcome.html";
   }
 });
 
@@ -152,7 +152,7 @@ function finish() {
     // trình duyệt chặn localStorage thì bỏ qua, không làm hỏng trang
   }
   // register.html đọc lại "vocabbit_onboarding" để hiển thị và gửi lên backend
-  window.location.href = "register.html";
+  window.location.href = "../pages/register.html";
 }
 
 document.addEventListener("DOMContentLoaded", render);

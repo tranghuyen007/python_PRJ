@@ -52,7 +52,7 @@ function comingSoon(title, desc) {
     <h1 class="page-title">${title}</h1>
     <p class="page-sub">${desc}</p>
     <div class="card empty-card">
-      <img src="../assets/icons/rabbit_welcome.png" alt="">
+      <img src="../assets/images/rabbit_welcome.png" alt="">
       <h3>Trang này đang được xây dựng</h3>
       <p>Thỏ Vocabbit sẽ sớm mở cửa khu vực này cho bạn.</p>
       <a href="#learn" class="btn-primary">Về Học từ mới</a>
@@ -109,7 +109,7 @@ const Pages = {
               </div>
             </div>
             <div class="continue-art">
-              <img src="../assets/icons/rabbit_welcome.png" alt="">
+              <img src="../assets/images/rabbit_welcome.png" alt="">
             </div>
           </div>
 
@@ -198,9 +198,20 @@ const Pages = {
     render: () => ReviewPage.sessionRender(),
     mount: (param) => ReviewPage.sessionMount(param),
   },
+  // Luyện phát âm (pronounce.js)
   pronounce: {
     title: "Luyện phát âm",
-    render: () => comingSoon("Luyện phát âm", "Nghe mẫu, ghi âm và so sánh giọng của bạn."),
+    crumb: "Luyện phát âm / Chọn section",
+    render: () => PronouncePage.render(),
+    mount: () => PronouncePage.mount(),
+  },
+  // Một lượt luyện: #pronounce-session/<mã section>/<word | sentence | retry>
+  "pronounce-session": {
+    title: "Luyện phát âm",
+    crumb: "Luyện phát âm",
+    menu: "pronounce",
+    render: () => PronouncePage.sessionRender(),
+    mount: (param) => PronouncePage.sessionMount(param),
   },
   wordbook: {
     title: "Bộ từ của tôi",

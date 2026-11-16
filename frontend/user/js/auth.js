@@ -12,7 +12,7 @@ const ROUTES = {
   register: "/api/register",          // backend: tạo tài khoản (POST JSON)
   login: "/api/login",                // backend: đăng nhập (POST JSON)
   success: "register_success.html",   // trang sau khi tạo tài khoản
-  overview: "index.html"              // trang Tổng quan
+  overview: "../index.html"           // trang chính (index.html nằm ngoài thư mục pages/)
 };
 
 const STORAGE_KEY = "vocabbit_onboarding";

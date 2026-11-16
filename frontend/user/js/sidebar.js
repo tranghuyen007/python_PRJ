@@ -38,7 +38,7 @@ document.getElementById("sidebar").innerHTML = `
 
 // Đăng xuất: xoá token đăng nhập rồi quay về trang đăng nhập
 // (bản demo giữ lại thông tin tài khoản & tiến độ để đăng nhập lại cùng gmail vẫn còn dữ liệu)
-const LOGIN_PAGE = "login.html";
+const LOGIN_PAGE = "pages/login.html";
 document.getElementById("logoutBtn").addEventListener("click", () => {
   const isDemo = typeof LessonPage !== "undefined" && LessonPage.api && LessonPage.api.isDemo;
   try {

@@ -1,0 +1,82 @@
+/* ===== pronounce.css – Luyện phát âm =====
+   Nạp sau lesson.css, study.css, review.css: dùng lại .btn, .bar, .level-tab, .st-card,
+   .rv-topic, .rs-word-box, .rr-summary... Mọi style riêng nằm trong .pronounce */
+
+#content > .pronounce { max-width: 1080px; margin: 0 auto; }
+.pronounce { --yellow: #e8890c; --yellow-light: #fdf1e2; }
+
+.pronounce .pr-unsupported { margin-bottom: 16px; }
+.pronounce .st-message { text-align: center; padding: 48px 20px; }
+.pronounce .st-message h2 { font-size: 22px; font-weight: 900; margin-bottom: 6px; }
+.pronounce .st-message p { color: var(--gray); margin-bottom: 18px; }
+
+/* ---------- Thẻ từ / câu ---------- */
+.pronounce .pr-q-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.pronounce .pr-target-box { text-align: center; }
+.pronounce .pr-meaning { margin-top: 6px; color: var(--gray); font-weight: 700; }
+.pronounce .pr-keyword { margin-top: 10px; font-size: 13px; color: var(--gray); }
+.pronounce .pr-keyword b { color: var(--blue-dark); }
+.pronounce .pr-listen-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+
+/* ---------- Nút micro + vòng đếm ngược 60 giây ---------- */
+.pronounce .pr-mic-area { text-align: center; margin: 26px 0 6px; }
+.pronounce .pr-mic {
+  --p: 1;
+  position: relative; width: 92px; height: 92px; border-radius: 50%;
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  background: var(--blue); color: var(--white); box-shadow: 0 5px 0 var(--blue-dark);
+  transition: transform .1s, background .2s, box-shadow .2s;
+}
+.pronounce .pr-mic:hover { background: #4a98f2; }
+.pronounce .pr-mic:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--blue-dark); }
+.pronounce .pr-mic-icon svg { width: 34px; height: 34px; }
+.pronounce .pr-mic-time { font-size: 12px; font-weight: 900; line-height: 1; min-height: 12px; }
+
+/* đang ghi âm: nút đỏ, vòng tròn ngắn dần theo thời gian còn lại */
+.pronounce .pr-mic.on { background: var(--red); box-shadow: 0 5px 0 #b8383c; }
+.pronounce .pr-mic.on .pr-mic-icon { animation: pr-beat 1s ease-in-out infinite; }
+.pronounce .pr-mic.on::before {
+  content: ""; position: absolute; inset: -9px; border-radius: 50%;
+  background: conic-gradient(var(--red) calc(var(--p) * 360deg), #e6ebf3 0);
+  -webkit-mask: radial-gradient(circle, transparent 50px, #000 51px);
+          mask: radial-gradient(circle, transparent 50px, #000 51px);
+}
+@keyframes pr-beat { 50% { transform: scale(1.15); } }
+
+.pronounce .pr-hint { margin-top: 16px; font-weight: 700; color: var(--gray); }
+.pronounce .pr-hint.warn { color: var(--red); }
+.pronounce .pr-live { min-height: 22px; margin-top: 4px; font-style: italic; color: var(--navy); }
+
+/* ---------- Kết quả 1 lần đọc ---------- */
+.pronounce .pr-feedback { margin-top: 16px; }
+.pronounce .pr-feedback.mid { background: var(--yellow-light); border-color: #f6dcb7; }
+.pronounce .pr-feedback.mid b { color: var(--yellow); }
+.pronounce .pr-score { min-width: 84px; text-align: center; font-size: 30px; font-weight: 900; }
+.pronounce .pr-feedback.ok .pr-score { color: var(--green-dark); }
+.pronounce .pr-feedback.mid .pr-score { color: var(--yellow); }
+.pronounce .pr-feedback.bad .pr-score { color: var(--red); }
+.pronounce .rs-fb-text .pr-blocked { margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--red); }
+.pronounce .pr-legend { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; font-size: 12px; font-weight: 700; }
+
+/* tô màu từng từ trong câu */
+.pronounce .pr-w { padding: 0 3px; border-radius: 6px; }
+.pronounce .pr-w.ok { color: var(--green-dark); }
+.pronounce .pr-w.close { color: var(--yellow); background: var(--yellow-light); }
+.pronounce .pr-w.wrong { color: var(--red); background: var(--red-light); }
+.pronounce .pr-w.missing { color: var(--gray); text-decoration: underline dashed; text-underline-offset: 4px; }
+
+.pronounce .pr-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+
+/* ---------- Màn kết quả ---------- */
+.pronounce .pr-words .rr-word > div { flex: 1; min-width: 0; }
+.pronounce .pr-words .rr-word b { display: block; overflow-wrap: anywhere; }
+.pronounce .pr-chip { padding: 4px 10px; border-radius: 99px; font-size: 13px; font-weight: 900; white-space: nowrap; }
+.pronounce .pr-chip.ok { background: var(--green-light); color: var(--green-dark); }
+.pronounce .pr-chip.mid { background: var(--yellow-light); color: var(--yellow); }
+.pronounce .pr-chip.bad { background: var(--red-light); color: var(--red); }
+.pronounce .pr-chip.skip { background: #f1f4f9; color: var(--gray); }
+
+@media (max-width: 720px) {
+  .pronounce .pr-feedback { flex-wrap: nowrap; }
+  .pronounce .pr-score { min-width: 64px; font-size: 24px; }
+}

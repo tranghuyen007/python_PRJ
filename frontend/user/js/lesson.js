@@ -1097,6 +1097,25 @@ const LessonPage = (() => {
     },
     addPoints(n) { state.points += n; logActivity(); saveProgress(true); },
 
+    // ----- dùng cho pronounce.js (Luyện phát âm) -----
+    // state.pronounce = { topics: { <mã section>: { word|sentence: { last, best, at } } },
+    //                     items:  { "word:father" | "sentence:father": { last, best, tries, at } } }
+    getPronounce: (topicId) => ((state.pronounce || {}).topics || {})[topicId] || {},
+    getPronounceItem: (key) => ((state.pronounce || {}).items || {})[key] || null,
+    savePronounceItem(key, score) {
+      const p = (state.pronounce = Object.assign({ topics: {}, items: {} }, state.pronounce));
+      const old = p.items[key] || {};
+      p.items[key] = { last: score, best: Math.max(old.best || 0, score), tries: (old.tries || 0) + 1, at: Date.now() };
+      logActivity();
+      saveProgress(true);
+    },
+    savePronounceSession(topicId, mode, score) {
+      const p = (state.pronounce = Object.assign({ topics: {}, items: {} }, state.pronounce));
+      const t = (p.topics[topicId] = p.topics[topicId] || {});
+      t[mode] = { last: score, best: Math.max(t[mode]?.best || 0, score), at: Date.now() };
+      saveProgress(true);
+    },
+
     // ----- dùng cho profile.js (trang Hồ sơ) -----
     // ghi nhận một lần học (vd: trả lời câu ôn tập, nộp câu bài kiểm tra)
     logActivity() { logActivity(); saveProgress(true); },
