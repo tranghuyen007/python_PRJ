@@ -397,12 +397,6 @@ const PronouncePage = (() => {
     return `
       <div class="learn study review pronounce" id="prRoot">
         ${SR ? "" : unsupportedNote()}
-        <div class="rv-types">
-          <b>Cách luyện:</b>
-          <span>${I.sound} Nghe giọng mẫu</span>
-          <span>${I.mic} Bấm micro và đọc to (tối đa ${CONFIG.LISTEN_LIMIT} giây)</span>
-          <span>${I.gauge} Nhận điểm % ngay</span>
-        </div>
         <p class="section-label">Chọn cấp độ</p>
         <div class="level-tabs" id="prTabs"></div>
         <div id="prTopics" class="rv-topics"><p class="st-loading">Đang tải…</p></div>
@@ -476,7 +470,6 @@ const PronouncePage = (() => {
         <div class="rv-modes">
           <div class="rv-mode primary">
             <h4>${I.word} Đọc từ đơn</h4>
-            <p>${nWord} từ trong ${info.words.length} từ đã học. Nghe mẫu rồi đọc to từng từ.</p>
             <div class="rv-mode-foot">
               <span>${lastText(st.word)}</span>
               <a href="#pronounce-session/${t.id}/word" class="btn btn-primary">${I.mic} Bắt đầu</a>
@@ -485,8 +478,8 @@ const PronouncePage = (() => {
           <div class="rv-mode ${nSent ? "" : "locked"}">
             <h4>${I.chat} Đọc cả câu</h4>
             <p>${nSent
-              ? `${nSent} câu ví dụ của từ đã học. Khó hơn: máy chấm từng từ trong câu.`
-              : "Các từ đã học chưa có câu ví dụ để luyện."}</p>
+              ? `Bắt đầu học`
+              : "Đang cập nhật"}</p>
             <div class="rv-mode-foot">
               <span>${lastText(st.sentence)}</span>
               ${nSent
