@@ -1,16 +1,26 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.database import initialize_database
 from routes.user import router as user_router
 from routes.auth import router as auth_router
 from routes.levels import router as levels_router
 from routes.placement_tests import router as placement_tests_router
 from routes.pronunciation import router as pronunciation_router
+from routes.progress import router as progress_router
 
 initialize_database()
 
 app = FastAPI(
     title="Learning Application API",
     version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get("/")
@@ -22,3 +32,4 @@ app.include_router(auth_router)
 app.include_router(levels_router)
 app.include_router(placement_tests_router)
 app.include_router(pronunciation_router)
+app.include_router(progress_router)

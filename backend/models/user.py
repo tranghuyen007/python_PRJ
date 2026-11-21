@@ -22,6 +22,10 @@ class User(Base):
         nullable=False,
     )
 
+    full_name = Column(String)
+
+    gender = Column(String)
+
     password_hash = Column(
         String,
         nullable=False,

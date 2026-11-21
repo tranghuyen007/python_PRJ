@@ -43,6 +43,8 @@ def register_user(
             username=user_data.username,
             email=user_data.email,
             password=user_data.password,
+            full_name=user_data.full_name,
+            gender=user_data.gender,
         )
     except ValueError as error:
         raise HTTPException(

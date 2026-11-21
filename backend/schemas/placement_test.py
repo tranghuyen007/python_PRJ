@@ -11,10 +11,31 @@ class LevelCreate(BaseModel):
     placement_test_enabled: bool = False
     placement_test_question_count: int = Field(default=10, ge=1)
     placement_test_passing_score: int = Field(default=7, ge=1)
+    is_active: bool = True
 
     @model_validator(mode="after")
     def validate_passing_score(self):
         if self.placement_test_passing_score > self.placement_test_question_count:
+            raise ValueError("passing score cannot exceed the configured question count")
+        return self
+
+
+class LevelUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+    description: str | None = None
+    display_order: int | None = Field(default=None, ge=0)
+    placement_test_enabled: bool | None = None
+    placement_test_question_count: int | None = Field(default=None, ge=1)
+    placement_test_passing_score: int | None = Field(default=None, ge=1)
+    is_active: bool | None = None
+
+    @model_validator(mode="after")
+    def validate_passing_score(self):
+        if (
+            self.placement_test_passing_score is not None
+            and self.placement_test_question_count is not None
+            and self.placement_test_passing_score > self.placement_test_question_count
+        ):
             raise ValueError("passing score cannot exceed the configured question count")
         return self
 
@@ -31,6 +52,58 @@ class PlacementTestSettingsUpdate(BaseModel):
         return self
 
 
+class TopicCreate(BaseModel):
+    level_id: int
+    name: str = Field(min_length=1, max_length=150)
+    description: str | None = None
+    display_order: int = Field(default=1, ge=1)
+    quick_review_limit: int = Field(default=15, ge=1)
+    is_active: bool = True
+
+
+class TopicUpdate(BaseModel):
+    level_id: int | None = None
+    name: str | None = Field(default=None, min_length=1, max_length=150)
+    description: str | None = None
+    display_order: int | None = Field(default=None, ge=1)
+    quick_review_limit: int | None = Field(default=None, ge=1)
+    is_active: bool | None = None
+
+
+class LessonCreate(BaseModel):
+    topic_id: int
+    name: str = Field(min_length=1, max_length=150)
+    description: str | None = None
+    display_order: int = Field(default=1, ge=1)
+    is_active: bool = True
+
+
+class LessonUpdate(BaseModel):
+    topic_id: int | None = None
+    name: str | None = Field(default=None, min_length=1, max_length=150)
+    description: str | None = None
+    display_order: int | None = Field(default=None, ge=1)
+    is_active: bool | None = None
+
+
+class WordCreate(BaseModel):
+    lesson_id: int
+    word: str = Field(min_length=1, max_length=200)
+    meaning: str = Field(min_length=1)
+    pronunciation: str | None = None
+    part_of_speech: str | None = None
+    example: str | None = None
+
+
+class WordUpdate(BaseModel):
+    lesson_id: int | None = None
+    word: str | None = Field(default=None, min_length=1, max_length=200)
+    meaning: str | None = Field(default=None, min_length=1)
+    pronunciation: str | None = None
+    part_of_speech: str | None = None
+    example: str | None = None
+
+
 class LevelResponse(BaseModel):
     level_id: int
     name: str
@@ -40,6 +113,7 @@ class LevelResponse(BaseModel):
     placement_test_question_count: int
     placement_test_passing_score: int
     is_unlocked: bool
+    is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -58,6 +132,7 @@ class TopicResponse(BaseModel):
     name: str
     description: str | None
     display_order: int
+    quick_review_limit: int
     is_active: int
 
     model_config = ConfigDict(from_attributes=True)
@@ -83,6 +158,10 @@ class WordResponse(BaseModel):
     example: str | None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class AdminWordResponse(WordResponse):
+    lesson_id: int
 
 
 class PlacementTestAttemptResponse(BaseModel):
