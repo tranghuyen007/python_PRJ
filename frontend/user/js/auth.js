@@ -97,8 +97,8 @@ function userFromServer(u, fallback) {
 // ---------------------------------------------------------------
 // 4) KIỂM TRA FORM
 // ---------------------------------------------------------------
-// Gmail hợp lệ: bắt đầu bằng chữ/số, chỉ gồm chữ, số, dấu . _ + -, đuôi @gmail.com
-const GMAIL_RE = /^[a-z0-9][a-z0-9._+-]*@gmail\.com$/i;
+// Gmail hợp lệ: bắt đầu bằng chữ/số, chỉ gồm chữ, số, đuôi @gmail.com
+const GMAIL_RE = /^[a-z][a-z0-9]*@gmail\.com$/i;
 
 // Mỗi ô (theo thuộc tính name) có 1 luật; trả về "" nếu hợp lệ, ngược lại là câu báo lỗi
 const RULES = {
