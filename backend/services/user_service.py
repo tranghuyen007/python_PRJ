@@ -15,6 +15,7 @@ def create_user(
     password: str,
     full_name: str | None = None,
     gender: str | None = None,
+    avatar_key: str = "bunny",
 ) -> User:
     if not username:
         base = re.sub(r"[^A-Za-z0-9_]", "", email.split("@", 1)[0])[:24] or "user"
@@ -53,6 +54,7 @@ def create_user(
         password_hash=hashed_password,
         full_name=full_name,
         gender=gender,
+        avatar_key=avatar_key,
     )
 
     db.add(new_user)

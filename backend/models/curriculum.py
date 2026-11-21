@@ -60,6 +60,8 @@ class Lesson(Base):
     description = Column(Text)
     display_order = Column(Integer, nullable=False)
     is_active = Column(Integer, nullable=False, default=1, server_default="1")
+    pronunciation_passing_score = Column(Integer, nullable=False, default=70, server_default="70")
+    pronunciation_max_attempts = Column(Integer, nullable=False, default=7, server_default="7")
 
 
 class Word(Base):
@@ -70,6 +72,8 @@ class Word(Base):
     pronunciation = Column(String)
     part_of_speech = Column(String)
     example = Column(Text)
+    ipa = Column(String)
+    reference_audio_path = Column(String)
     is_active = Column(Integer, nullable=False, default=1, server_default="1")
 
 

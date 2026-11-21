@@ -6,6 +6,7 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    JSON,
     func,
 )
 
@@ -35,4 +36,8 @@ class PronunciationAttempt(Base):
     target_text = Column(Text, nullable=False)          # từ / câu phải đọc
     transcript = Column(Text, nullable=False, default="", server_default="")  # máy nghe được
     score = Column(Integer, nullable=False)             # 0 – 100 (%)
+    lesson_id = Column(Integer, ForeignKey("lessons.lesson_id", ondelete="CASCADE"), index=True)
+    overall_score = Column(Integer, nullable=False, default=0, server_default="0")
+    character_results = Column(JSON)
+    phoneme_results = Column(JSON)
     created_at = Column(DateTime, nullable=False, server_default=func.current_timestamp())

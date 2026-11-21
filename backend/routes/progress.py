@@ -9,16 +9,26 @@ from schemas.progress import (
     QuickReviewAnswerResponse,
     QuickReviewSessionResponse,
     TopicProgressResponse,
+    LearningStreakResponse,
 )
 from services.progress_service import (
     create_quick_review,
     get_topic_progress,
     mark_word_learned,
     submit_quick_review_answer,
+    get_learning_streak,
 )
 
 
 router = APIRouter(tags=["Learning progress"])
+
+
+@router.get("/progress/streak", response_model=LearningStreakResponse)
+def read_learning_streak(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    return get_learning_streak(db, user)
 
 
 @router.get(

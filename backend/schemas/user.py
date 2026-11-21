@@ -7,6 +7,7 @@ class UserCreate(BaseModel):
     password: str = Field(min_length=9, max_length=40)
     full_name: str | None = Field(default=None, max_length=100)
     gender: str | None = Field(default=None, max_length=20)
+    avatar_key: str | None = Field(default=None, max_length=30)
 
 class UserResponse(BaseModel):
     user_id: int
@@ -14,6 +15,7 @@ class UserResponse(BaseModel):
     email: str
     full_name: str | None = None
     gender: str | None = None
+    avatar_key: str = "bunny"
     role: str
     status: str
     created_at: datetime

@@ -28,6 +28,49 @@ def _now() -> datetime:
     return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
+def get_learning_streak(db: Session, user: User) -> dict:
+    rows = (
+        db.query(UserDailyActivity.activity_date)
+        .filter(UserDailyActivity.user_id == user.user_id)
+        .order_by(UserDailyActivity.activity_date.desc())
+        .all()
+    )
+    active_dates = sorted({row.activity_date for row in rows if row.activity_date})
+    if not active_dates:
+        return {
+            "current_streak": 0,
+            "longest_streak": 0,
+            "total_active_days": 0,
+            "activity_dates": [],
+        }
+
+    longest = 1
+    running = 1
+    for previous, current in zip(active_dates, active_dates[1:]):
+        if (current - previous).days == 1:
+            running += 1
+            longest = max(longest, running)
+        else:
+            running = 1
+
+    today = date.today()
+    latest = active_dates[-1]
+    current = 0
+    if (today - latest).days in (0, 1):
+        cursor = latest
+        active_set = set(active_dates)
+        while cursor in active_set:
+            current += 1
+            cursor = cursor.fromordinal(cursor.toordinal() - 1)
+
+    return {
+        "current_streak": current,
+        "longest_streak": longest,
+        "total_active_days": len(active_dates),
+        "activity_dates": [item.isoformat() for item in active_dates[-60:]],
+    }
+
+
 def _accessible_topic(db: Session, user: User, topic_id: int) -> Topic:
     topic = db.query(Topic).filter_by(topic_id=topic_id, is_active=1).first()
     if topic is None:

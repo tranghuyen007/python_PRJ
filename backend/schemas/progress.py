@@ -40,3 +40,10 @@ class QuickReviewAnswerResponse(BaseModel):
     completed_items: int
     total_items: int
     session_completed: bool
+
+
+class LearningStreakResponse(BaseModel):
+    current_streak: int
+    longest_streak: int
+    total_active_days: int
+    activity_dates: list[str]

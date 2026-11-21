@@ -25,6 +25,12 @@ class User(Base):
     full_name = Column(String)
 
     gender = Column(String)
+    avatar_key = Column(
+        String,
+        nullable=False,
+        default="bunny",
+        server_default="bunny",
+    )
 
     password_hash = Column(
         String,

@@ -53,6 +53,50 @@ def migrate_placement_test_schema() -> None:
                 connection.execute(text("ALTER TABLE users ADD COLUMN full_name VARCHAR"))
             if "gender" not in user_columns:
                 connection.execute(text("ALTER TABLE users ADD COLUMN gender VARCHAR"))
+            if "avatar_key" not in user_columns:
+                connection.execute(
+                    text("ALTER TABLE users ADD COLUMN avatar_key VARCHAR NOT NULL DEFAULT 'bunny'")
+                )
+
+        if "lessons" in tables:
+            lesson_columns = {column["name"] for column in inspector.get_columns("lessons")}
+            if "pronunciation_passing_score" not in lesson_columns:
+                connection.execute(
+                    text("ALTER TABLE lessons ADD COLUMN pronunciation_passing_score INTEGER NOT NULL DEFAULT 70")
+                )
+            if "pronunciation_max_attempts" not in lesson_columns:
+                connection.execute(
+                    text("ALTER TABLE lessons ADD COLUMN pronunciation_max_attempts INTEGER NOT NULL DEFAULT 7")
+                )
+
+        if "words" in tables:
+            word_columns = {column["name"] for column in inspector.get_columns("words")}
+            if "ipa" not in word_columns:
+                connection.execute(text("ALTER TABLE words ADD COLUMN ipa VARCHAR"))
+            if "reference_audio_path" not in word_columns:
+                connection.execute(text("ALTER TABLE words ADD COLUMN reference_audio_path VARCHAR"))
+
+        if "pronunciation_attempts" in tables:
+            pronunciation_columns = {
+                column["name"]
+                for column in inspector.get_columns("pronunciation_attempts")
+            }
+            if "lesson_id" not in pronunciation_columns:
+                connection.execute(
+                    text("ALTER TABLE pronunciation_attempts ADD COLUMN lesson_id INTEGER")
+                )
+            if "overall_score" not in pronunciation_columns:
+                connection.execute(
+                    text("ALTER TABLE pronunciation_attempts ADD COLUMN overall_score INTEGER NOT NULL DEFAULT 0")
+                )
+            if "character_results" not in pronunciation_columns:
+                connection.execute(
+                    text("ALTER TABLE pronunciation_attempts ADD COLUMN character_results JSON")
+                )
+            if "phoneme_results" not in pronunciation_columns:
+                connection.execute(
+                    text("ALTER TABLE pronunciation_attempts ADD COLUMN phoneme_results JSON")
+                )
 
         if "levels" in tables:
             level_columns = {column["name"] for column in inspector.get_columns("levels")}

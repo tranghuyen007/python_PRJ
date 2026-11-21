@@ -76,6 +76,8 @@ class LessonCreate(BaseModel):
     description: str | None = None
     display_order: int = Field(default=1, ge=1)
     is_active: bool = True
+    pronunciation_passing_score: int = Field(default=70, ge=1, le=100)
+    pronunciation_max_attempts: int = Field(default=7, ge=1)
 
 
 class LessonUpdate(BaseModel):
@@ -84,6 +86,8 @@ class LessonUpdate(BaseModel):
     description: str | None = None
     display_order: int | None = Field(default=None, ge=1)
     is_active: bool | None = None
+    pronunciation_passing_score: int | None = Field(default=None, ge=1, le=100)
+    pronunciation_max_attempts: int | None = Field(default=None, ge=1)
 
 
 class WordCreate(BaseModel):
@@ -93,6 +97,7 @@ class WordCreate(BaseModel):
     pronunciation: str | None = None
     part_of_speech: str | None = None
     example: str | None = None
+    ipa: str | None = None
 
 
 class WordUpdate(BaseModel):
@@ -102,6 +107,7 @@ class WordUpdate(BaseModel):
     pronunciation: str | None = None
     part_of_speech: str | None = None
     example: str | None = None
+    ipa: str | None = None
 
 
 class LevelResponse(BaseModel):
@@ -145,6 +151,8 @@ class LessonResponse(BaseModel):
     description: str | None
     display_order: int
     is_active: int
+    pronunciation_passing_score: int = 70
+    pronunciation_max_attempts: int = 7
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -156,6 +164,7 @@ class WordResponse(BaseModel):
     pronunciation: str | None
     part_of_speech: str | None
     example: str | None
+    ipa: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
