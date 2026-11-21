@@ -6,6 +6,7 @@ CREATE TABLE users (
     email TEXT NOT NULL UNIQUE,
     full_name TEXT,
     gender TEXT,
+    avatar_key TEXT NOT NULL DEFAULT 'bunny',
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'USER' CHECK(role IN ('USER', 'ADMIN')),
     status TEXT NOT NULL DEFAULT 'ACTIVE' CHECK(status IN ('ACTIVE', 'LOCKED')),
@@ -56,6 +57,8 @@ CREATE TABLE lessons (
 
     display_order INTEGER NOT NULL,
     is_active INTEGER NOT NULL DEFAULT 1 CHECK(is_active IN (0, 1)),
+    pronunciation_passing_score INTEGER NOT NULL DEFAULT 70 CHECK(pronunciation_passing_score >= 1 AND pronunciation_passing_score <= 100),
+    pronunciation_max_attempts INTEGER NOT NULL DEFAULT 7 CHECK(pronunciation_max_attempts >= 1),
 
     FOREIGN KEY (topic_id)
         REFERENCES topics(topic_id)
@@ -208,6 +211,8 @@ CREATE TABLE words (
     pronunciation TEXT,
     part_of_speech TEXT,
     example TEXT,
+    ipa TEXT,
+    reference_audio_path TEXT,
     is_active INTEGER NOT NULL DEFAULT 1 CHECK(is_active IN (0, 1)),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -307,3 +312,34 @@ CREATE TABLE placement_test_attempt_items (
 
 CREATE INDEX ix_placement_test_attempt_items_attempt_id
     ON placement_test_attempt_items(attempt_id);
+
+CREATE TABLE pronunciation_attempts (
+    attempt_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    word_id INTEGER,
+    word TEXT NOT NULL,
+    mode TEXT NOT NULL CHECK(mode IN ('word', 'sentence')),
+    target_text TEXT NOT NULL,
+    transcript TEXT NOT NULL DEFAULT '',
+    score INTEGER NOT NULL CHECK(score >= 0 AND score <= 100),
+    overall_score INTEGER NOT NULL DEFAULT 0,
+    lesson_id INTEGER,
+    character_results JSON,
+    phoneme_results JSON,
+    overall_score INTEGER NOT NULL DEFAULT 0,
+    lesson_id INTEGER,
+    character_results JSON,
+    phoneme_results JSON,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (word_id) REFERENCES words(word_id),
+    FOREIGN KEY (lesson_id) REFERENCES lessons(lesson_id) ON DELETE CASCADE
+);
+
+CREATE INDEX ix_pronunciation_attempts_user_id
+    ON pronunciation_attempts(user_id);
+CREATE INDEX ix_pronunciation_attempts_word_id
+    ON pronunciation_attempts(word_id);
+CREATE INDEX ix_pronunciation_attempts_word
+    ON pronunciation_attempts(word);

@@ -69,12 +69,6 @@ body.no-scroll { overflow: hidden; }
 .learn .total-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
 .learn .total-row small { font-weight: 800; color: var(--blue); font-size: 12px; }
 .learn .section-label { font-weight: 800; font-size: 13px; margin: 6px 0 8px; }
-.learn .review-topic { padding: 14px 0; border-bottom: 1px solid var(--border); }
-.learn .review-topic:last-child { border-bottom: 0; }
-.learn .review-topic h2 { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
-.learn .review-topic p { color: var(--gray); margin-bottom: 10px; }
-.learn .review-correct { color: var(--green-dark); font-weight: 800; margin: 12px 0; }
-.learn .review-incorrect { color: var(--red); font-weight: 800; margin: 12px 0; }
 
 /* ---------- Tabs cấp độ ---------- */
 .learn .level-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
@@ -132,6 +126,7 @@ body.no-scroll { overflow: hidden; }
 .learn .placement-info p:last-child { color: var(--gray); font-size: 13px; }
 .learn .placement-info b { color: var(--navy); }
 .learn .placement-actions { display: flex; flex-direction: column; gap: 10px; }
+.learn .placement-test-level { margin-top: 10px; }
 
 .learn .locked-panel {
   display: flex; align-items: center; gap: 14px; padding: 14px 18px;
@@ -313,22 +308,4 @@ body.no-scroll { overflow: hidden; }
   .learn .lesson .btn { margin-left: 48px; }
   .learn .flash-grid { grid-template-columns: repeat(2, 1fr); }
   .learn .quiz-options { grid-template-columns: 1fr; }
-}
-
-.learn #learn-message:empty { display: none; }
-.learn .lesson-list[hidden] { display: none; }
-.learn .lesson-entry { display: grid; gap: 6px; }
-.learn .lesson-description { margin: 0 0 4px 48px; color: var(--gray); font-size: 12px; }
-.learn .word-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-top: 14px; }
-.learn .word-card { padding: 14px; border-radius: 12px; background: #f7f9fc; }
-.learn .word-card h3 { font-weight: 900; }
-.learn .word-card p { margin-top: 5px; color: var(--gray); }
-.learn .word-card .btn { margin-top: 10px; }
-.learn .placement-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 20px; }
-.learn .placement-options .btn { white-space: normal; text-align: left; }
-.learn .error { color: #b4262b; }
-.learn .placement-link { margin-bottom: 16px; }
-
-@media (max-width: 640px) {
-  .learn .placement-options { grid-template-columns: 1fr; }
 }

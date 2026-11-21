@@ -3,31 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vocabbit – Học từ mới</title>
+  <title>Tổng quan – Vocabbit</title>
   <link rel="icon" type="image/png" href="../assets/images/logo.png">
   <link rel="stylesheet" href="../user/css/base.css">
   <link rel="stylesheet" href="../user/css/sidebar.css">
   <link rel="stylesheet" href="../user/css/pages.css">
   <link rel="stylesheet" href="../user/css/lesson.css">
+  <link rel="stylesheet" href="../user/css/study.css">
+  <link rel="stylesheet" href="../user/css/review.css">
+  <link rel="stylesheet" href="../user/css/exam.css">
+  <link rel="stylesheet" href="../user/css/profile.css">
+  <link rel="stylesheet" href="../user/css/pronounce.css">
 </head>
 <body>
   <div class="layout">
+    <!-- Thanh điều hướng bên trái (sidebar.js tự vẽ vào đây) -->
     <div id="sidebar"></div>
 
     <div class="main-area">
+      <!-- Thanh trên cùng: giữ nguyên khi đổi trang -->
       <header class="topbar">
         <div class="topbar-right">
-          <a class="pill pill-points" href="#profile" aria-label="Mở hồ sơ">
-            <span id="topbar-user">Tài khoản</span>
-          </a>
+          <span class="pill pill-streak">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4 0 7-3 7-7 0-5-5-8-6-13-2 3-3 5-3 8-1-1-2-2-2-4-2 2-3 5-3 9 0 4 3 7 7 7z"/></svg>
+            <span id="streakText">0 ngày liên tiếp</span>
+          </span>
+          <span class="pill pill-points">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <span id="pointsText">0 điểm</span>
+          </span>
+          <button class="icon-btn" type="button" aria-label="Thông báo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          </button>
         </div>
       </header>
+
+      <!-- Vùng nội dung: router.js thay nội dung khi bấm menu -->
       <main class="content" id="content"></main>
     </div>
   </div>
 
   <script src="../user/js/sidebar.js"></script>
+  <script src="../user/js/lesson-data.js"></script>  <!-- dữ liệu mẫu, bỏ khi có API -->
   <script src="../user/js/lesson.js"></script>
+  <script src="../user/js/study.js"></script>
+  <script src="../user/js/review.js"></script>
+  <script src="../user/js/exam.js"></script>
+  <script src="../user/js/profile.js"></script>
+  <script src="../user/js/pronounce.js"></script>
   <script src="../user/js/pages.js"></script>
   <script src="../user/js/router.js"></script>
 </body>

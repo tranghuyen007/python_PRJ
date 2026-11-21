@@ -1,102 +1,226 @@
-"use strict";
+// ===== pages.js — nội dung của từng trang =====
+// Mỗi trang có: title (tiêu đề tab) và render() trả về HTML để chèn vào <main class="content">.
+// Muốn thêm trang mới: thêm 1 mục vào Pages + 1 mục vào menuItems trong sidebar.js.
 
+// ---------- Dữ liệu mẫu (sau này lấy từ API backend) ----------
+const userData = {
+  name: "Minh Anh",
+  todayMinutes: 5,
+  goalMinutes: 10,
+  wordsLearned: 16,
+  lessonsDone: 2,
+  currentLesson: {
+    topic: "Đời sống hằng ngày",
+    title: "Thói quen mỗi ngày",
+    lessonNo: 3,
+    words: 8,
+    wordsDone: 4,
+  },
+  topics: [
+    { icon: "home",  title: "Đời sống hằng ngày", desc: "Những từ gần gũi nhất với bạn.", done: 2, total: 4, status: "learning" },
+    { icon: "cup",   title: "Ẩm thực & đồ uống",  desc: "Gọi món, nấu ăn và khám phá.",  done: 1, total: 4, status: "words", wordsLearned: 8 },
+    { icon: "plane", title: "Du lịch & khám phá", desc: "Sẵn sàng cho chuyến đi tiếp theo.", done: 0, total: 4, status: "new" },
+  ],
+  reviewWords: 15,
+};
+
+// ---------- Icon SVG dùng lại nhiều lần ----------
+const Icons = {
+  home:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>`,
+  cup:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M7 2v2M11 2v2M15 2v2"/></svg>`,
+  plane: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>`,
+  sun:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`,
+  arrow: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`,
+  refresh: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>`,
+  mic:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/></svg>`,
+};
+
+// ---------- Hàm nhỏ dùng chung ----------
+function progressBar(percent) {
+  return `<div class="progress"><div class="progress-fill" style="width:${percent}%"></div></div>`;
+}
+
+function topicBadge(topic) {
+  if (topic.status === "learning") return `<span class="badge badge-blue">Đang học</span>`;
+  if (topic.status === "words")    return `<span class="badge badge-green">${topic.wordsLearned} từ đã học</span>`;
+  return `<span class="badge badge-gray">Chưa bắt đầu</span>`;
+}
+
+// Khung tạm cho các trang chưa làm
+function comingSoon(title, desc) {
+  return `
+    <h1 class="page-title">${title}</h1>
+    <p class="page-sub">${desc}</p>
+    <div class="card empty-card">
+      <img src="../assets/images/rabbit_welcome.png" alt="">
+      <h3>Trang này đang được xây dựng</h3>
+      <p>Thỏ Vocabbit sẽ sớm mở cửa khu vực này cho bạn.</p>
+      <a href="#learn" class="btn-primary">Về Học từ mới</a>
+    </div>
+  `;
+}
+
+// ---------- Danh sách trang ----------
 const Pages = {
-  learn: {
-    title: "Học từ mới",
+  // Tổng quan: đã bỏ khỏi sidebar, giữ lại code để dùng sau (vẫn mở được bằng index.html#overview)
+  overview: {
+    title: "Tổng quan",
     render() {
+      const u = userData;
+      const l = u.currentLesson;
+      const lessonPercent = Math.round((l.wordsDone / l.words) * 100);
+      const todayPercent = Math.min(100, (u.todayMinutes / u.goalMinutes) * 100);
+      const minutesLeft = Math.max(0, u.goalMinutes - u.todayMinutes);
+
+      const topicCards = u.topics.map(t => `
+        <a href="#learn" class="card topic-card">
+          <div class="topic-head">
+            <span class="icon-box">${Icons[t.icon]}</span>
+            ${topicBadge(t)}
+          </div>
+          <h3>${t.title}</h3>
+          <p>${t.desc}</p>
+          ${progressBar((t.done / t.total) * 100)}
+          <div class="topic-foot">
+            <span>${t.done}/${t.total} unit hoàn thành</span>
+            <span class="arrow">${Icons.arrow}</span>
+          </div>
+        </a>
+      `).join("");
+
       return `
-        <div class="learn">
-          <div class="lp-head">
-            <div class="lp-levels">
-              <p class="section-label">Chọn cấp độ</p>
-              <div id="learn-levels" class="level-tabs" role="tablist"></div>
-            </div>
-            <div class="total-card">
-              <p>Tiến độ cấp độ</p>
-              <b id="totalWords">0 / 0 từ</b>
-              <div class="total-row">
-                <div class="bar"><span id="totalBar"></span></div>
-                <small id="totalPct">0%</small>
+        <h1 class="page-title">Chào ${u.name}, cùng học nhé!</h1>
+        <p class="page-sub">Một vài từ mới hôm nay, thêm một bước tự tin ngày mai.</p>
+
+        <section class="overview-top">
+          <!-- Tiếp tục bài học -->
+          <div class="card continue-card">
+            <div class="continue-info">
+              <span class="eyebrow">Tiếp tục unit</span>
+              <h2>${l.title}</h2>
+              <p class="meta">${l.topic} • Unit ${l.lessonNo} • ${l.words} từ</p>
+              <div class="progress-row">
+                ${progressBar(lessonPercent)}
+                <span>${lessonPercent}%</span>
+              </div>
+              <div class="continue-actions">
+                <a href="#learn" class="btn-primary">${Icons.arrow} Tiếp tục học</a>
+                <span class="hint">Đã lưu ${l.wordsDone}/${l.words} từ hoàn thành</span>
               </div>
             </div>
+            <div class="continue-art">
+              <img src="../assets/images/rabbit_welcome.png" alt="">
+            </div>
           </div>
-          <div id="learn-message" class="notice"></div>
-          <section id="level-summary" class="level-card"></section>
-          <div id="learn-content" class="tp-list"></div>
-        </div>
+
+          <!-- Hôm nay của bạn -->
+          <div class="card today-card">
+            <div class="today-head">
+              <h3>Hôm nay của bạn</h3>
+              <span class="today-sun">${Icons.sun}</span>
+            </div>
+            <p class="today-num">${u.todayMinutes} / ${u.goalMinutes} phút</p>
+            ${progressBar(todayPercent)}
+            <p class="today-text">
+              ${minutesLeft > 0
+                ? `Chỉ thêm ${minutesLeft} phút để đạt mục tiêu. Bạn đang làm rất tốt!`
+                : "Bạn đã đạt mục tiêu hôm nay. Tuyệt vời!"}
+            </p>
+            <span class="badge badge-green">${u.wordsLearned} từ đã học • ${u.lessonsDone} unit hoàn thành</span>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-head">
+            <h2>Học theo section</h2>
+            <a href="#learn" class="link">Xem tất cả section →</a>
+          </div>
+          <div class="topic-grid">${topicCards}</div>
+        </section>
+
+        <section class="shortcut-grid">
+          <a href="#review" class="card shortcut-card">
+            <span class="shortcut-icon">${Icons.refresh}</span>
+            <div>
+              <h3>Ôn tập để nhớ lâu</h3>
+              <p>${u.reviewWords} từ quen thuộc, một lượt ôn nhẹ nhàng.</p>
+              <span class="link">Đến trung tâm ôn tập →</span>
+            </div>
+          </a>
+          <a href="#pronounce" class="card shortcut-card">
+            <span class="shortcut-icon">${Icons.mic}</span>
+            <div>
+              <h3>Nói rõ hơn mỗi ngày</h3>
+              <p>Nghe mẫu, ghi âm và nhận phản hồi phát âm.</p>
+              <span class="link">Luyện phát âm nâng cao →</span>
+            </div>
+          </a>
+        </section>
       `;
     },
-    mount() { LessonPage.mountLearning(); }
   },
-  placement: {
-    title: "Bài kiểm tra vượt cấp",
+
+  // Trang Học từ mới: giao diện + logic nằm trong lesson.js (LessonPage)
+  learn: {
+    title: "Học từ mới",
+    crumb: "Học từ mới / Duyệt section",
+    render: () => LessonPage.render(),
+    mount: () => LessonPage.mount(),
+  },
+  // Trang học 1 bài (3 bước). Mở bằng #study/<mã bài>, vd: #study/a1-family-3
+  study: {
+    title: "Học unit",
+    crumb: "Học từ mới / Khám phá từ",
     menu: "learn",
-    render() {
-      return `
-        <div class="learn">
-          <a href="#learn" class="link">← Quay lại bài học</a>
-          <h1 class="page-title">Bài kiểm tra vượt cấp</h1>
-          <p class="page-sub">Bài trắc nghiệm từ vựng được tạo từ nội dung của cấp độ.</p>
-          <div id="placement-content" class="card"></div>
-        </div>
-      `;
-    },
-    mount(levelId) { LessonPage.mountPlacementTest(levelId); }
+    render: (param) => StudyPage.render(param),
+    mount: (param) => StudyPage.mount(param),
   },
-  "quick-review": {
-    title: "Ôn tập nhanh",
-    menu: "review",
-    render() {
-      return `
-        <div class="learn">
-          <a href="#learn" class="link">← Quay lại bài học</a>
-          <h1 class="page-title">Ôn tập nhanh</h1>
-          <p class="page-sub">Ôn ngẫu nhiên các từ bạn đã đánh dấu đã học trong từng chủ đề.</p>
-          <div id="quick-review-content" class="card"></div>
-        </div>
-      `;
-    },
-    mount(topicId) { LessonPage.mountQuickReview(topicId); }
+  // Bài kiểm tra tổng / xếp lớp (exam.js): #exam/<mã bài>, vd: #exam/gate-elementary
+  exam: {
+    title: "Bài kiểm tra",
+    crumb: "Học từ mới / Bài kiểm tra",
+    menu: "learn",
+    render: () => ExamPage.render(),
+    mount: (param) => ExamPage.mount(param),
   },
+  // Trung tâm ôn tập (review.js)
   review: {
     title: "Ôn tập",
-    render() {
-      return `
-        <div class="learn">
-          <h1 class="page-title">Ôn tập</h1>
-          <p class="page-sub">Chọn một chủ đề để ôn lại những từ bạn đã học.</p>
-          <div id="quick-review-content" class="card"></div>
-        </div>
-      `;
-    },
-    mount() { LessonPage.mountQuickReview(); }
+    crumb: "Ôn tập / Chọn section",
+    render: () => ReviewPage.render(),
+    mount: () => ReviewPage.mount(),
   },
+  // Một lượt ôn: #review-session/<mã chủ đề>/<quick | full>
+  "review-session": {
+    title: "Ôn tập",
+    crumb: "Ôn tập",
+    menu: "review",
+    render: () => ReviewPage.sessionRender(),
+    mount: (param) => ReviewPage.sessionMount(param),
+  },
+  // Luyện phát âm (pronounce.js)
   pronounce: {
     title: "Luyện phát âm",
-    render() {
-      return `
-        <h1 class="page-title">Luyện phát âm</h1>
-        <p class="page-sub">Tính năng mở rộng sẽ được kết nối trong phiên bản sau.</p>
-        <div class="card empty-card">
-          <img src="../assets/images/rabbit_welcome.png" alt="">
-          <h3>Đang được phát triển</h3>
-          <p>Hiện tại bạn có thể nghe phát âm từ vựng bằng nút loa trong danh sách bài học.</p>
-          <a href="#learn" class="btn-primary">Về Học từ mới</a>
-        </div>
-      `;
-    }
+    crumb: "Luyện phát âm / Chọn section",
+    render: () => PronouncePage.render(),
+    mount: () => PronouncePage.mount(),
   },
+  // Một lượt luyện: #pronounce-session/<mã section>/<word | sentence | retry>
+  "pronounce-session": {
+    title: "Luyện phát âm",
+    crumb: "Luyện phát âm",
+    menu: "pronounce",
+    render: () => PronouncePage.sessionRender(),
+    mount: (param) => PronouncePage.sessionMount(param),
+  },
+  wordbook: {
+    title: "Bộ từ của tôi",
+    render: () => comingSoon("Bộ từ của tôi", "Những từ bạn đã lưu lại."),
+  },
+  // Hồ sơ người dùng (profile.js)
   profile: {
     title: "Hồ sơ",
-    render() {
-      return `
-        <div class="learn">
-          <h1 class="page-title">Hồ sơ</h1>
-          <p class="page-sub">Thông tin tài khoản học tập của bạn.</p>
-          <div id="profile-content" class="card"></div>
-        </div>
-      `;
-    },
-    mount() { LessonPage.mountProfile(); }
-  }
+    render: () => ProfilePage.render(),
+    mount: () => ProfilePage.mount(),
+  },
 };

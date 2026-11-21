@@ -29,10 +29,11 @@ const PronouncePage = (() => {
     GOOD: 80,                  // >= 80%: tốt (được cộng điểm)
     PASS: 70,                  // < 70%: đưa vào danh sách luyện lại
     POINTS_PER_GOOD: 2,
-    API_ATTEMPTS: "http://127.0.0.1:8000/pronunciation/attempts"
+    API_ATTEMPTS: "http://127.0.0.1:8000/pronunciation/assess",
+    API_REFERENCE: "http://127.0.0.1:8000/pronunciation/words"
   };
 
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SR = typeof window.MediaRecorder !== "undefined";
   const MODES = {
     word: { label: "Đọc từ", q: "Đọc to từ sau" },
     sentence: { label: "Đọc cả câu", q: "Đọc to cả câu sau" }
@@ -220,114 +221,92 @@ const PronouncePage = (() => {
   // 3) BỘ GHI ÂM – giữ tối đa 60 giây (đã lọc từ cấm)
   // ===============================================================
   function createRecorder(h) {
-    let rec = null, active = false, stopping = false, mode = "word";
-    let finals = [], confs = [], firstAlts = null, allowed = new Set(), blocked = 0;
-    let deadline = 0, tickTimer = null, silenceTimer = null;
+    let active = false, stream = null, recorder = null, chunks = [], deadline = 0, tickTimer = null, currentItem = null;
 
-    function build() {
-      rec = new SR();
-      rec.lang = "en-US";
-      rec.continuous = true;      // nghe liên tục, không tự tắt sau câu đầu
-      rec.interimResults = true;  // hiện chữ ngay khi đang nói
-      rec.maxAlternatives = 5;
-
-      rec.onresult = (e) => {
-        if (!active) return;
-        let interim = "";
-        for (let i = e.resultIndex; i < e.results.length; i++) {
-          const r = e.results[i];
-          if (r.isFinal) {
-            // lọc từ cấm ở mọi phương án máy đoán
-            const alts = Array.from(r, (a) => cleanSpeech(a.transcript, allowed));
-            blocked += alts[0].removed;
-            if (alts[0].removed) h.onBlocked();
-            if (!alts[0].text) continue;          // cả đoạn chỉ toàn từ cấm -> bỏ qua, nghe tiếp
-            finals.push(alts[0].text);
-            confs.push(r[0].confidence);
-            if (!firstAlts) firstAlts = alts.map((a) => a.text).filter(Boolean);
-          } else {
-            interim += " " + cleanSpeech(r[0].transcript, allowed).text;
-          }
-        }
-        h.onInterim((finals.join(" ") + " " + interim).replace(/\s+/g, " ").trim());
-
-        if (mode === "word" && finals.length) return finish(); // từ đơn: nghe xong là chấm
-        clearTimeout(silenceTimer);
-        if (finals.length && !interim) silenceTimer = setTimeout(finish, CONFIG.SILENCE_AFTER_SPEECH);
-      };
-
-      rec.onerror = (e) => {
-        if (e.error === "no-speech" || e.error === "aborted") return; // để onend xử lý
-        const msg = {
-          "not-allowed": "Bạn chưa cho phép dùng micro. Bấm biểu tượng ổ khóa trên thanh địa chỉ để cấp quyền.",
-          "service-not-allowed": "Trình duyệt chặn nhận dạng giọng nói. Hãy dùng Chrome hoặc Edge.",
-          "audio-capture": "Không tìm thấy micro trên máy.",
-          "network": "Mất kết nối mạng – nhận dạng giọng nói cần internet."
-        }[e.error] || "Lỗi nhận dạng giọng nói: " + e.error;
-        stopAll();
-        h.onError(msg);
-      };
-
-      rec.onend = () => {
-        if (!active) return;
-        if (finals.length) return finish();
-        if (stopping || Date.now() >= deadline) return timeout();
-        // Chrome tự ngắt khi im lặng vài giây -> bật lại để giữ đủ 60 giây
-        try { rec.start(); } catch (err) { timeout(); }
-      };
-    }
-
-    function tick() {
-      const left = Math.max(0, deadline - Date.now()) / 1000;
-      h.onTick(left);
-      if (left <= 0) finals.length ? finish() : timeout();
-    }
-
-    function stopAll() {
-      active = false;
-      clearInterval(tickTimer);
-      clearTimeout(silenceTimer);
-      if (rec) {
-        rec.onresult = rec.onerror = rec.onend = null;
-        try { rec.abort(); } catch (err) { /* bỏ qua */ }
+    function stopStream() {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+        stream = null;
       }
     }
 
-    function finish() {
-      if (!active) return;
-      const result = {
-        transcript: finals.join(" ").trim(),
-        alternatives: firstAlts || [finals.join(" ")],
-        confidence: confs.length ? confs.reduce((a, b) => a + b, 0) / confs.length : 0,
-        blocked
-      };
-      stopAll();
-      h.onDone(result);
+    async function finishUpload() {
+      if (!active || !currentItem) return;
+      active = false;
+      clearInterval(tickTimer);
+      stopStream();
+      const mime = recorder?.mimeType || "audio/webm";
+      const extension = mime.includes("ogg") ? "ogg" : mime.includes("mp4") ? "m4a" : "webm";
+      const form = new FormData();
+      form.append("word_id", String(currentItem.w.word_id));
+      form.append("lesson_id", String(currentItem.lesson.lessonId));
+      form.append("target_text", currentItem.text);
+      form.append("audio", new Blob(chunks, { type: mime }), `recording.${extension}`);
+      try {
+        const res = await fetch(CONFIG.API_ATTEMPTS, {
+          method: "POST",
+          headers: api().authHeader(),
+          body: form
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.detail || "Không phân tích được bản ghi.");
+        h.onDone({ backend: true, ...data });
+      } catch (error) {
+        h.onError(error.message || "Không gửi được bản ghi để phân tích.");
+      }
     }
 
     function timeout() {
       if (!active) return;
-      stopAll();
-      h.onTimeout(blocked);
+      if (chunks.length) finishUpload();
+      else h.onTimeout(false);
     }
 
     return {
       get active() { return active; },
-      start(m, target) {
+      async start(m, target, item) {
         if (active) return;
-        mode = m; finals = []; confs = []; firstAlts = null; stopping = false;
-        allowed = allowedSet(target); blocked = 0;
-        active = true;
-        deadline = Date.now() + CONFIG.LISTEN_LIMIT * 1000;
-        if ("speechSynthesis" in window) window.speechSynthesis.cancel(); // tắt giọng mẫu để micro không thu lại
-        build();
-        try { rec.start(); } catch (err) { stopAll(); h.onError("Không bật được micro, hãy thử lại."); return; }
-        h.onStart();
-        tick();
-        tickTimer = setInterval(tick, 200);
+        currentItem = item;
+        chunks = [];
+        if (!navigator.mediaDevices?.getUserMedia) {
+          h.onError("Trình duyệt không hỗ trợ truy cập micro.");
+          return;
+        }
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const preferred = ["audio/webm;codecs=opus", "audio/ogg;codecs=opus", "audio/mp4"];
+          const mimeType = preferred.find((type) => MediaRecorder.isTypeSupported(type)) || "";
+          recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+          recorder.ondataavailable = (event) => {
+            if (event.data.size) chunks.push(event.data);
+          };
+          recorder.onstop = finishUpload;
+          recorder.start();
+          active = true;
+          deadline = Date.now() + CONFIG.LISTEN_LIMIT * 1000;
+          h.onStart();
+          tickTimer = setInterval(() => {
+            const left = Math.max(0, deadline - Date.now()) / 1000;
+            h.onTick(left);
+            if (left <= 0) timeout();
+          }, 200);
+        } catch (error) {
+          h.onError(error.message || "Không mở được micro.");
+        }
       },
-      stop() { if (active) { stopping = true; rec.stop(); } }, // bấm micro lần nữa = đã đọc xong
-      cancel() { stopAll(); }
+      stop() {
+        if (!active) return;
+        if (recorder && recorder.state !== "inactive") recorder.stop();
+      },
+      cancel() {
+        active = false;
+        clearInterval(tickTimer);
+        if (recorder && recorder.state !== "inactive") {
+          recorder.onstop = null;
+          recorder.stop();
+        }
+        stopStream();
+      }
     };
   }
 
@@ -339,14 +318,33 @@ const PronouncePage = (() => {
 
   // Giọng đọc mẫu (Text-to-Speech có sẵn trong trình duyệt)
   function speak(text, rate = 0.85) {
-    if (!("speechSynthesis" in window)) return api().toast("Trình duyệt chưa hỗ trợ phát âm.");
     if (recorder?.active) return;
-    window.speechSynthesis.cancel();
+    const current = session?.items?.[session.i];
+    const wordId = current?.w?.word_id;
+    if (wordId) {
+      fetch(`${CONFIG.API_REFERENCE}/${wordId}/reference-audio`, {
+        headers: api().authHeader()
+      })
+        .then((res) => res.ok ? res.blob() : Promise.reject(new Error("Không tải được âm thanh mẫu.")))
+        .then((blob) => {
+          const audio = new Audio(URL.createObjectURL(blob));
+          audio.playbackRate = rate;
+          return audio.play();
+        })
+        .catch(() => {
+          if (!("speechSynthesis" in window)) return api().toast("Trình duyệt chưa hỗ trợ phát âm.");
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = "en-US";
+          u.rate = rate;
+          window.speechSynthesis.speak(u);
+        });
+      return;
+    }
+    if (!("speechSynthesis" in window)) return api().toast("Trình duyệt chưa hỗ trợ phát âm.");
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "en-US";
     u.rate = rate;
-    const voice = window.speechSynthesis.getVoices().find((v) => v.lang === "en-US");
-    if (voice) u.voice = voice;
     window.speechSynthesis.speak(u);
   }
 
@@ -658,9 +656,18 @@ const PronouncePage = (() => {
   function showResult(res) {
     const s = session;
     const it = s.items[s.i];
-    const r = it.mode === "sentence"
-      ? scoreSentence(it.text, res.transcript, res.confidence)
-      : scoreWord(it.text, res.alternatives, res.confidence);
+    const r = res.backend
+      ? {
+          score: res.score,
+          heard: it.text,
+          words: (res.characters || []).map((item) => ({
+            text: item.character,
+            status: item.status === "wrong" ? "wrong" : "ok"
+          }))
+        }
+      : it.mode === "sentence"
+        ? scoreSentence(it.text, res.transcript, res.confidence)
+        : scoreWord(it.text, res.alternatives, res.confidence);
 
     it.tries++;
     it.score = Math.max(it.score ?? 0, r.score);
@@ -705,18 +712,8 @@ const PronouncePage = (() => {
 
   // Gửi kết quả lên backend khi đã tắt DEMO_MODE (bản demo chỉ lưu trên trình duyệt)
   function sendToServer(it, r) {
-    if (api().isDemo) return;
-    fetch(CONFIG.API_ATTEMPTS, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...api().authHeader() },
-      body: JSON.stringify({
-        word: it.w.en,
-        mode: it.mode,
-        target_text: it.text,
-        transcript: r.heard || "",
-        score: r.score
-      })
-    }).catch(() => { /* lỗi mạng: điểm vẫn được lưu trên trình duyệt */ });
+    // Lượt ghi âm thật được gửi multipart ngay trong createRecorder.
+    // Không còn gửi JSON/transcript cũ vì backend hiện phân tích file audio.
   }
 
   function next() {
@@ -840,7 +837,7 @@ const PronouncePage = (() => {
       else if (a === "mic") {
         if (!recorder) return;
         const cur = session.items[session.i];
-        recorder.active ? recorder.stop() : recorder.start(cur.mode, cur.text);
+        recorder.active ? recorder.stop() : recorder.start(cur.mode, cur.text, cur);
       }
       else if (a === "next") next();
       else if (a === "exit") {
