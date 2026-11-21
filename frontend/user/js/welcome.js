@@ -3,28 +3,26 @@ const texts = {
   vi: {
     label: "Tiếng Việt",
     heroTitle: 'Học từ vựng cùng <span class="">Vocabbit</span>, học một chút tiến bộ thật nhiều',
-    start: "Get started",
-    login: "I already have an account",
+    start: "Tạo tài khoản",
+    login: "Đăng nhập",
 
     f1Tag: "Học từ vựng",
-    f1Title: "Học từng từ,<br />hiểu từng nghĩa.",
-    f1Desc: "Mỗi unit giới thiệu từ vựng theo chủ đề quen thuộc, kèm phát âm chuẩn, nghĩa tiếng Việt và câu ví dụ thực tế. Flashcard và bài nối từ giúp bạn nhớ nghĩa nhanh hơn, để hiểu từ chứ không chỉ học thuộc lòng.",
+    f1Title: "Từ vựng theo cấp độ,<br />chủ đề và bài học.",
+    f1Desc: "Duyệt danh sách từ vựng được quản trị viên cập nhật, với nghĩa tiếng Việt, phiên âm và câu ví dụ khi có.",
 
-    f2Tag: "Ôn luyện thông minh",
-    f2Title: "Luyện tập đa dạng,<br />ghi nhớ lâu dài.",
-    f2Desc: "Sau khi học xong, từ vựng được ôn lại qua nhiều dạng bài tập khác nhau. Mỗi dạng luyện một kỹ năng riêng, giúp bạn nhớ từ theo nhiều chiều.",
+    f2Tag: "Kiểm tra vượt cấp",
+    f2Title: "Vượt qua bài kiểm tra,<br />mở khóa cấp độ.",
+    f2Desc: "Bài kiểm tra trắc nghiệm lấy từ vựng trong cấp độ. Khi đạt số câu đúng tối thiểu, bạn mở được cấp độ đó và các cấp độ thấp hơn.",
 
-    f3Tag: "Theo dõi tiến trình",
-    f3Title: "Học mỗi ngày,<br />tiến bộ mỗi ngày.",
-    f3Desc: "Chuỗi ngày học liên tiếp (streak) giúp bạn giữ động lực mỗi ngày. Trang hồ sơ cho bạn thấy số từ đã học, số unit đã hoàn thành và những từ cần ôn lại, để biết rõ mình đang tiến bộ ra sao.",
+    f3Tag: "Nghe từ vựng",
+    f3Title: "Xem phiên âm,<br />nghe phát âm.",
+    f3Desc: "Mỗi từ có thể hiển thị phiên âm và ví dụ. Nút phát âm sử dụng giọng đọc có sẵn trên trình duyệt.",
 
     ctaTitle: "Thêm một từ mới, thêm một bước tiến.",
     ctaSub: "Tạo tài khoản miễn phí và bắt đầu bài học đầu tiên cùng Vocabbit.",
 
     footDesc: "Web học từ vựng tiếng Anh nhẹ nhàng, thú vị cho người mới bắt đầu. Học một chút mỗi ngày cùng bạn thỏ Vocabbit.",
-    colLearn: "Học tập", lLessons: "Bài học từ vựng", lReview: "Ôn luyện", lWrite: "Luyện viết từ", lProgress: "Theo dõi tiến độ",
-    colHelp: "Hỗ trợ", lFaq: "Câu hỏi thường gặp", lGuide: "Hướng dẫn sử dụng", lContact: "Liên hệ góp ý",
-    colLegal: "Pháp lý", lTerms: "Điều khoản sử dụng", lPrivacy: "Chính sách quyền riêng tư", lCookie: "Chính sách cookie"
+    colLearn: "Học tập", lLessons: "Bài học từ vựng"
   },
   en: {
     label: "English",
@@ -33,24 +31,22 @@ const texts = {
     login: "I already have an account",
 
     f1Tag: "Vocabulary",
-    f1Title: "Learn every word,<br />understand every meaning.",
-    f1Desc: "Each unit introduces words by familiar topics, with clear pronunciation, Vietnamese meanings and real-life example sentences. Flashcards and word-matching help you remember meanings faster, so you truly understand words instead of just memorizing them.",
+    f1Title: "Vocabulary by level,<br />topic and lesson.",
+    f1Desc: "Browse administrator-managed vocabulary with Vietnamese meanings, pronunciation and example sentences when available.",
 
-    f2Tag: "Smart review",
-    f2Title: "Varied practice,<br />lasting memory.",
-    f2Desc: "After each lesson, your words are reviewed through several types of exercises. Each type trains a different skill, helping you remember words from many angles.",
+    f2Tag: "Placement tests",
+    f2Title: "Pass a test,<br />unlock a level.",
+    f2Desc: "Multiple-choice vocabulary questions come from the selected level. Passing unlocks that level and all lower levels.",
 
-    f3Tag: "Track progress",
-    f3Title: "Learn every day,<br />grow every day.",
-    f3Desc: "Your daily streak keeps you motivated every day. Your profile shows how many words you've learned, how many units you've completed and which words need review, so you can clearly see your progress.",
+    f3Tag: "Listen to vocabulary",
+    f3Title: "Read pronunciation,<br />hear each word.",
+    f3Desc: "Words can include pronunciation and examples. The play button uses speech available in your browser.",
 
     ctaTitle: "One new word, one step forward.",
     ctaSub: "Create a free account and start your first lesson with Vocabbit.",
 
     footDesc: "A gentle, fun way for beginners to learn English vocabulary. Learn a little every day with Vocabbit the bunny.",
-    colLearn: "Learn", lLessons: "Vocabulary lessons", lReview: "Review", lWrite: "Spelling practice", lProgress: "Progress",
-    colHelp: "Support", lFaq: "FAQ", lGuide: "User guide", lContact: "Feedback",
-    colLegal: "Legal", lTerms: "Terms of use", lPrivacy: "Privacy policy", lCookie: "Cookie policy"
+    colLearn: "Learn", lLessons: "Vocabulary lessons"
   }
 };
 
