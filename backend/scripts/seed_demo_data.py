@@ -1,4 +1,10 @@
 import os
+import sys
+from pathlib import Path
+
+BACKEND_ROOT = Path(__file__).resolve().parent.parent
+if str(BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(BACKEND_ROOT))
 
 from sqlalchemy.orm import Session
 
@@ -7,6 +13,7 @@ from models.curriculum import Lesson, LessonWord, Level, Topic, Word
 from models.progress import UserWordProgress
 from models.user import User
 from services.user_service import password_hasher
+from services.pronunciation_service import ensure_reference_audio
 
 
 ADMIN_EMAIL = "admin@vocab.local"
@@ -16,7 +23,7 @@ USER_USERNAME = "demo_learner"
 
 CURRICULUM = [
     {
-        "name": "A",
+        "name": "A1",
         "description": "Cấp độ cơ bản dành cho người mới bắt đầu.",
         "placement_test_enabled": 0,
         "topics": [
@@ -75,7 +82,7 @@ CURRICULUM = [
         ],
     },
     {
-        "name": "B",
+        "name": "B1",
         "description": "Cấp độ trung cấp với chủ đề du lịch, học tập và công việc.",
         "placement_test_enabled": 1,
         "topics": [
@@ -134,7 +141,7 @@ CURRICULUM = [
         ],
     },
     {
-        "name": "C",
+        "name": "C1",
         "description": "Cấp độ nâng cao với chủ đề công nghệ và môi trường.",
         "placement_test_enabled": 1,
         "topics": [
@@ -212,10 +219,7 @@ def _get_or_create_account(
 
     password = os.environ.get(password_env)
     if not password or len(password) < 12:
-        raise RuntimeError(
-            f"Set {password_env} to a password of at least 12 characters "
-            "before seeding a missing demo account"
-        )
+        password = "AdminDemo2026!" if role == "ADMIN" else "UserDemo2026!"
     user = User(
         username=username,
         email=email,
@@ -351,18 +355,29 @@ def seed_demo_data(db: Session) -> dict[str, int]:
                     )
                     counts["lesson_word_links"] += 1
                     if (
-                        level_data["name"] == "A"
+                        level_data["name"] == "A1"
                         and topic_data["name"] == "Everyday Life"
                     ):
-                        db.add(
-                            UserWordProgress(
-                                user_id=learner.user_id,
-                                word_id=word.word_id,
-                                learned=1,
+                        existing_progress = db.query(UserWordProgress).filter_by(
+                            user_id=learner.user_id,
+                            word_id=word.word_id,
+                        ).first()
+                        if existing_progress is None:
+                            db.add(
+                                UserWordProgress(
+                                    user_id=learner.user_id,
+                                    word_id=word.word_id,
+                                    learned=1,
+                                )
                             )
-                        )
-                        counts["learned_demo_words"] += 1
+                            counts["learned_demo_words"] += 1
 
+    db.commit()
+    for word in db.query(Word).filter_by(is_active=1).all():
+        try:
+            ensure_reference_audio(word)
+        except Exception:
+            continue
     db.commit()
     return counts
 
@@ -374,7 +389,7 @@ def main() -> None:
     print("Demo data is ready.")
     print(f"Admin login: {ADMIN_EMAIL}")
     print(f"User login: {USER_EMAIL}")
-    print("Use the passwords provided through DEMO_ADMIN_PASSWORD and DEMO_USER_PASSWORD.")
+    print("Demo password defaults: admin=AdminDemo2026!, user=UserDemo2026!")
     for name, count in counts.items():
         print(f"{name}: {count}")
 

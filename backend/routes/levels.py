@@ -25,6 +25,7 @@ from services.placement_test_service import (
     get_level_words,
     level_is_unlocked,
 )
+from services.pronunciation_service import ensure_reference_audio
 
 
 router = APIRouter(tags=["Levels"])
@@ -366,6 +367,7 @@ def admin_list_words(
             "pronunciation": word.pronunciation,
             "part_of_speech": word.part_of_speech,
             "example": word.example,
+            "ipa": word.ipa,
             "lesson_id": lesson_id,
         }
         for word, lesson_id in rows
@@ -387,6 +389,7 @@ def admin_create_word(
         pronunciation=data.pronunciation,
         part_of_speech=data.part_of_speech,
         example=data.example,
+        ipa=data.ipa,
         is_active=1,
     )
     db.add(word)
@@ -395,6 +398,11 @@ def admin_create_word(
         db.add(LessonWord(lesson_id=lesson.lesson_id, word_id=word.word_id, display_order=1))
         db.commit()
         db.refresh(word)
+        try:
+            ensure_reference_audio(word)
+            db.commit()
+        except Exception:
+            db.rollback()
     except Exception:
         db.rollback()
         raise
@@ -405,6 +413,7 @@ def admin_create_word(
         "pronunciation": word.pronunciation,
         "part_of_speech": word.part_of_speech,
         "example": word.example,
+        "ipa": word.ipa,
         "lesson_id": lesson.lesson_id,
     }
 
@@ -431,6 +440,11 @@ def admin_update_word(
         setattr(word, key, value)
     db.commit()
     db.refresh(word)
+    try:
+        ensure_reference_audio(word, force=bool(changes.get("word")))
+        db.commit()
+    except Exception:
+        db.rollback()
     assigned = db.query(LessonWord.lesson_id).filter_by(word_id=word_id).first()
     return {
         "word_id": word.word_id,
@@ -439,6 +453,7 @@ def admin_update_word(
         "pronunciation": word.pronunciation,
         "part_of_speech": word.part_of_speech,
         "example": word.example,
+        "ipa": word.ipa,
         "lesson_id": assigned[0] if assigned else lesson_id,
     }
 

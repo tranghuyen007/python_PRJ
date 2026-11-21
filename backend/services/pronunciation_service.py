@@ -1,6 +1,7 @@
 import math
 import subprocess
 import tempfile
+import asyncio
 from pathlib import Path
 from typing import Iterable
 
@@ -217,10 +218,12 @@ def assess_recording(
     }
 
 
-async def get_reference_audio(word: Word) -> Path:
+async def get_reference_audio(word: Word, force: bool = False) -> Path:
     cache_dir = _CACHE_DIR
     cache_dir.mkdir(parents=True, exist_ok=True)
     cache_path = cache_dir / f"word_{word.word_id}.mp3"
+    if force and cache_path.exists():
+        cache_path.unlink()
     if not cache_path.exists():
         communicate = edge_tts.Communicate(
             text=word.word,
@@ -229,3 +232,8 @@ async def get_reference_audio(word: Word) -> Path:
         await communicate.save(str(cache_path))
     word.reference_audio_path = str(cache_path)
     return cache_path
+
+
+def ensure_reference_audio(word: Word, force: bool = False) -> Path:
+    """Tạo file mẫu đồng bộ cho luồng admin/create/update."""
+    return asyncio.run(get_reference_audio(word, force=force))

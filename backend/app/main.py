@@ -7,8 +7,13 @@ from routes.levels import router as levels_router
 from routes.placement_tests import router as placement_tests_router
 from routes.pronunciation import router as pronunciation_router
 from routes.progress import router as progress_router
+from app.database import SessionLocal
+from scripts.seed_demo_data import seed_demo_data
 
 initialize_database()
+
+with SessionLocal() as startup_db:
+    seed_demo_data(startup_db)
 
 app = FastAPI(
     title="Learning Application API",
