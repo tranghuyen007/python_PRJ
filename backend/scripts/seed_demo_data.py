@@ -373,12 +373,6 @@ def seed_demo_data(db: Session) -> dict[str, int]:
                             counts["learned_demo_words"] += 1
 
     db.commit()
-    for word in db.query(Word).filter_by(is_active=1).all():
-        try:
-            ensure_reference_audio(word)
-        except Exception:
-            continue
-    db.commit()
     return counts
 
 

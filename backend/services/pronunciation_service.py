@@ -38,27 +38,36 @@ def decode_audio(audio_bytes: bytes, extension: str = "webm") -> np.ndarray:
     try:
         import imageio_ffmpeg
 
-        result = subprocess.run(
+        ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
+        attempts = (
             [
-                imageio_ffmpeg.get_ffmpeg_exe(),
-                "-v",
-                "error",
-                "-y",
-                "-i",
-                source_path,
-                "-vn",
-                "-ac",
-                "1",
-                "-ar",
-                "16000",
-                "-f",
-                "wav",
-                wav_path,
+                ffmpeg, "-v", "error", "-y",
+                "-i", source_path,
+                "-vn", "-ac", "1", "-ar", "16000",
+                "-f", "wav", wav_path,
             ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
+            [
+                ffmpeg, "-v", "error", "-y",
+                "-fflags", "+genpts",
+                "-i", source_path,
+                "-vn", "-ac", "1", "-ar", "16000",
+                "-f", "wav", wav_path,
+            ],
         )
+        result = None
+        detail = ""
+        for command in attempts:
+            if Path(wav_path).exists():
+                Path(wav_path).unlink()
+            result = subprocess.run(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            if result.returncode == 0 and Path(wav_path).is_file() and Path(wav_path).stat().st_size > 44:
+                break
+            detail = result.stderr.decode("utf-8", "replace").strip()
         if result.returncode != 0:
             detail = result.stderr.decode("utf-8", "replace").strip()
             raise ValueError(

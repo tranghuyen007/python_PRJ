@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from app.database import initialize_database
 from routes.user import router as user_router
 from routes.auth import router as auth_router
@@ -38,3 +40,7 @@ app.include_router(levels_router)
 app.include_router(placement_tests_router)
 app.include_router(pronunciation_router)
 app.include_router(progress_router)
+
+frontend_dir = Path(__file__).resolve().parents[2] / "frontend"
+if frontend_dir.is_dir():
+    app.mount("/frontend", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
