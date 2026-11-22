@@ -27,44 +27,28 @@ function getAdminToken() {
 // Hàm fetchAPI chung tự động gửi Bearer Token
 async function fetchAPI(endpoint, method = "GET", bodyData = null) {
     const token = getAdminToken();
-
-    // Nếu chưa đăng nhập -> Đuổi về trang login
     if (!token) {
-        alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
+        alert("Phi?n ??ng nh?p ?? h?t h?n. Vui l?ng ??ng nh?p l?i!");
         window.location.replace("login.html");
-        return;
+        return null;
     }
 
-    const headers = {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-    };
-
+    const headers = { Authorization: `Bearer ${token}` };
+    if (bodyData !== null) headers["Content-Type"] = "application/json";
     const config = { method, headers };
-    if (bodyData) {
-        config.body = JSON.stringify(bodyData);
+    if (bodyData !== null) config.body = JSON.stringify(bodyData);
+
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+    if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem(STORAGE_KEY_SESSION);
+        sessionStorage.removeItem(STORAGE_KEY_SESSION);
+        window.location.replace("login.html");
+        throw new Error("Phi?n ??ng nh?p qu?n tr? ?? h?t h?n.");
     }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-
-        // Token sai hoặc hết hạn (401 / 403)
-        if (response.status === 401 || response.status === 403) {
-            localStorage.removeItem(STORAGE_KEY_SESSION);
-            sessionStorage.removeItem(STORAGE_KEY_SESSION);
-            window.location.replace("login.html");
-            return;
-        }
-
-        const data = await response.json();
-        if (!response.ok) {
-            throw new Error(data.detail || "Lỗi thao tác API");
-        }
-        return data;
-    } catch (error) {
-        console.error(`Lỗi API [${method} ${endpoint}]:`, error);
-        throw error;
-    }
+    if (response.status === 204) return null;
+    const data = await response.json().catch(() => null);
+    if (!response.ok) throw new Error(data?.detail || `L?i thao t?c API (${response.status})`);
+    return data;
 }
 
 /* ================================================================
@@ -73,25 +57,17 @@ async function fetchAPI(endpoint, method = "GET", bodyData = null) {
 (function guardAdminPage() {
     "use strict";
 
-    const sessionLocal = localStorage.getItem(STORAGE_KEY_SESSION);
-    const sessionSession = sessionStorage.getItem(STORAGE_KEY_SESSION);
-    const raw = sessionLocal || sessionSession;
-
-    // Nếu chưa đăng nhập thì chuyển về trang login
+    const raw = localStorage.getItem(STORAGE_KEY_SESSION) || sessionStorage.getItem(STORAGE_KEY_SESSION);
     if (!raw) {
         window.location.replace("login.html");
         return;
     }
-
     try {
-        const user = JSON.parse(raw);
-        if (!user.token) throw new Error("Missing token");
+        const session = JSON.parse(raw);
+        if (!session.token) throw new Error("Missing token");
         const adminLabel = document.getElementById("admin-label");
-        if (adminLabel && user) {
-            adminLabel.textContent = user.name || "Quản trị viên";
-        }
         fetch(`${API_BASE_URL}/auth/me`, {
-            headers: { Authorization: `Bearer ${user.token}` }
+            headers: { Authorization: `Bearer ${session.token}` }
         }).then(async (res) => {
             const profile = await res.json().catch(() => ({}));
             if (!res.ok || profile.role !== "ADMIN") {
@@ -100,7 +76,7 @@ async function fetchAPI(endpoint, method = "GET", bodyData = null) {
                 window.location.replace("login.html");
                 return;
             }
-            if (adminLabel) adminLabel.textContent = profile.full_name || "Quản trị viên";
+            if (adminLabel) adminLabel.textContent = profile.full_name || "Qu?n tr? vi?n";
         }).catch(() => {
             localStorage.removeItem(STORAGE_KEY_SESSION);
             sessionStorage.removeItem(STORAGE_KEY_SESSION);
@@ -152,14 +128,19 @@ async function loadAllData() {
         const rawWords = await fetchAPI("/admin/words") || [];
 
         // Chuẩn hóa danh sách Cấp độ
-        levels = rawLevels.map(l => ({
+        levels = rawLevels.filter(l => l.is_active !== false).map(l => ({
             id: l.level_id || l.id,
             name: l.name,
-            description: l.description || ""
+            description: l.description || "",
+            display_order: l.display_order || 1,
+            placement_test_enabled: l.placement_test_enabled ?? 0,
+            placement_test_question_count: l.placement_test_question_count ?? 10,
+            placement_test_passing_score: l.placement_test_passing_score ?? 7,
+            is_active: l.is_active ?? 1
         }));
 
         // Chuẩn hóa danh sách Chủ đề
-        topics = rawTopics.map(t => {
+        topics = rawTopics.filter(t => t.is_active !== 0).map(t => {
             const parentLevel = levels.find(l => l.id === t.level_id);
             return {
                 id: t.topic_id || t.id,
@@ -168,12 +149,13 @@ async function loadAllData() {
                 level_id: t.level_id,
                 description: t.description || "",
                 is_active: t.is_active ?? 1,
-                display_order: t.display_order || t.order || 1
+                display_order: t.display_order || t.order || 1,
+                quick_review_limit: t.quick_review_limit ?? 15
             };
         });
 
         // 2. Lấy toàn bộ bài học từ endpoint admin hiện có
-        lessons = rawLessons.map(l => ({
+        lessons = rawLessons.filter(l => l.is_active !== 0).map(l => ({
             id: l.lesson_id || l.id,
             name: l.name,
             topicId: l.topic_id,
@@ -185,14 +167,15 @@ async function loadAllData() {
         }));
 
         // 3. Chuẩn hóa danh sách Từ vựng
-        vocabularies = rawWords.map(w => ({
+        vocabularies = rawWords.filter(w => w.is_active !== 0).map(w => ({
             id: w.word_id || w.id,
             word: w.word,
             meaning: w.meaning,
             pronunciation: w.pronunciation || "",
             type: w.part_of_speech || w.type || "Khác",
             lessonId: w.lesson_id || w.lessonId,
-            example: w.example || ""
+            example: w.example || "",
+            ipa: w.ipa || ""
         }));
 
         // 4. Vẽ lại toàn bộ giao diện
@@ -296,6 +279,9 @@ const levelFormTitle = document.getElementById("level-form-title");
 
 const levelNameInput = document.getElementById("level-name");
 const levelDescriptionInput = document.getElementById("level-description");
+const levelPlacementEnabledInput = document.getElementById("level-placement-enabled");
+const levelPlacementCountInput = document.getElementById("level-placement-count");
+const levelPlacementPassingInput = document.getElementById("level-placement-passing");
 
 const addLevelButton = document.getElementById("btn-add-level");
 const cancelLevelButton = document.getElementById("btn-cancel-level");
@@ -316,6 +302,11 @@ function renderLevels() {
         const descriptionCell = document.createElement("td");
         descriptionCell.textContent = level.description || "Chưa có";
 
+        const placementCell = document.createElement("td");
+        placementCell.textContent = level.placement_test_enabled
+            ? `Bật · ${level.placement_test_passing_score ?? 7}/${level.placement_test_question_count ?? 10} câu`
+            : "Không sử dụng";
+
         const actionCell = document.createElement("td");
 
         const editButton = document.createElement("button");
@@ -333,7 +324,7 @@ function renderLevels() {
         });
 
         actionCell.append(editButton, deleteButton);
-        row.append(idCell, nameCell, descriptionCell, actionCell);
+        row.append(idCell, nameCell, descriptionCell, placementCell, actionCell);
         levelList.appendChild(row);
     });
 }
@@ -370,9 +361,15 @@ function openLevelForm(level = null) {
         levelFormTitle.textContent = "Sửa cấp độ";
         levelNameInput.value = level.name;
         levelDescriptionInput.value = level.description;
+        levelPlacementEnabledInput.value = level.placement_test_enabled ? "1" : "0";
+        levelPlacementCountInput.value = String(level.placement_test_question_count ?? 10);
+        levelPlacementPassingInput.value = String(level.placement_test_passing_score ?? 7);
         editingLevelId = level.id;
     } else {
         levelFormTitle.textContent = "Thêm cấp độ";
+        levelPlacementEnabledInput.value = "0";
+        levelPlacementCountInput.value = "10";
+        levelPlacementPassingInput.value = "7";
         editingLevelId = null;
     }
 
@@ -397,17 +394,7 @@ function deleteLevel(id) {
 
     const confirmed = confirm("Bạn có chắc muốn xóa cấp độ " + level.name + "?");
     if (!confirmed) return;
-
-    levels = levels.filter(item => item.id !== id);
-
-    renderLevels();
-    updateTopicLevelOptions();
-    renderTopics();
-    renderLessonTopicOptions();
-    renderLessons();
-    renderVocabularyLessonOptions();
-    renderVocabularies();
-    renderDashboardStats();
+    fetchAPI(`/levels/${id}`, "DELETE").then(() => loadAllData()).catch((error) => alert(error.message));
 }
 
 addLevelButton.addEventListener("click", function () {
@@ -420,14 +407,26 @@ cancelLevelButton.addEventListener("click", function () {
     editingLevelId = null;
 });
 
-levelForm.addEventListener("submit", function (event) {
+levelForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const name = levelNameInput.value.trim().toUpperCase();
     const description = levelDescriptionInput.value.trim();
+    const placementEnabled = levelPlacementEnabledInput.value === "1";
+    const placementQuestionCount = Number(levelPlacementCountInput.value);
+    const placementPassingScore = Number(levelPlacementPassingInput.value);
 
     if (!name) {
         alert("Vui lòng nhập tên cấp độ.");
+        return;
+    }
+    if (!Number.isInteger(placementQuestionCount) || placementQuestionCount < 1 ||
+        !Number.isInteger(placementPassingScore) || placementPassingScore < 1) {
+        alert("Số câu kiểm tra và số câu cần đạt phải là số nguyên dương.");
+        return;
+    }
+    if (placementPassingScore > placementQuestionCount) {
+        alert("Số câu cần đạt không được lớn hơn tổng số câu kiểm tra.");
         return;
     }
 
@@ -440,35 +439,29 @@ levelForm.addEventListener("submit", function (event) {
         return;
     }
 
-    if (editingLevelId !== null) {
-        const level = levels.find(item => item.id === editingLevelId);
-        if (level) {
-            const oldName = level.name;
-            level.name = name;
-            level.description = description;
-
-            // Cập nhật cấp độ của các chủ đề liên quan
-            topics.forEach(function (topic) {
-                if (topic.level === oldName) topic.level = name;
-            });
+    const current = editingLevelId !== null ? levels.find(item => item.id === editingLevelId) : null;
+    const payload = {
+        name,
+        description: description || null,
+        display_order: current?.display_order || (levels.length ? Math.max(...levels.map(level => level.display_order || 1)) + 1 : 1),
+        placement_test_enabled: placementEnabled,
+        placement_test_question_count: placementQuestionCount,
+        placement_test_passing_score: placementPassingScore,
+        is_active: current?.is_active ?? true
+    };
+    try {
+        if (editingLevelId !== null) {
+            await fetchAPI(`/levels/${editingLevelId}`, "PATCH", payload);
+        } else {
+            await fetchAPI("/levels", "POST", payload);
         }
-    } else {
-        const newId = levels.length > 0 ? Math.max(...levels.map(item => item.id)) + 1 : 1;
-        levels.push({ id: newId, name: name, description: description });
+        await loadAllData();
+        levelFormContainer.classList.add("hidden");
+        levelForm.reset();
+        editingLevelId = null;
+    } catch (error) {
+        alert(error.message);
     }
-
-    renderLevels();
-    updateTopicLevelOptions();
-    renderTopics();
-    renderLessonTopicOptions();
-    renderLessons();
-    renderVocabularyLessonOptions();
-    renderVocabularies();
-    renderDashboardStats();
-
-    levelFormContainer.classList.add("hidden");
-    levelForm.reset();
-    editingLevelId = null;
 });
 
 /* ================================================================
@@ -681,14 +674,7 @@ function deleteTopic(id) {
     const confirmed = confirm("Bạn có chắc muốn xóa chủ đề " + topic.name + "?");
     if (!confirmed) return;
 
-    topics = topics.filter(item => item.id !== id);
-
-    renderTopics();
-    renderLessonTopicOptions();
-    renderLessons();
-    renderVocabularyLessonOptions();
-    renderVocabularies();
-    renderDashboardStats();
+    fetchAPI(`/topics/${id}`, "DELETE").then(() => loadAllData()).catch((error) => alert(error.message));
 }
 
 addTopicButton.addEventListener("click", function () {
@@ -701,7 +687,7 @@ cancelTopicButton.addEventListener("click", function () {
     editingTopicId = null;
 });
 
-topicForm.addEventListener("submit", function (event) {
+topicForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const name = topicNameInput.value.trim();
@@ -724,37 +710,34 @@ topicForm.addEventListener("submit", function (event) {
         return;
     }
 
-    if (editingTopicId !== null) {
-        const topic = topics.find(item => item.id === editingTopicId);
-        if (topic) {
-            topic.name = name;
-            topic.level = level;
-            topic.description = description;
-            topic.is_active = is_active;
-            topic.display_order = display_order;
-        }
-    } else {
-        const newId = topics.length > 0 ? Math.max(...topics.map(item => item.id)) + 1 : 1;
-        topics.push({
-            id: newId,
-            name: name,
-            level: level,
-            description: description,
-            is_active: is_active,
-            display_order: display_order
-        });
+    const levelObject = levels.find(item => item.name === level);
+    if (!levelObject) {
+        alert("Cấp độ không hợp lệ.");
+        return;
     }
-
-    renderTopics();
-    renderLessonTopicOptions();
-    renderLessons();
-    renderVocabularyLessonOptions();
-    renderVocabularies();
-    renderDashboardStats();
-
-    topicFormContainer.classList.add("hidden");
-    topicForm.reset();
-    editingTopicId = null;
+    const payload = {
+        level_id: levelObject.id,
+        name,
+        description: description || null,
+        display_order,
+        quick_review_limit: editingTopicId !== null
+            ? (topics.find(item => item.id === editingTopicId)?.quick_review_limit ?? 15)
+            : 15,
+        is_active: is_active === 1
+    };
+    try {
+        if (editingTopicId !== null) {
+            await fetchAPI(`/topics/${editingTopicId}`, "PATCH", payload);
+        } else {
+            await fetchAPI("/topics", "POST", payload);
+        }
+        await loadAllData();
+        topicFormContainer.classList.add("hidden");
+        topicForm.reset();
+        editingTopicId = null;
+    } catch (error) {
+        alert(error.message);
+    }
 });
 
 topicSearch.addEventListener("input", renderTopics);
@@ -1209,12 +1192,7 @@ function deleteLesson(id) {
     const confirmed = confirm("Bạn có chắc muốn xóa bài học " + lesson.name + "?");
     if (!confirmed) return;
 
-    lessons = lessons.filter(item => item.id !== id);
-
-    renderLessons();
-    renderVocabularyLessonOptions();
-    renderVocabularies();
-    renderDashboardStats();
+    fetchAPI(`/lessons/${id}`, "DELETE").then(() => loadAllData()).catch((error) => alert(error.message));
 }
 
 addLessonButton.addEventListener("click", function () {
@@ -1227,7 +1205,7 @@ cancelLessonButton.addEventListener("click", function () {
     editingLessonId = null;
 });
 
-lessonForm.addEventListener("submit", function (event) {
+lessonForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const name = lessonNameInput.value.trim();
@@ -1256,35 +1234,29 @@ lessonForm.addEventListener("submit", function (event) {
         return;
     }
 
-    if (editingLessonId !== null) {
-        const lesson = lessons.find(item => item.id === editingLessonId);
-        if (lesson) {
-            lesson.name = name;
-            lesson.topicId = topicId;
-            lesson.order = order;
-            lesson.description = description;
-            lesson.is_active = is_active;
+    const current = editingLessonId !== null ? lessons.find(item => item.id === editingLessonId) : null;
+    const payload = {
+        topic_id: topicId,
+        name,
+        description: description || null,
+        display_order: order,
+        is_active: is_active === 1,
+        pronunciation_passing_score: current?.pronunciationPassingScore ?? 70,
+        pronunciation_max_attempts: current?.pronunciationMaxAttempts ?? 7
+    };
+    try {
+        if (editingLessonId !== null) {
+            await fetchAPI(`/lessons/${editingLessonId}`, "PATCH", payload);
+        } else {
+            await fetchAPI("/lessons", "POST", payload);
         }
-    } else {
-        const newId = lessons.length > 0 ? Math.max(...lessons.map(item => item.id)) + 1 : 1;
-        lessons.push({
-            id: newId,
-            name: name,
-            topicId: topicId,
-            order: order,
-            description: description,
-            is_active: is_active
-        });
+        await loadAllData();
+        lessonFormContainer.classList.add("hidden");
+        lessonForm.reset();
+        editingLessonId = null;
+    } catch (error) {
+        alert(error.message);
     }
-
-    renderLessons();
-    renderVocabularyLessonOptions();
-    renderVocabularies();
-    renderDashboardStats();
-
-    lessonFormContainer.classList.add("hidden");
-    lessonForm.reset();
-    editingLessonId = null;
 });
 
 lessonSearch.addEventListener("input", renderLessons);
@@ -1504,11 +1476,7 @@ function deleteVocabulary(id) {
     const confirmed = confirm("Bạn có chắc muốn xóa từ vựng " + vocabulary.word + "?");
     if (!confirmed) return;
 
-    vocabularies = vocabularies.filter(item => item.id !== id);
-
-    renderVocabularies();
-    renderLessons();
-    renderDashboardStats();
+    fetchAPI(`/words/${id}`, "DELETE").then(() => loadAllData()).catch((error) => alert(error.message));
 }
 
 addVocabularyButton.addEventListener("click", function () {
@@ -1521,7 +1489,7 @@ cancelVocabularyButton.addEventListener("click", function () {
     editingVocabularyId = null;
 });
 
-vocabularyForm.addEventListener("submit", function (event) {
+vocabularyForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const word = vocabularyWordInput.value.trim();
@@ -1553,36 +1521,27 @@ vocabularyForm.addEventListener("submit", function (event) {
         return;
     }
 
-    if (editingVocabularyId !== null) {
-        const vocabulary = vocabularies.find(item => item.id === editingVocabularyId);
-        if (vocabulary) {
-            vocabulary.word = word;
-            vocabulary.meaning = meaning;
-            vocabulary.pronunciation = pronunciation;
-            vocabulary.type = type;
-            vocabulary.lessonId = lessonId;
-            vocabulary.example = example;
+    const payload = {
+        lesson_id: lessonId,
+        word,
+        meaning,
+        pronunciation: pronunciation || null,
+        part_of_speech: type,
+        example: example || null
+    };
+    try {
+        if (editingVocabularyId !== null) {
+            await fetchAPI(`/words/${editingVocabularyId}`, "PATCH", payload);
+        } else {
+            await fetchAPI("/words", "POST", payload);
         }
-    } else {
-        const newId = vocabularies.length > 0 ? Math.max(...vocabularies.map(item => item.id)) + 1 : 1;
-        vocabularies.push({
-            id: newId,
-            word: word,
-            meaning: meaning,
-            pronunciation: pronunciation,
-            type: type,
-            lessonId: lessonId,
-            example: example
-        });
+        await loadAllData();
+        vocabularyFormContainer.classList.add("hidden");
+        vocabularyForm.reset();
+        editingVocabularyId = null;
+    } catch (error) {
+        alert(error.message);
     }
-
-    renderVocabularies();
-    renderLessons();
-    renderDashboardStats();
-
-    vocabularyFormContainer.classList.add("hidden");
-    vocabularyForm.reset();
-    editingVocabularyId = null;
 });
 
 vocabularySearch.addEventListener("input", renderVocabularies);

@@ -1194,10 +1194,12 @@ th {
 ================================================================ */
 
 .pronun-cell {
-    display: flex;
-    align-items: center;
-    gap: 6px;
     white-space: nowrap;
+}
+
+.pronun-cell .btn-speak {
+    margin-left: 6px;
+    vertical-align: middle;
 }
 
 .btn-speak {

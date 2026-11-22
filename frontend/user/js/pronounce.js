@@ -235,6 +235,10 @@ const PronouncePage = (() => {
       active = false;
       clearInterval(tickTimer);
       stopStream();
+      if (!chunks.length) {
+        h.onTimeout(false);
+        return;
+      }
       const mime = recorder?.mimeType || "audio/webm";
       const extension = mime.includes("ogg") ? "ogg" : mime.includes("mp4") ? "m4a" : "webm";
       const form = new FormData();
@@ -258,8 +262,7 @@ const PronouncePage = (() => {
 
     function timeout() {
       if (!active) return;
-      if (chunks.length) finishUpload();
-      else h.onTimeout(false);
+      if (recorder && recorder.state !== "inactive") recorder.stop();
     }
 
     return {
@@ -281,7 +284,7 @@ const PronouncePage = (() => {
             if (event.data.size) chunks.push(event.data);
           };
           recorder.onstop = finishUpload;
-          recorder.start();
+          recorder.start(250);
           active = true;
           deadline = Date.now() + CONFIG.LISTEN_LIMIT * 1000;
           h.onStart();

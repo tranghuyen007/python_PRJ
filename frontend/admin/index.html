@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin | English Vocabulary</title>
 
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css?v=table-alignment">
 </head>
 
 <body>
@@ -111,6 +111,7 @@
                                 <th>ID</th>
                                 <th>Tên cấp độ</th>
                                 <th>Mô tả</th>
+                                <th>Kiểm tra vượt cấp</th>
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
@@ -129,6 +130,15 @@
                         <input type="text" id="level-name" placeholder="Ví dụ: A1" required>
                         <label for="level-description">Mô tả</label>
                         <textarea id="level-description" placeholder="Mô tả cấp độ tiếng Anh..."></textarea>
+                        <label for="level-placement-enabled">Bài kiểm tra vượt cấp</label>
+                        <select id="level-placement-enabled">
+                            <option value="0">Không sử dụng</option>
+                            <option value="1">Sử dụng</option>
+                        </select>
+                        <label for="level-placement-count">Số câu kiểm tra</label>
+                        <input type="number" id="level-placement-count" min="1" max="200" value="10" required>
+                        <label for="level-placement-passing">Số câu cần đạt</label>
+                        <input type="number" id="level-placement-passing" min="1" max="200" value="7" required>
 
                         <div class="form-actions">
                             <button type="submit" class="btn-primary">
@@ -366,7 +376,7 @@
 
     </div>
 
-    <script src="js/admin.js"></script>
+    <script src="js/admin.js?v=crud-final"></script>
 </body>
 
 </html>
