@@ -396,7 +396,7 @@ const StudyPage = (() => {
         </div>`;
     } else if (allDone) {
       actions = `
-        <span class="st-muted">Đã nối đúng cả ${total} từ · đúng từ ${api().config.LESSON_PASS * 100}% bài kiểm tra để mở unit tiếp theo</span>
+        <span class="st-muted">Đã nối đúng cả ${total} từ </span>
         <div class="m-btns">
           <button type="button" class="btn btn-ghost btn-sm" data-st="replay">Luyện ghép lại</button>
           <button type="button" class="btn btn-primary" data-st="quiz">Làm bài kiểm tra unit</button>

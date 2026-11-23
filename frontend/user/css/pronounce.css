@@ -43,6 +43,14 @@
 }
 @keyframes pr-beat { 50% { transform: scale(1.15); } }
 
+/* vòng sáng theo âm lượng giọng nói (pronounce.js đặt --lvl từ 0 đến 1) */
+.pronounce .pr-mic::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  box-shadow: 0 0 0 calc(var(--lvl, 0) * 18px) rgba(230, 72, 77, .25);
+  transition: box-shadow .08s linear;
+}
+.pronounce .pr-mic.speaking::after { box-shadow: 0 0 0 calc(var(--lvl, 0) * 18px + 4px) rgba(230, 72, 77, .35); }
+
 .pronounce .pr-hint { margin-top: 16px; font-weight: 700; color: var(--gray); }
 .pronounce .pr-hint.warn { color: var(--red); }
 .pronounce .pr-live { min-height: 22px; margin-top: 4px; font-style: italic; color: var(--navy); }
@@ -56,6 +64,20 @@
 .pronounce .pr-feedback.mid .pr-score { color: var(--yellow); }
 .pronounce .pr-feedback.bad .pr-score { color: var(--red); }
 .pronounce .rs-fb-text .pr-blocked { margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--red); }
+.pronounce .pr-issues { margin: 6px 0 0; padding-left: 18px; font-size: 14px; line-height: 1.7; }
+.pronounce .pr-issues li b { color: var(--navy); }
+.pronounce .pr-word-eval { list-style: none; margin: 8px 0 0; padding: 0; font-size: 14px; line-height: 1.9; }
+.pronounce .pr-word-eval li > span.pr-w { display: inline-block; min-width: 74px; font-size: 12px; font-weight: 800; text-align: center; margin-right: 6px; }
+.pronounce .pr-word-eval b.pr-w { background: none; padding: 0; }
+/* đọc cả câu: mỗi từ một cột, nhãn đánh giá nằm ngay dưới từ */
+.pronounce .pr-sent-eval { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 8px; }
+.pronounce .pr-col { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; }
+.pronounce .pr-col > .pr-w { font-size: 16px; font-weight: 800; }
+.pronounce .pr-lbl { font-size: 11px; font-weight: 800; white-space: nowrap; }
+.pronounce .pr-lbl.ok { color: var(--green-dark); }
+.pronounce .pr-lbl.close { color: var(--yellow); }
+.pronounce .pr-lbl.wrong { color: var(--red); }
+.pronounce .pr-lbl.missing { color: var(--gray); text-decoration: underline dashed; text-underline-offset: 3px; }
 .pronounce .pr-legend { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; font-size: 12px; font-weight: 700; }
 
 /* tô màu từng từ trong câu */

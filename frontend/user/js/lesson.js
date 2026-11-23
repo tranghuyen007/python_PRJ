@@ -212,13 +212,24 @@ const LessonPage = (() => {
   async function loadLevels() {
     if (DEMO_MODE) return VOCAB_LEVELS;
     const res = await fetch(ROUTES.levels, { headers: authHeader() });
+    if (res.status === 401) {
+      // Chưa đăng nhập hoặc token hết hạn (30 phút) -> quay về trang đăng nhập
+      try { localStorage.removeItem(KEYS.token); } catch (err) { /* bỏ qua */ }
+      window.location.href = "pages/login.html";
+      return new Promise(() => {}); // dừng tải tiếp trong lúc chuyển trang
+    }
     if (!res.ok) throw new Error(`Không tải được cấp độ (${res.status})`);
     const rawLevels = await res.json();
     const levels = [];
     for (const rawLevel of rawLevels) {
-      const topicsRes = await fetch(`${API_BASE_URL}/levels/${rawLevel.level_id}/topics`, { headers: authHeader() });
       const topics = [];
-      const rawTopics = topicsRes.ok ? await topicsRes.json().catch(() => []) : [];
+      // Cấp độ chưa mở (cần qua bài kiểm tra xếp lớp): backend trả 403 cho nội dung,
+      // nên không gọi API — trang sẽ hiện ổ khoá + nút "Làm bài kiểm tra".
+      let rawTopics = [];
+      if (rawLevel.is_unlocked) {
+        const topicsRes = await fetch(`${API_BASE_URL}/levels/${rawLevel.level_id}/topics`, { headers: authHeader() });
+        rawTopics = topicsRes.ok ? await topicsRes.json().catch(() => []) : [];
+      }
       for (const rawTopic of rawTopics) {
         const lessonsRes = await fetch(`${API_BASE_URL}/topics/${rawTopic.topic_id}/lessons`, { headers: authHeader() });
         if (!lessonsRes.ok) continue;

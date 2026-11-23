@@ -15,6 +15,7 @@ class UserResponse(BaseModel):
     email: str
     full_name: str | None = None
     gender: str | None = None
+    bio: str | None = None
     avatar_key: str = "bunny"
     role: str
     status: str

@@ -266,6 +266,7 @@ const ProfilePage = (() => {
     const fullName = form.elements.fullName.value.trim();
     const bio = form.elements.bio.value.trim();
     if (!fullName) { $("pfErr").textContent = "Vui lòng nhập tên của bạn"; return; }
+    let saved = { fullName, bio };
     if (!api().isDemo) {
       try {
         const res = await fetch(ROUTES.me, {
@@ -273,13 +274,24 @@ const ProfilePage = (() => {
           headers: { "Content-Type": "application/json", ...api().authHeader() },
           body: JSON.stringify({ full_name: fullName, bio })
         });
-        if (!res.ok) throw new Error(res.status);
+        const d = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+          $("pfErr").textContent = "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.";
+          return;
+        }
+        if (!res.ok) {
+          const detail = Array.isArray(d.detail) ? d.detail[0]?.msg : d.detail;
+          $("pfErr").textContent = detail || "Không lưu được lên máy chủ. Thử lại sau nhé.";
+          return;
+        }
+        saved = { fullName: d.full_name ?? fullName, bio: d.bio ?? bio };   // dùng dữ liệu server đã lưu
       } catch (e) {
-        $("pfErr").textContent = "Không lưu được lên máy chủ. Thử lại sau nhé.";
+        $("pfErr").textContent = "Không kết nối được máy chủ. Thử lại sau nhé.";
         return;
       }
     }
-    user = { ...user, fullName, bio };
+    $("pfErr").textContent = "";
+    user = { ...user, ...saved };
     write(KEYS.user, user);
     api().toast("Đã cập nhật hồ sơ");
     draw();

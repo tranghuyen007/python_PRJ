@@ -25,6 +25,8 @@ class User(Base):
     full_name = Column(String)
 
     gender = Column(String)
+
+    bio = Column(String)  # giới thiệu ngắn ở trang Hồ sơ
     avatar_key = Column(
         String,
         nullable=False,

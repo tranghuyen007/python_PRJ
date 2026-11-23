@@ -25,7 +25,12 @@ const PronouncePage = (() => {
     SESSION_SIZE: 10,          // số mục mỗi lượt
     MIN_LESSONS: 1,            // số unit phải hoàn thành để mở section
     LISTEN_LIMIT: 60,          // giây: nút ghi âm giữ tối đa
-    SILENCE_AFTER_SPEECH: 1500,// ms: đọc câu xong, im lặng chừng này thì chấm
+    SILENCE_AFTER_SPEECH: 1500,// ms: đã nói rồi mà im lặng liên tục chừng này -> tự ngắt và chấm
+    NO_SPEECH_TIMEOUT: 6000,   // ms: bấm ghi âm mà không nói gì trong khoảng này -> tự ngắt, không chấm
+    MIN_SPEECH_MS: 250,        // ms: phải có tiếng nói tổng cộng ít nhất chừng này mới tính là "đã nói"
+    CALIBRATE_MS: 400,         // ms đầu: đo tiếng ồn nền của phòng để đặt ngưỡng
+    VOICE_MIN_LEVEL: 0.02,     // ngưỡng âm lượng (RMS 0..1) tối thiểu để coi là tiếng nói
+    VOICE_NOISE_RATIO: 2.5,    // tiếng nói phải to hơn tiếng ồn nền ít nhất bấy nhiêu lần
     GOOD: 80,                  // >= 80%: tốt (được cộng điểm)
     PASS: 70,                  // < 70%: đưa vào danh sách luyện lại
     POINTS_PER_GOOD: 2,
@@ -218,10 +223,18 @@ const PronouncePage = (() => {
   }
 
   // ===============================================================
-  // 3) BỘ GHI ÂM – giữ tối đa 60 giây (đã lọc từ cấm)
+  // 3) BỘ GHI ÂM – giữ tối đa 60 giây, TỰ NGẮT KHI NGƯỜI DÙNG NGỪNG NÓI
+  //    Web Audio AnalyserNode đo âm lượng (RMS) liên tục:
+  //    - còn tiếng nói to hơn ngưỡng  -> tiếp tục ghi
+  //    - đã nói rồi, im lặng liên tục SILENCE_AFTER_SPEECH ms -> tự dừng và gửi chấm
+  //    - không nói gì trong NO_SPEECH_TIMEOUT ms -> tự dừng, không gửi
   // ===============================================================
   function createRecorder(h) {
     let active = false, stream = null, recorder = null, chunks = [], deadline = 0, tickTimer = null, currentItem = null;
+    // trạng thái phát hiện giọng nói
+    let audioCtx = null, analyser = null, sampleBuf = null, vadTimer = null;
+    let startedAt = 0, lastTickAt = 0, noiseSum = 0, noiseCount = 0, threshold = CONFIG.VOICE_MIN_LEVEL;
+    let speechMs = 0, heardSpeech = false, silenceSince = 0;
 
     function stopStream() {
       if (stream) {
@@ -230,12 +243,91 @@ const PronouncePage = (() => {
       }
     }
 
+    function stopVad() {
+      clearInterval(vadTimer);
+      vadTimer = null;
+      if (audioCtx) { audioCtx.close().catch(() => {}); audioCtx = null; }
+      analyser = null;
+    }
+
+    // Âm lượng hiện tại của micro (RMS, 0..1)
+    function currentLevel() {
+      if (!analyser) return 0;
+      analyser.getFloatTimeDomainData(sampleBuf);
+      let sum = 0;
+      for (let i = 0; i < sampleBuf.length; i++) sum += sampleBuf[i] * sampleBuf[i];
+      return Math.sqrt(sum / sampleBuf.length);
+    }
+
+    function startVad() {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return; // trình duyệt quá cũ: chỉ dùng nút bấm + giới hạn 60 giây như trước
+      audioCtx = new Ctx();
+      const source = audioCtx.createMediaStreamSource(stream);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 1024;
+      sampleBuf = new Float32Array(analyser.fftSize);
+      source.connect(analyser);
+
+      startedAt = lastTickAt = Date.now();
+      noiseSum = 0; noiseCount = 0; threshold = CONFIG.VOICE_MIN_LEVEL;
+      speechMs = 0; heardSpeech = false; silenceSince = 0;
+
+      vadTimer = setInterval(() => {
+        if (!active) return;
+        const now = Date.now();
+        const dt = now - lastTickAt;
+        lastTickAt = now;
+        const lvl = currentLevel();
+        const elapsed = now - startedAt;
+
+        // Giai đoạn đầu: đo tiếng ồn nền để đặt ngưỡng (phòng ồn thì ngưỡng cao hơn)
+        if (elapsed < CONFIG.CALIBRATE_MS) {
+          noiseSum += lvl; noiseCount++;
+          h.onLevel?.(lvl, false);
+          return;
+        }
+        if (noiseCount) {
+          threshold = Math.max(CONFIG.VOICE_MIN_LEVEL, (noiseSum / noiseCount) * CONFIG.VOICE_NOISE_RATIO);
+          noiseCount = 0;
+        }
+
+        const speaking = lvl >= threshold;
+        h.onLevel?.(lvl, speaking);
+
+        if (speaking) {
+          speechMs += dt;
+          silenceSince = 0;
+          if (!heardSpeech && speechMs >= CONFIG.MIN_SPEECH_MS) {
+            heardSpeech = true;
+            h.onSpeech?.();
+          }
+          return;
+        }
+
+        if (heardSpeech) {
+          // Đã nói rồi -> đếm thời gian im lặng, đủ lâu thì tự ngắt và chấm
+          if (!silenceSince) silenceSince = now;
+          if (now - silenceSince >= CONFIG.SILENCE_AFTER_SPEECH) {
+            if (recorder && recorder.state !== "inactive") recorder.stop();
+          }
+        } else if (elapsed >= CONFIG.NO_SPEECH_TIMEOUT) {
+          // Bấm ghi âm mà không nói gì -> tự ngắt, không gửi lên server
+          chunks = [];
+          if (recorder && recorder.state !== "inactive") recorder.stop();
+        }
+      }, 50);
+    }
+
     async function finishUpload() {
       if (!active || !currentItem) return;
       active = false;
       clearInterval(tickTimer);
+      // Có đo âm lượng mà chưa từng nghe thấy tiếng nói -> không gửi chấm
+      const noVoice = !!analyser && !heardSpeech;
+      stopVad();
       stopStream();
-      if (!chunks.length) {
+      if (!chunks.length || noVoice) {
         h.onTimeout(false);
         return;
       }
@@ -245,7 +337,9 @@ const PronouncePage = (() => {
       form.append("word_id", String(currentItem.w.word_id));
       form.append("lesson_id", String(currentItem.lesson.lessonId));
       form.append("target_text", currentItem.text);
-      form.append("audio", new Blob(chunks, { type: mime }), `recording.${extension}`);
+      const blob = new Blob(chunks, { type: mime });
+      currentItem.recording = blob;   // giữ bản ghi gần nhất để nghe lại ở trang tổng kết
+      form.append("audio", blob, `recording.${extension}`);
       try {
         const res = await fetch(CONFIG.API_ATTEMPTS, {
           method: "POST",
@@ -287,6 +381,7 @@ const PronouncePage = (() => {
           recorder.start(250);
           active = true;
           deadline = Date.now() + CONFIG.LISTEN_LIMIT * 1000;
+          try { startVad(); } catch (e) { stopVad(); } // lỗi đo âm lượng thì vẫn ghi bình thường
           h.onStart();
           tickTimer = setInterval(() => {
             const left = Math.max(0, deadline - Date.now()) / 1000;
@@ -304,6 +399,7 @@ const PronouncePage = (() => {
       cancel() {
         active = false;
         clearInterval(tickTimer);
+        stopVad();
         if (recorder && recorder.state !== "inactive") {
           recorder.onstop = null;
           recorder.stop();
@@ -313,42 +409,64 @@ const PronouncePage = (() => {
     };
   }
 
+  // Chỉ phát 1 âm thanh tại một thời điểm (giọng mẫu / bản ghi của người học)
+  let playing = null;
+  function stopPlayback() {
+    if (playing) {
+      playing.audio.pause();
+      URL.revokeObjectURL(playing.url);
+      playing = null;
+    }
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  }
+  function playBlob(blob, rate = 1) {
+    stopPlayback();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.playbackRate = rate;
+    playing = { audio, url };
+    audio.onended = () => { if (playing?.audio === audio) stopPlayback(); };
+    return audio.play();
+  }
+
   function stopRecorder() {
     if (recorder) recorder.cancel();
     recorder = null;
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    stopPlayback();
   }
 
-  // Giọng đọc mẫu (Text-to-Speech có sẵn trong trình duyệt)
-  function speak(text, rate = 0.85) {
-    if (recorder?.active) return;
-    const current = session?.items?.[session.i];
-    const wordId = current?.w?.word_id;
-    if (wordId) {
-      fetch(`${CONFIG.API_REFERENCE}/${wordId}/reference-audio`, {
-        headers: api().authHeader()
-      })
-        .then((res) => res.ok ? res.blob() : Promise.reject(new Error("Không tải được âm thanh mẫu.")))
-        .then((blob) => {
-          const audio = new Audio(URL.createObjectURL(blob));
-          audio.playbackRate = rate;
-          return audio.play();
-        })
-        .catch(() => {
-          if (!("speechSynthesis" in window)) return api().toast("Trình duyệt chưa hỗ trợ phát âm.");
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          u.lang = "en-US";
-          u.rate = rate;
-          window.speechSynthesis.speak(u);
-        });
-      return;
-    }
+  // Đọc bằng giọng có sẵn của trình duyệt (Web Speech API)
+  function speakTTS(text, rate) {
     if (!("speechSynthesis" in window)) return api().toast("Trình duyệt chưa hỗ trợ phát âm.");
+    stopPlayback();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "en-US";
     u.rate = rate;
     window.speechSynthesis.speak(u);
+  }
+
+  // Giọng đọc mẫu cho mục đang luyện:
+  // - Đọc từ: dùng file MP3 mẫu của từ trên server (lỗi thì đọc bằng trình duyệt)
+  // - Đọc cả câu: file MP3 chỉ có từ đơn, nên đọc CẢ CÂU bằng giọng trình duyệt
+  function speak(item, rate = 0.85) {
+    if (recorder?.active || !item) return;
+    const wordId = item.w?.word_id;
+    if (item.mode === "sentence" || !wordId) {
+      speakTTS(item.text, rate);
+      return;
+    }
+    fetch(`${CONFIG.API_REFERENCE}/${wordId}/reference-audio`, {
+      headers: api().authHeader()
+    })
+      .then((res) => res.ok ? res.blob() : Promise.reject(new Error("Không tải được âm thanh mẫu.")))
+      .then((blob) => playBlob(blob, rate))
+      .catch(() => speakTTS(item.text, rate));
+  }
+
+  // Trang tổng kết: phát lại bản ghi người học vừa đọc cho mục đó
+  function playRecording(item) {
+    if (!item?.recording) return api().toast("Mục này chưa có bản ghi âm.");
+    playBlob(item.recording).catch(() => api().toast("Không phát được bản ghi."));
   }
 
   // ===============================================================
@@ -606,7 +724,7 @@ const PronouncePage = (() => {
               <span class="pr-mic-icon">${I.mic}</span>
               <span class="pr-mic-time" id="prTime"></span>
             </button>
-            <p class="pr-hint" id="prHint">Bấm micro rồi đọc to. Bạn có ${CONFIG.LISTEN_LIMIT} giây.</p>
+            <p class="pr-hint" id="prHint">Bấm micro rồi đọc to. Đọc xong ngừng một chút, hệ thống sẽ tự dừng và chấm điểm.</p>
             <p class="pr-live" id="prLive"></p>
           </div>
 
@@ -622,8 +740,18 @@ const PronouncePage = (() => {
     recorder = createRecorder({
       onStart() {
         $("prMic")?.classList.add("on");
-        setHint("Đang nghe… đọc xong có thể bấm micro lần nữa.");
+        setHint("Đang nghe… hãy đọc to và rõ.");
         if ($("prResult")) $("prResult").innerHTML = "";
+      },
+      onSpeech() {
+        setHint("Đang ghi âm… đọc xong ngừng một chút là tự dừng (hoặc bấm micro để dừng ngay).");
+      },
+      onLevel(lvl, speaking) {
+        // Vòng sáng quanh nút micro to/nhỏ theo âm lượng giọng nói
+        const mic = $("prMic");
+        if (!mic) return;
+        mic.style.setProperty("--lvl", Math.min(1, lvl * 8).toFixed(2));
+        mic.classList.toggle("speaking", speaking);
       },
       onTick(left) {
         if ($("prTime")) $("prTime").textContent = Math.ceil(left) + "s";
@@ -651,7 +779,11 @@ const PronouncePage = (() => {
 
   function resetMic() {
     const mic = $("prMic");
-    if (mic) { mic.classList.remove("on"); mic.style.removeProperty("--p"); }
+    if (mic) {
+      mic.classList.remove("on", "speaking");
+      mic.style.removeProperty("--p");
+      mic.style.removeProperty("--lvl");
+    }
     if ($("prTime")) $("prTime").textContent = "";
     if ($("prLive")) $("prLive").textContent = "";
   }
@@ -659,14 +791,20 @@ const PronouncePage = (() => {
   function showResult(res) {
     const s = session;
     const it = s.items[s.i];
+    // backend: correct/close/wrong/missing  ->  lớp CSS: ok/close/wrong/missing
+    const cls = (st) => ({ correct: "ok", close: "close", wrong: "wrong", missing: "missing" }[st] || "ok");
+    const issues = res.backend ? (res.issues || []) : [];
     const r = res.backend
       ? {
           score: res.score,
-          heard: it.text,
-          words: (res.characters || []).map((item) => ({
-            text: item.character,
-            status: item.status === "wrong" ? "wrong" : "ok"
-          }))
+          heard: issues.length
+            ? "Cần sửa: " + issues.map((x) => `/${x.expected}/`).join(", ")
+            : "Không phát hiện âm sai",
+          words: it.mode === "sentence" && Array.isArray(res.words)
+            // Đọc cả câu: tô màu theo từng từ
+            ? res.words.map((x) => ({ text: x.text, status: cls(x.status) }))
+            // Đọc từ: tô màu theo từng chữ cái
+            : (res.characters || []).map((x) => ({ text: x.character, status: cls(x.status) }))
         }
       : it.mode === "sentence"
         ? scoreSentence(it.text, res.transcript, res.confidence)
@@ -687,18 +825,55 @@ const PronouncePage = (() => {
 
     const lv = level(r.score);
     const verdict = { ok: "Tuyệt vời!", mid: "Khá tốt, thử lại cho chuẩn hơn nhé!", bad: "Chưa đúng lắm, nghe mẫu rồi thử lại nhé!" }[lv];
+
+    // Nhãn đánh giá theo từ (chế độ đọc cả câu)
+    const LABELS = { ok: "Đúng", close: "Gần đúng", wrong: "Sai", missing: "Bị thiếu" };
+    const cleanWord = (t) => t.replace(/^[^\p{L}\p{N}']+|[^\p{L}\p{N}']+$/gu, "");   // bỏ dấu câu ở đầu/cuối từ
+
+    let detail = "";
+    let legend = "";
+    if (res.backend && it.mode === "sentence" && r.words?.length) {
+      // ĐỌC CẢ CÂU: câu của người học, dưới MỖI TỪ là nhãn đánh giá thật của lần đọc này
+      detail = `
+        <div class="pr-sent-eval">${r.words.map((x) => `
+          <span class="pr-col">
+            <span class="pr-w ${x.status}">${esc(x.text)}</span>
+            <small class="pr-lbl ${x.status}">${LABELS[x.status].toLowerCase()}</small>
+          </span>`).join("")}
+        </div>`;
+    } else if (res.backend) {
+      // ĐỌC TỪ ĐƠN: giữ nguyên – liệt kê âm cần sửa
+      detail = issues.length
+        ? `<ul class="pr-issues">${issues.map((x) => x.status === "missing"
+            ? `<li><span class="pr-w missing">/${esc(x.expected)}/</span> bị bỏ sót</li>`
+            : `<li><span class="pr-w ${cls(x.status)}">/${esc(x.expected)}/</span> bạn đọc thành <b>/${esc(x.heard || "?")}/</b>${x.status === "close" ? " (gần đúng)" : ""}</li>`
+          ).join("")}</ul>`
+        : `<p>Không phát hiện âm nào sai. Giữ phong độ nhé!</p>`;
+    } else {
+      detail = `<p>Máy nghe được: “${esc(r.heard || "…")}”</p>`;
+    }
+
+    // Trang tổng kết: chế độ câu ghi tóm tắt theo từ
+    if (res.backend && it.mode === "sentence" && r.words?.length) {
+      const bad = r.words.filter((x) => x.status !== "ok");
+      it.heard = bad.length
+        ? ["wrong", "missing", "close"]
+            .map((st) => {
+              const list = bad.filter((x) => x.status === st).map((x) => cleanWord(x.text)).filter(Boolean);
+              return list.length ? `${LABELS[st]}: ${list.join(", ")}` : "";
+            })
+            .filter(Boolean).join(" · ")
+        : "Đọc đúng tất cả các từ";
+    }
+
     $("prResult").innerHTML = `
       <div class="rs-feedback pr-feedback ${lv}">
         <div class="pr-score">${r.score}%</div>
         <div class="rs-fb-text">
           <b>${verdict}</b>
-          <p>Máy nghe được: “${esc(r.heard || "…")}”</p>
+          ${detail}
           ${res.blocked ? `<p class="pr-blocked">Đã bỏ qua ${res.blocked} từ không phù hợp, không tính vào điểm.</p>` : ""}
-          ${r.words ? `
-            <div class="pr-legend">
-              <span class="pr-w ok">đúng</span><span class="pr-w close">gần đúng</span>
-              <span class="pr-w wrong">sai</span><span class="pr-w missing">bị thiếu</span>
-            </div>` : ""}
+          ${legend}
         </div>
       </div>`;
 
@@ -760,16 +935,19 @@ const PronouncePage = (() => {
       : s.score >= 50 ? ["Bạn đang tiến bộ!", "Nghe chậm giọng mẫu, đọc theo từng âm rồi thử lại nhé."]
       : ["Cứ từ từ thôi!", "Hãy nghe mẫu nhiều lần, đọc chậm và rõ từng âm rồi luyện lại."];
 
-    const rows = s.items.map((x) => {
+    const rows = s.items.map((x, idx) => {
       const lv = x.score === null ? "skip" : level(x.score);
+      const playBtn = x.recording
+        ? `<button type="button" class="rs-sound" data-pr="play-rec" data-idx="${idx}" aria-label="Nghe lại bản ghi của bạn" title="Nghe lại bản ghi của bạn">${I.sound}</button>`
+        : `<button type="button" class="rs-sound" disabled aria-label="Chưa có bản ghi" title="Chưa có bản ghi" style="opacity:.35;cursor:not-allowed">${I.sound}</button>`;
       return `
         <div class="rr-word">
           <div>
             <b>${esc(x.mode === "sentence" ? x.text : x.w.en)}</b>
-            <p>${x.score === null ? "Bỏ qua" : `Máy nghe: “${esc(x.heard || "…")}”`}</p>
+            <p>${x.score === null ? "Bỏ qua" : esc(x.heard || "")}</p>
           </div>
           <span class="pr-chip ${lv}">${x.score === null ? "–" : x.score + "%"}</span>
-          <button type="button" class="rs-sound" data-pr="speak" data-text="${esc(x.text)}" aria-label="Nghe">${I.sound}</button>
+          ${playBtn}
         </div>`;
     }).join("");
 
@@ -835,8 +1013,8 @@ const PronouncePage = (() => {
         drawCenter();
         if (!api().isLevelOpen(activeLevel)) api().toast(api().lockReason(activeLevel));
       }
-      else if (a === "listen") speak(session.items[session.i].text, Number(el.dataset.rate));
-      else if (a === "speak") speak(el.dataset.text);
+      else if (a === "listen") speak(session.items[session.i], Number(el.dataset.rate));
+      else if (a === "play-rec") playRecording(session.items[Number(el.dataset.idx)]);
       else if (a === "mic") {
         if (!recorder) return;
         const cur = session.items[session.i];

@@ -2,6 +2,7 @@ import math
 import subprocess
 import tempfile
 import asyncio
+import threading
 from pathlib import Path
 from typing import Iterable
 
@@ -18,14 +19,35 @@ from models.user import User
 _ASSESSOR = None
 _CACHE_DIR = Path(__file__).resolve().parents[1] / "uploads" / "audio"
 
+# Model AI chấm phát âm (~1.26GB, tải từ HuggingFace lần đầu rồi lưu ở ~/.cache/huggingface).
+# _LOAD_LOCK: nhiều request cùng lúc chỉ nạp model 1 lần (trước đây mỗi request tự tải -> tải trùng).
+# _ASSESS_LOCK: model dùng chung giữ trạng thái câu mẫu (set_sentence), nên chấm lần lượt từng bản ghi.
+_LOAD_LOCK = threading.Lock()
+_ASSESS_LOCK = threading.Lock()
+
 
 def _get_assessor():
     global _ASSESSOR
     if _ASSESSOR is None:
-        from pronounce_assess import PronounceAssessModel
+        with _LOAD_LOCK:
+            if _ASSESSOR is None:
+                from pronounce_assess import PronounceAssessModel
 
-        _ASSESSOR = PronounceAssessModel()
+                _ASSESSOR = PronounceAssessModel()
     return _ASSESSOR
+
+
+def preload_assessor_in_background() -> None:
+    """Nạp sẵn model ở luồng nền khi backend khởi động,
+    để người học bấm chấm lần đầu không phải chờ tải model."""
+    def _load():
+        try:
+            _get_assessor()
+            print("[pronunciation] Model chấm phát âm đã sẵn sàng.")
+        except Exception as error:  # không làm sập server nếu thiếu mạng / thiếu thư viện
+            print(f"[pronunciation] Chưa nạp được model: {error}")
+
+    threading.Thread(target=_load, name="preload-pronounce-model", daemon=True).start()
 
 
 def decode_audio(audio_bytes: bytes, extension: str = "webm") -> np.ndarray:
@@ -102,24 +124,102 @@ def _chunks(audio: np.ndarray, chunk_size: int = 8000) -> Iterable[np.ndarray]:
             yield chunk.astype(np.float32)
 
 
-def _character_results(target: str, phoneme_events: list[dict]) -> list[dict]:
-    chars = list(target.strip())
-    if not chars:
-        return []
+# Mức độ của từng trạng thái (số lớn hơn = nặng hơn), dùng khi nhiều âm rơi vào cùng 1 chữ
+_SEVERITY = {"correct": 0, "close": 1, "missing": 2, "wrong": 3}
+# gop (0..1) của âm đọc lệch: từ ngưỡng này trở lên coi là "gần đúng" thay vì "sai"
+_CLOSE_GOP = 0.5
 
+
+def _phoneme_status(event: dict) -> str:
+    label = event.get("label")
+    if label == "omitted":
+        return "missing"
+    if label == "mispronounced":
+        gop = event.get("gop")
+        try:
+            if gop is not None and math.isfinite(float(gop)) and float(gop) >= _CLOSE_GOP:
+                return "close"
+        except (TypeError, ValueError):
+            pass
+        return "wrong"
+    return "correct"
+
+
+def _letter_statuses(target: str, phoneme_events: list[dict]) -> list[str]:
+    """Trạng thái cho từng ký tự của câu mẫu.
+
+    Âm vị thứ p (trong tổng n âm của câu mẫu) được gán vào chữ cái tương ứng theo tỉ lệ
+    vị trí, chỉ tính chữ cái/số (bỏ khoảng trắng, dấu câu) nên không tô đỏ khoảng trắng.
+    """
+    chars = list(target)
     statuses = ["correct"] * len(chars)
-    bad_positions = [
-        event.get("position")
-        for event in phoneme_events
-        if event.get("label") in {"mispronounced", "omitted"}
-        and event.get("position") is not None
-    ]
-    if bad_positions:
-        count = max(len(bad_positions), 1)
-        for position in bad_positions:
-            char_index = min(len(chars) - 1, round(position * len(chars) / max(count, 1)))
-            statuses[char_index] = "wrong"
-    return [{"character": char, "status": status} for char, status in zip(chars, statuses)]
+    letter_idx = [i for i, ch in enumerate(chars) if ch.isalnum()]
+    ref_events = [e for e in phoneme_events if e.get("position") is not None]
+    if not letter_idx or not ref_events:
+        return statuses
+
+    n_ref = max(int(e["position"]) for e in ref_events) + 1
+    for event in ref_events:
+        status = _phoneme_status(event)
+        if status == "correct":
+            continue
+        pos = int(event["position"])
+        k = min(len(letter_idx) - 1, int((pos + 0.5) * len(letter_idx) / n_ref))
+        char_index = letter_idx[k]
+        if _SEVERITY[status] > _SEVERITY[statuses[char_index]]:
+            statuses[char_index] = status
+    return statuses
+
+
+def _character_results(target: str, phoneme_events: list[dict]) -> list[dict]:
+    target = target.strip()
+    if not target:
+        return []
+    statuses = _letter_statuses(target, phoneme_events)
+    return [{"character": char, "status": status} for char, status in zip(target, statuses)]
+
+
+def _word_results(target: str, character_results: list[dict]) -> list[dict]:
+    """Gộp kết quả từng chữ cái thành kết quả từng từ (dùng cho chế độ đọc cả câu)."""
+    words, current = [], []
+    for item in character_results + [{"character": " ", "status": "correct"}]:
+        if item["character"].isspace():
+            if current:
+                text = "".join(c["character"] for c in current)
+                letters = [c["status"] for c in current if c["character"].isalnum()]
+                bad = [s for s in letters if s != "correct"]
+                if not bad:
+                    status = "correct"
+                elif all(s == "missing" for s in bad) and len(bad) * 2 >= len(letters):
+                    status = "missing"
+                elif all(s == "close" for s in bad) or len(bad) <= max(1, len(letters) // 4):
+                    status = "close"
+                else:
+                    status = "wrong"
+                words.append({"text": text, "status": status})
+                current = []
+        else:
+            current.append(item)
+    return words
+
+
+def _issues(phoneme_events: list[dict], limit: int = 5) -> list[dict]:
+    """Các âm cần sửa: đọc lệch (âm mẫu -> âm máy nghe được) hoặc bị bỏ sót."""
+    issues = []
+    for event in phoneme_events:
+        if event.get("position") is None:
+            continue
+        status = _phoneme_status(event)
+        if status == "correct":
+            continue
+        issues.append({
+            "status": status,
+            "expected": event.get("phoneme"),
+            "heard": event.get("decoded") if status != "missing" else None,
+        })
+        if len(issues) >= limit:
+            break
+    return issues
 
 
 def assess_recording(
@@ -145,25 +245,26 @@ def assess_recording(
         raise ValueError("Recorded audio is too short")
 
     assessor = _get_assessor()
-    assessor.set_sentence(target)
     events = []
     prosody = {}
-    for event in assessor.stream_decode(_chunks(audio), sample_rate=16000):
-        if event.label == "prosody":
-            prosody = {
-                "monotony_score": event.monotony_score,
-                "rhythm_score": event.rhythm_score,
-                "boundary_score": event.boundary_score,
-                "speaking_rate": event.speaking_rate,
-            }
-            continue
-        events.append({
-            "phoneme": event.phoneme,
-            "position": event.position,
-            "label": event.label,
-            "decoded": event.decoded,
-            "gop": event.gop,
-        })
+    with _ASSESS_LOCK:
+        assessor.set_sentence(target)
+        for event in assessor.stream_decode(_chunks(audio), sample_rate=16000):
+            if event.label == "prosody":
+                prosody = {
+                    "monotony_score": event.monotony_score,
+                    "rhythm_score": event.rhythm_score,
+                    "boundary_score": event.boundary_score,
+                    "speaking_rate": event.speaking_rate,
+                }
+                continue
+            events.append({
+                "phoneme": event.phoneme,
+                "position": event.position,
+                "label": event.label,
+                "decoded": event.decoded,
+                "gop": event.gop,
+            })
 
     if not events:
         raise ValueError("No pronunciation phonemes could be detected")
@@ -222,6 +323,8 @@ def assess_recording(
         "passing_score": lesson.pronunciation_passing_score,
         "advance": passed or exhausted,
         "characters": character_results,
+        "words": _word_results(target, character_results),
+        "issues": _issues(events),
         "phonemes": events,
         "prosody": prosody,
     }

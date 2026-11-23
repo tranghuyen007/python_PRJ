@@ -39,11 +39,30 @@ document.getElementById("sidebar").innerHTML = `
 // Đăng xuất: xoá token đăng nhập rồi quay về trang đăng nhập
 // (bản demo giữ lại thông tin tài khoản & tiến độ để đăng nhập lại cùng gmail vẫn còn dữ liệu)
 const LOGIN_PAGE = "pages/login.html";
+// Dữ liệu riêng của từng người học (giữ giống USER_DATA_KEYS trong auth.js)
+const LOGOUT_USER_KEYS = ["vocabbit_progress", "vocabbit_onboarding", "vocabbit_saved_words", "vocabbit_user"];
+const LOGOUT_SNAPSHOT_PREFIX = "vocabbit_snapshot:";
+
 document.getElementById("logoutBtn").addEventListener("click", () => {
   const isDemo = typeof LessonPage !== "undefined" && LessonPage.api && LessonPage.api.isDemo;
   try {
+    // 1) Chụp lại toàn bộ tiến độ ngay lúc đăng xuất, gắn theo gmail của người học
+    const user = JSON.parse(localStorage.getItem("vocabbit_user") || "null");
+    if (user && user.email) {
+      const data = {};
+      LOGOUT_USER_KEYS.forEach((k) => {
+        const v = localStorage.getItem(k);
+        if (v !== null) data[k] = v;
+      });
+      localStorage.setItem(LOGOUT_SNAPSHOT_PREFIX + user.email.toLowerCase(), JSON.stringify({
+        savedAt: new Date().toISOString(),
+        lastPage: window.location.hash || "#learn",   // trang đang mở lúc đăng xuất
+        data
+      }));
+    }
+    // 2) Xoá token + dữ liệu đang dùng, để người khác đăng nhập trên máy này không thấy bài của mình
     localStorage.removeItem("vocabbit_token");
-    if (!isDemo) localStorage.removeItem("vocabbit_user");
+    if (!isDemo) LOGOUT_USER_KEYS.forEach((k) => localStorage.removeItem(k));
   } catch (err) { /* bỏ qua */ }
   window.location.href = LOGIN_PAGE;
 });

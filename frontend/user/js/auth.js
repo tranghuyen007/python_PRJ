@@ -85,6 +85,45 @@ function saveUser(user, token) {
   } catch (err) { /* bỏ qua */ }
 }
 
+// ---------------------------------------------------------------
+// LƯU / KHÔI PHỤC TIẾN ĐỘ THEO TỪNG TÀI KHOẢN
+// sidebar.js chụp dữ liệu vào "vocabbit_snapshot:<gmail>" khi đăng xuất,
+// đăng nhập lại cùng gmail thì trả dữ liệu về đúng như lúc đăng xuất.
+// (giữ USER_DATA_KEYS giống trong sidebar.js)
+// ---------------------------------------------------------------
+const USER_DATA_KEYS = ["vocabbit_progress", "vocabbit_onboarding", "vocabbit_saved_words", "vocabbit_user"];
+const SNAPSHOT_PREFIX = "vocabbit_snapshot:";
+
+function clearUserData(keepOnboarding) {
+  try {
+    USER_DATA_KEYS.forEach((k) => {
+      if (keepOnboarding && k === STORAGE_KEY) return;
+      localStorage.removeItem(k);
+    });
+  } catch (err) { /* bỏ qua */ }
+}
+
+function restoreSnapshot(email) {
+  try {
+    const key = SNAPSHOT_PREFIX + email.toLowerCase();
+    const raw = localStorage.getItem(key);
+    if (raw) {
+      const snap = JSON.parse(raw);
+      clearUserData(false);
+      Object.entries(snap.data || {}).forEach(([k, v]) => localStorage.setItem(k, v));
+      // Xoá bản chụp sau khi dùng, tránh lần sau ghi đè lên tiến độ mới hơn
+      localStorage.removeItem(key);
+      return snap;
+    }
+    // Không có bản chụp mà dữ liệu đang có là của người khác -> bắt đầu sạch
+    const current = JSON.parse(localStorage.getItem(USER_KEY) || "null");
+    if (current && current.email && current.email.toLowerCase() !== email.toLowerCase()) {
+      clearUserData(false);
+    }
+  } catch (err) { /* bỏ qua */ }
+  return null;
+}
+
 function userFromServer(u, fallback) {
   if (!u) return fallback;
   return {
@@ -106,7 +145,7 @@ const GMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RULES = {
   fullName: (v) => (v.trim() ? "" : "Vui lòng nhập tên của bạn"),
   email:    (v) => (GMAIL_RE.test(v.trim()) ? "" : "Nhập sai cú pháp gmail"),
-  password: (v) => (v.length >= 8 ? "" : "Nhập ít nhất 8 kí tự"),
+  password: (v) => (v.length >= 9 ? "" : "Nhập ít nhất 9 kí tự"),   // khớp với backend (min_length=9)
   confirm:  (v, form) => (v && v === form.elements.password.value ? "" : "Mật khẩu nhập lại không khớp")
 };
 
@@ -189,7 +228,35 @@ function showFormError(form, message) {
 }
 
 // Backend trả lỗi dạng { field: "email", message: "..." } thì gắn vào đúng ô
+// Dịch lỗi FastAPI (detail) sang câu tiếng Việt dễ hiểu
+const SERVER_MESSAGES = {
+  "Email already exists": { field: "email", message: "Gmail này đã được đăng ký" },
+  "Username already exists": { message: "Tên đăng nhập đã tồn tại" }
+};
+
+function normalizeServerError(data) {
+  if (!data || data.message) return data || {};
+  const detail = data.detail;
+  // 409: detail là chuỗi
+  if (typeof detail === "string") {
+    return SERVER_MESSAGES[detail] || { message: detail };
+  }
+  // 422: detail là mảng lỗi kiểm tra dữ liệu của Pydantic
+  if (Array.isArray(detail) && detail.length) {
+    const err = detail[0];
+    const name = Array.isArray(err.loc) ? err.loc[err.loc.length - 1] : "";
+    const fieldMap = { full_name: "fullName", email: "email", password: "password", gender: "gender" };
+    const field = fieldMap[name];
+    let message = err.msg || "Dữ liệu không hợp lệ";
+    if (err.type === "string_too_short") message = `Cần ít nhất ${err.ctx?.min_length} kí tự`;
+    if (err.type === "string_too_long") message = `Tối đa ${err.ctx?.max_length} kí tự`;
+    return { field, message };
+  }
+  return {};
+}
+
 function handleServerError(form, data, fallback) {
+  data = normalizeServerError(data);
   const input = data.field && form.elements[data.field];
   if (input) {
     setFieldError(input, data.message || fallback);
@@ -258,7 +325,13 @@ async function registerWithEmail(form) {
       username: null
     });
     if (ok) {
-      saveUser(userFromServer(data, newUser));
+      // Xoá token cũ (của tài khoản trước) rồi tự đăng nhập để lấy token mới,
+      // nếu không các API như /levels sẽ trả 401 và trang học bị trắng.
+      try { localStorage.removeItem(TOKEN_KEY); } catch (err) { /* bỏ qua */ }
+      // Tài khoản mới: xoá tiến độ còn sót của người trước, giữ lại lựa chọn onboarding vừa làm
+      clearUserData(true);
+      const login = await loginWithBackend(newUser.email, f.password.value);
+      saveUser(userFromServer(data, newUser), login.ok ? login.data.access_token : null);
       window.location.href = ROUTES.success;
     } else {
       handleServerError(form, data, "Không tạo được tài khoản. Thử lại nhé.");
@@ -295,8 +368,10 @@ async function loginWithEmail(form) {
   try {
     const { ok, data } = await loginWithBackend(email, f.password.value);
     if (ok) {
+      // Trả lại tiến độ đã lưu lúc đăng xuất (token thì luôn dùng token mới vừa cấp)
+      const snap = restoreSnapshot(email);
       saveUser(userFromServer(data.user, { email, fullName: email.split("@")[0], createdAt: data.user.created_at || new Date().toISOString() }), data.access_token);
-      window.location.href = ROUTES.overview + "#learn";
+      window.location.href = ROUTES.overview + ((snap && snap.lastPage) || "#learn");
     } else {
       handleServerError(form, data, "Sai mật khẩu. Vui lòng thử lại.");
       stopLoading(btn);
@@ -332,8 +407,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Trang thành công: tài khoản đã lưu lựa chọn, xoá bản tạm trên trình duyệt
-  if (document.body.dataset.page === "success" && !DEMO_MODE) {
-    try { localStorage.removeItem(STORAGE_KEY); } catch (err) {}
-  }
+  // Trang thành công: KHÔNG xoá lựa chọn onboarding nữa — backend chưa lưu mục này,
+  // xoá đi thì trang học mất cấp độ người học đã chọn. Nó được lưu/khôi phục theo tài khoản
+  // cùng tiến độ khi đăng xuất / đăng nhập.
 });

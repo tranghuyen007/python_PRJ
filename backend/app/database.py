@@ -53,6 +53,8 @@ def migrate_placement_test_schema() -> None:
                 connection.execute(text("ALTER TABLE users ADD COLUMN full_name VARCHAR"))
             if "gender" not in user_columns:
                 connection.execute(text("ALTER TABLE users ADD COLUMN gender VARCHAR"))
+            if "bio" not in user_columns:
+                connection.execute(text("ALTER TABLE users ADD COLUMN bio VARCHAR"))
             if "avatar_key" not in user_columns:
                 connection.execute(
                     text("ALTER TABLE users ADD COLUMN avatar_key VARCHAR NOT NULL DEFAULT 'bunny'")
