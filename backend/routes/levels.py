@@ -57,6 +57,16 @@ def _require_unlocked_level(db: Session, user: User, level_id: int) -> Level:
     return level
 
 
+def _next_lesson_word_order(db: Session, lesson_id: int) -> int:
+    last_order = (
+        db.query(LessonWord.display_order)
+        .filter_by(lesson_id=lesson_id)
+        .order_by(LessonWord.display_order.desc())
+        .first()
+    )
+    return (last_order[0] if last_order is not None else 0) + 1
+
+
 @router.get("/levels", response_model=list[LevelResponse])
 def list_levels(
     db: Session = Depends(get_db),
@@ -395,7 +405,13 @@ def admin_create_word(
     db.add(word)
     try:
         db.flush()
-        db.add(LessonWord(lesson_id=lesson.lesson_id, word_id=word.word_id, display_order=1))
+        db.add(
+            LessonWord(
+                lesson_id=lesson.lesson_id,
+                word_id=word.word_id,
+                display_order=_next_lesson_word_order(db, lesson.lesson_id),
+            )
+        )
         db.commit()
         db.refresh(word)
         try:
@@ -435,7 +451,13 @@ def admin_update_word(
         if lesson is None:
             raise HTTPException(status_code=404, detail="Active lesson not found")
         db.query(LessonWord).filter_by(word_id=word_id).delete()
-        db.add(LessonWord(lesson_id=lesson_id, word_id=word_id, display_order=1))
+        db.add(
+            LessonWord(
+                lesson_id=lesson_id,
+                word_id=word_id,
+                display_order=_next_lesson_word_order(db, lesson_id),
+            )
+        )
     for key, value in changes.items():
         setattr(word, key, value)
     db.commit()

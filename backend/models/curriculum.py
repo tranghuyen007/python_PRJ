@@ -5,6 +5,7 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    UniqueConstraint,
 )
 
 from app.database import Base
@@ -79,6 +80,10 @@ class Word(Base):
 
 class LessonWord(Base):
     __tablename__ = "lesson_words"
+    __table_args__ = (
+        UniqueConstraint("lesson_id", "display_order"),
+    )
+
     lesson_id = Column(Integer, ForeignKey("lessons.lesson_id"), primary_key=True)
     word_id = Column(Integer, ForeignKey("words.word_id"), primary_key=True)
     display_order = Column(Integer, nullable=False)

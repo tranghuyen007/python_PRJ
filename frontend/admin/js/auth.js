@@ -1,5 +1,5 @@
 /**
- * auth.js — Xử lý đăng nhập / đăng ký / quên mật khẩu
+ * auth.js — Xử lý đăng nhập / quên mật khẩu
  * English Vocabbit Admin Panel
  *
  * Lưu ý: đây là phiên bản frontend demo sử dụng localStorage.
@@ -23,7 +23,7 @@ const ADMIN_DASHBOARD = "index.html";   // Trang admin sau khi đăng nhập
 
 /** Hiển thị / ẩn panel */
 function showPanel(id) {
-    ["panel-login", "panel-register", "panel-forgot"].forEach(function (pid) {
+    ["panel-login", "panel-forgot"].forEach(function (pid) {
         document.getElementById(pid).classList.toggle("hidden", pid !== id);
     });
 }
@@ -54,19 +54,6 @@ async function hashPassword(password) {
 /** Xác thực email cơ bản */
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-}
-
-/** Kiểm tra độ mạnh mật khẩu → trả về {score: 0-4, label} */
-function checkPasswordStrength(password) {
-    let score = 0;
-    if (password.length >= 8) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/[0-9]/.test(password)) score++;
-    if (/[^A-Za-z0-9]/.test(password)) score++;
-
-    const labels = ["", "Yếu", "Trung bình", "Mạnh", "Rất mạnh"];
-    const classes = ["", "weak", "fair", "good", "strong"];
-    return { score, label: labels[score], cls: classes[score], pct: score * 25 };
 }
 
 /** Đặt thông báo lỗi cho trường nhập */
@@ -161,8 +148,6 @@ function fakeDelay(ms = 800) {
    CHUYỂN ĐỔI PANEL
 ================================================================ */
 
-document.getElementById("goto-register").addEventListener("click", () => showPanel("panel-register"));
-document.getElementById("goto-login").addEventListener("click", () => showPanel("panel-login"));
 document.getElementById("goto-forgot").addEventListener("click", () => {
     showPanel("panel-forgot");
     // Reset về bước 1
@@ -267,118 +252,6 @@ loginForm.addEventListener("submit", async function (e) {
         showToast("error", "Lỗi kết nối", "Không thể kết nối máy chủ Python.");
     } finally {
         setLoading("btn-login", "login-spinner", false);
-    }
-});
-
-/* ================================================================
-   ĐĂNG KÝ
-================================================================ */
-
-const regPasswordInput = document.getElementById("reg-password");
-const strengthFill = document.getElementById("strength-fill");
-const strengthLabel = document.getElementById("strength-label");
-
-// Cập nhật thanh độ mạnh mật khẩu
-regPasswordInput.addEventListener("input", function () {
-    const result = checkPasswordStrength(this.value);
-    strengthFill.style.width = result.pct + "%";
-    strengthFill.className = "strength-fill " + result.cls;
-    strengthLabel.textContent = result.label;
-    strengthLabel.style.color = result.pct >= 75 ? "#22c55e"
-        : result.pct >= 50 ? "#3b82f6"
-            : result.pct >= 25 ? "#f59e0b"
-                : "#ef4444";
-});
-
-const registerForm = document.getElementById("register-form");
-
-registerForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const name = document.getElementById("reg-name").value.trim();
-    const email = document.getElementById("reg-email").value.trim();
-    const password = document.getElementById("reg-password").value;
-    const confirm = document.getElementById("reg-confirm").value;
-
-    clearErrors(["reg-name-error", "reg-email-error", "reg-password-error", "reg-confirm-error"]);
-
-    let hasError = false;
-
-    if (name.length < 2) {
-        setError("reg-name-error", "Vui lòng nhập họ tên (tối thiểu 2 ký tự).");
-        markInput("reg-name", true);
-        hasError = true;
-    } else {
-        markInput("reg-name", false);
-    }
-
-    if (!isValidEmail(email)) {
-        setError("reg-email-error", "Vui lòng nhập địa chỉ email hợp lệ.");
-        markInput("reg-email", true);
-        hasError = true;
-    } else {
-        markInput("reg-email", false);
-    }
-
-    const strength = checkPasswordStrength(password);
-    if (password.length < 8) {
-        setError("reg-password-error", "Mật khẩu phải có tối thiểu 8 ký tự.");
-        markInput("reg-password", true);
-        hasError = true;
-    } else if (strength.score < 2) {
-        setError("reg-password-error", "Mật khẩu quá yếu. Hãy thêm chữ hoa, số hoặc ký tự đặc biệt.");
-        markInput("reg-password", true);
-        hasError = true;
-    } else {
-        markInput("reg-password", false);
-    }
-
-    if (password !== confirm) {
-        setError("reg-confirm-error", "Mật khẩu xác nhận không khớp.");
-        markInput("reg-confirm", true);
-        hasError = true;
-    } else {
-        markInput("reg-confirm", false);
-    }
-
-    if (hasError) return;
-
-    setLoading("btn-register", "register-spinner", true);
-
-    try {
-        /* --- GỌI API THỰC ---
-        const res = await fetch("/api/admin/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, password })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || "Đăng ký thất bại");
-        */
-
-        // ---- Demo: lưu vào localStorage ----
-        await fakeDelay();
-
-        const users = getUsers();
-        if (users.find(u => u.email === email)) {
-            setError("reg-email-error", "Email này đã được sử dụng.");
-            markInput("reg-email", true);
-            return;
-        }
-
-        const hash = await hashPassword(password);
-        users.push({ name, email, password: hash, createdAt: new Date().toISOString() });
-        saveUsers(users);
-
-        showToast("success", "Đăng ký thành công", "Tài khoản đã được tạo. Vui lòng đăng nhập.");
-        registerForm.reset();
-        strengthFill.style.width = "0";
-        strengthLabel.textContent = "";
-        setTimeout(() => showPanel("panel-login"), 1200);
-    } catch (err) {
-        showToast("error", "Lỗi", err.message || "Không thể kết nối máy chủ.");
-    } finally {
-        setLoading("btn-register", "register-spinner", false);
     }
 });
 

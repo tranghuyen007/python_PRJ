@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
 from app.database import Base
-from models.curriculum import Word
+from models.curriculum import LessonWord, Word
 from models.user import User
 from routes.levels import (
     admin_create_lesson,
@@ -92,6 +92,99 @@ class AdminCurriculumRouteTests(unittest.TestCase):
         )
         self.assertEqual(changed["meaning"], "táo")
         self.assertEqual(self.db.get(Word, word["word_id"]).meaning, "táo")
+
+    def test_created_words_receive_next_display_order(self):
+        level = create_level(
+            LevelCreate(name="A1", display_order=1),
+            self.db,
+            self.admin,
+        )
+        topic = admin_create_topic(
+            TopicCreate(level_id=level["level_id"], name="Food", quick_review_limit=12),
+            self.db,
+            self.admin,
+        )
+        lesson = admin_create_lesson(
+            LessonCreate(topic_id=topic.topic_id, name="Fruit"),
+            self.db,
+            self.admin,
+        )
+
+        for word_text in ("apple", "banana"):
+            admin_create_word(
+                WordCreate(
+                    lesson_id=lesson.lesson_id,
+                    word=word_text,
+                    meaning=f"{word_text} meaning",
+                ),
+                self.db,
+                self.admin,
+            )
+
+        orders = [
+            item.display_order
+            for item in self.db.query(LessonWord)
+            .filter_by(lesson_id=lesson.lesson_id)
+            .order_by(LessonWord.display_order)
+            .all()
+        ]
+        self.assertEqual(orders, [1, 2])
+
+    def test_reassigned_word_receives_next_display_order(self):
+        level = create_level(
+            LevelCreate(name="A1", display_order=1),
+            self.db,
+            self.admin,
+        )
+        topic = admin_create_topic(
+            TopicCreate(level_id=level["level_id"], name="Food", quick_review_limit=12),
+            self.db,
+            self.admin,
+        )
+        source_lesson = admin_create_lesson(
+            LessonCreate(topic_id=topic.topic_id, name="Fruit"),
+            self.db,
+            self.admin,
+        )
+        target_lesson = admin_create_lesson(
+            LessonCreate(topic_id=topic.topic_id, name="Vegetables", display_order=2),
+            self.db,
+            self.admin,
+        )
+        moved_word = admin_create_word(
+            WordCreate(
+                lesson_id=source_lesson.lesson_id,
+                word="apple",
+                meaning="quả táo",
+            ),
+            self.db,
+            self.admin,
+        )
+        admin_create_word(
+            WordCreate(
+                lesson_id=target_lesson.lesson_id,
+                word="carrot",
+                meaning="cà rốt",
+            ),
+            self.db,
+            self.admin,
+        )
+
+        admin_update_word(
+            moved_word["word_id"],
+            WordUpdate(lesson_id=target_lesson.lesson_id),
+            self.db,
+            self.admin,
+        )
+
+        orders = [
+            item.display_order
+            for item in self.db.query(LessonWord)
+            .filter_by(lesson_id=target_lesson.lesson_id)
+            .order_by(LessonWord.display_order)
+            .all()
+        ]
+        self.assertEqual(orders, [1, 2])
 
 
 if __name__ == "__main__":
