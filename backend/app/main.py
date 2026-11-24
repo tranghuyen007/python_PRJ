@@ -9,6 +9,7 @@ from routes.levels import router as levels_router
 from routes.placement_tests import router as placement_tests_router
 from routes.pronunciation import router as pronunciation_router
 from routes.progress import router as progress_router
+from routes.admin_users import router as admin_users_router
 from app.database import SessionLocal
 from scripts.seed_demo_data import seed_demo_data
 
@@ -40,6 +41,7 @@ app.include_router(levels_router)
 app.include_router(placement_tests_router)
 app.include_router(pronunciation_router)
 app.include_router(progress_router)
+app.include_router(admin_users_router)
 
 frontend_dir = Path(__file__).resolve().parents[2] / "frontend"
 if frontend_dir.is_dir():
