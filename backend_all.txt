@@ -1,0 +1,4622 @@
+=== backend\app\__init__.py ===
+
+
+=== backend\app\database.py ===
+from pathlib import Path
+
+from sqlalchemy import create_engine
+from sqlalchemy import inspect, text
+from sqlalchemy.engine import URL
+from sqlalchemy.orm import declarative_base, sessionmaker
+
+
+# Xác định thư mục backend
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+
+# Đường dẫn tới file SQLite
+DATABASE_FILE = BACKEND_DIR / "database.db"
+
+DATABASE_URL = URL.create(
+    drivername="sqlite",
+    database=str(DATABASE_FILE),
+)
+
+# Tạo engine kết nối database
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False},
+)
+
+# Tạo session để thao tác với database
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine,
+)
+
+# Base để các Model kế thừa
+Base = declarative_base()
+
+
+def migrate_placement_test_schema() -> None:
+    """Apply additive SQLite migrations for auth, curriculum, and review sessions."""
+    inspector = inspect(engine)
+    tables = set(inspector.get_table_names())
+    with engine.begin() as connection:
+        if "users" in tables:
+            user_columns = {column["name"] for column in inspector.get_columns("users")}
+            if "role" not in user_columns:
+                connection.execute(
+                    text("ALTER TABLE users ADD COLUMN role VARCHAR NOT NULL DEFAULT 'USER'")
+                )
+            if "status" not in user_columns:
+                connection.execute(
+                    text("ALTER TABLE users ADD COLUMN status VARCHAR NOT NULL DEFAULT 'ACTIVE'")
+                )
+            if "full_name" not in user_columns:
+                connection.execute(text("ALTER TABLE users ADD COLUMN full_name VARCHAR"))
+            if "gender" not in user_columns:
+                connection.execute(text("ALTER TABLE users ADD COLUMN gender VARCHAR"))
+            if "bio" not in user_columns:
+                connection.execute(text("ALTER TABLE users ADD COLUMN bio VARCHAR"))
+            if "avatar_key" not in user_columns:
+                connection.execute(
+                    text("ALTER TABLE users ADD COLUMN avatar_key VARCHAR NOT NULL DEFAULT 'bunny'")
+                )
+
+        if "lessons" in tables:
+            lesson_columns = {column["name"] for column in inspector.get_columns("lessons")}
+            if "pronunciation_passing_score" not in lesson_columns:
+                connection.execute(
+                    text("ALTER TABLE lessons ADD COLUMN pronunciation_passing_score INTEGER NOT NULL DEFAULT 70")
+                )
+            if "pronunciation_max_attempts" not in lesson_columns:
+                connection.execute(
+                    text("ALTER TABLE lessons ADD COLUMN pronunciation_max_attempts INTEGER NOT NULL DEFAULT 7")
+                )
+
+        if "words" in tables:
+            word_columns = {column["name"] for column in inspector.get_columns("words")}
+            if "ipa" not in word_columns:
+                connection.execute(text("ALTER TABLE words ADD COLUMN ipa VARCHAR"))
+            if "reference_audio_path" not in word_columns:
+                connection.execute(text("ALTER TABLE words ADD COLUMN reference_audio_path VARCHAR"))
+
+        if "pronunciation_attempts" in tables:
+            pronunciation_columns = {
+                column["name"]
+                for column in inspector.get_columns("pronunciation_attempts")
+            }
+            if "lesson_id" not in pronunciation_columns:
+                connection.execute(
+                    text("ALTER TABLE pronunciation_attempts ADD COLUMN lesson_id INTEGER")
+                )
+            if "overall_score" not in pronunciation_columns:
+                connection.execute(
+                    text("ALTER TABLE pronunciation_attempts ADD COLUMN overall_score INTEGER NOT NULL DEFAULT 0")
+                )
+            if "character_results" not in pronunciation_columns:
+                connection.execute(
+                    text("ALTER TABLE pronunciation_attempts ADD COLUMN character_results JSON")
+                )
+            if "phoneme_results" not in pronunciation_columns:
+                connection.execute(
+                    text("ALTER TABLE pronunciation_attempts ADD COLUMN phoneme_results JSON")
+                )
+
+        if "levels" in tables:
+            level_columns = {column["name"] for column in inspector.get_columns("levels")}
+            new_columns = {
+                "placement_test_enabled": "INTEGER NOT NULL DEFAULT 0",
+                "placement_test_question_count": "INTEGER NOT NULL DEFAULT 10",
+                "placement_test_passing_score": "INTEGER NOT NULL DEFAULT 7",
+                "is_active": "INTEGER NOT NULL DEFAULT 1",
+            }
+            for name, definition in new_columns.items():
+                if name not in level_columns:
+                    connection.execute(text(f"ALTER TABLE levels ADD COLUMN {name} {definition}"))
+
+        if "topics" in tables:
+            topic_columns = {column["name"] for column in inspector.get_columns("topics")}
+            if "quick_review_limit" not in topic_columns:
+                connection.execute(
+                    text("ALTER TABLE topics ADD COLUMN quick_review_limit INTEGER NOT NULL DEFAULT 15")
+                )
+
+        if "review_session_items" in tables:
+            review_item_columns = {
+                column["name"]
+                for column in inspector.get_columns("review_session_items")
+            }
+            if "question_data" not in review_item_columns:
+                connection.execute(
+                    text("ALTER TABLE review_session_items ADD COLUMN question_data JSON")
+                )
+            if "correct_answer" not in review_item_columns:
+                connection.execute(
+                    text("ALTER TABLE review_session_items ADD COLUMN correct_answer TEXT")
+                )
+            if "answer" not in review_item_columns:
+                connection.execute(
+                    text("ALTER TABLE review_session_items ADD COLUMN answer TEXT")
+                )
+
+        for table_name in ("topics", "lessons", "words"):
+            if table_name in tables:
+                columns = {
+                    column["name"]
+                    for column in inspector.get_columns(table_name)
+                }
+                if "is_active" not in columns:
+                    connection.execute(
+                        text(
+                            f"ALTER TABLE {table_name} "
+                            "ADD COLUMN is_active INTEGER NOT NULL DEFAULT 1"
+                        )
+                    )
+
+
+def initialize_database() -> None:
+    migrate_placement_test_schema()
+    Base.metadata.create_all(bind=engine)
+
+=== backend\app\init_db.py ===
+from pathlib import Path
+import sqlite3
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+DATABASE_FILE = BASE_DIR / "backend" / "database.db"
+SQL_FILE = BASE_DIR / "database" / "database.sql"
+
+
+connection = sqlite3.connect(DATABASE_FILE)
+
+with open(SQL_FILE, "r", encoding="utf-8") as file:
+    sql_script = file.read()
+
+connection.executescript(sql_script)
+
+connection.close()
+
+print("Database created successfully.")
+
+=== backend\app\main.py ===
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
+from app.database import initialize_database
+from routes.user import router as user_router
+from routes.auth import router as auth_router
+from routes.levels import router as levels_router
+from routes.placement_tests import router as placement_tests_router
+from routes.pronunciation import router as pronunciation_router
+from routes.progress import router as progress_router
+from app.database import SessionLocal
+from scripts.seed_demo_data import seed_demo_data
+
+initialize_database()
+
+with SessionLocal() as startup_db:
+    seed_demo_data(startup_db)
+
+app = FastAPI(
+    title="Learning Application API",
+    version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+def root():
+    return {"message": "API is running"}
+
+app.include_router(user_router)
+app.include_router(auth_router)
+app.include_router(levels_router)
+app.include_router(placement_tests_router)
+app.include_router(pronunciation_router)
+app.include_router(progress_router)
+
+frontend_dir = Path(__file__).resolve().parents[2] / "frontend"
+if frontend_dir.is_dir():
+    app.mount("/frontend", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+
+
+=== backend\app\security.py ===
+
+from fastapi import Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from fastapi.security import HTTPBearer
+from app.database import SessionLocal
+from models.user import User
+from services.token_service import decode_access_token
+
+bearer_scheme = HTTPBearer()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+def get_current_user(
+    credentials = Depends(bearer_scheme),
+    db: Session = Depends(get_db)
+) -> User:
+    token = credentials.credentials
+    credentials_error = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    try:
+        payload = decode_access_token(token)
+        user_id = int(payload["sub"])
+    except (ValueError, TypeError, KeyError):
+        raise credentials_error
+
+    user = (
+        db.query(User)
+        .filter(User.user_id == user_id)
+        .first()
+    )
+
+    if user is None or user.status != "ACTIVE":
+        raise credentials_error
+
+    return user
+
+
+def require_admin(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    if current_user.role != "ADMIN":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required",
+        )
+    return current_user
+
+
+=== backend\app.py ===
+
+
+
+=== backend\config.py ===
+
+
+=== backend\models\__init__.py ===
+from models.user import User
+
+__all__ = ["User"]
+
+=== backend\models\curriculum.py ===
+from sqlalchemy import (
+    CheckConstraint,
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+)
+
+from app.database import Base
+
+
+class Level(Base):
+    __tablename__ = "levels"
+    __table_args__ = (
+        CheckConstraint(
+            "placement_test_enabled IN (0, 1)",
+            name="ck_levels_placement_test_enabled",
+        ),
+        CheckConstraint(
+            "placement_test_question_count >= 1",
+            name="ck_levels_placement_test_question_count",
+        ),
+        CheckConstraint(
+            "placement_test_passing_score >= 1",
+            name="ck_levels_placement_test_passing_score",
+        ),
+        CheckConstraint(
+            "placement_test_passing_score <= placement_test_question_count",
+            name="ck_levels_placement_test_passing_score_max",
+        ),
+    )
+
+    level_id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, nullable=False, unique=True)
+    description = Column(Text)
+    display_order = Column(Integer, nullable=False)
+    placement_test_enabled = Column(Integer, nullable=False, default=0, server_default="0")
+    placement_test_question_count = Column(Integer, nullable=False, default=10, server_default="10")
+    placement_test_passing_score = Column(Integer, nullable=False, default=7, server_default="7")
+    is_active = Column(Integer, nullable=False, default=1, server_default="1")
+
+
+class Topic(Base):
+    __tablename__ = "topics"
+    topic_id = Column(Integer, primary_key=True, autoincrement=True)
+    level_id = Column(Integer, ForeignKey("levels.level_id", ondelete="CASCADE"), nullable=False)
+    name = Column(String, nullable=False)
+    description = Column(Text)
+    display_order = Column(Integer, nullable=False)
+    quick_review_limit = Column(Integer, nullable=False, default=15, server_default="15")
+    is_active = Column(Integer, nullable=False, default=1, server_default="1")
+
+
+class Lesson(Base):
+    __tablename__ = "lessons"
+    lesson_id = Column(Integer, primary_key=True, autoincrement=True)
+    topic_id = Column(Integer, ForeignKey("topics.topic_id", ondelete="CASCADE"), nullable=False)
+    name = Column(String, nullable=False)
+    description = Column(Text)
+    display_order = Column(Integer, nullable=False)
+    is_active = Column(Integer, nullable=False, default=1, server_default="1")
+    pronunciation_passing_score = Column(Integer, nullable=False, default=70, server_default="70")
+    pronunciation_max_attempts = Column(Integer, nullable=False, default=7, server_default="7")
+
+
+class Word(Base):
+    __tablename__ = "words"
+    word_id = Column(Integer, primary_key=True, autoincrement=True)
+    word = Column(String, nullable=False)
+    meaning = Column(Text, nullable=False)
+    pronunciation = Column(String)
+    part_of_speech = Column(String)
+    example = Column(Text)
+    ipa = Column(String)
+    reference_audio_path = Column(String)
+    is_active = Column(Integer, nullable=False, default=1, server_default="1")
+
+
+class LessonWord(Base):
+    __tablename__ = "lesson_words"
+    __table_args__ = (
+        UniqueConstraint("lesson_id", "display_order"),
+    )
+
+    lesson_id = Column(Integer, ForeignKey("lessons.lesson_id"), primary_key=True)
+    word_id = Column(Integer, ForeignKey("words.word_id"), primary_key=True)
+    display_order = Column(Integer, nullable=False)
+
+
+=== backend\models\placement_test.py ===
+from sqlalchemy import (
+    CheckConstraint,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    JSON,
+    Text,
+    UniqueConstraint,
+    func,
+)
+
+from app.database import Base
+
+
+class PlacementTestAttempt(Base):
+    __tablename__ = "placement_test_attempts"
+    __table_args__ = (
+        CheckConstraint("total_questions >= 1"),
+        CheckConstraint("passing_score >= 1"),
+        CheckConstraint("passing_score <= total_questions"),
+        CheckConstraint("correct_answers >= 0 AND correct_answers <= total_questions"),
+        CheckConstraint("passed IN (0, 1)"),
+    )
+
+    attempt_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False, index=True)
+    level_id = Column(Integer, ForeignKey("levels.level_id", ondelete="CASCADE"), nullable=False, index=True)
+    total_questions = Column(Integer, nullable=False)
+    passing_score = Column(Integer, nullable=False)
+    correct_answers = Column(Integer, nullable=False, default=0, server_default="0")
+    passed = Column(Integer, nullable=False, default=0, server_default="0")
+    started_at = Column(DateTime, nullable=False, server_default=func.current_timestamp())
+    completed_at = Column(DateTime)
+
+
+class PlacementTestAttemptItem(Base):
+    __tablename__ = "placement_test_attempt_items"
+    __table_args__ = (
+        UniqueConstraint("attempt_id", "word_id", name="uq_placement_attempt_word"),
+        CheckConstraint("is_answered IN (0, 1)"),
+        CheckConstraint("is_correct IN (0, 1)"),
+    )
+
+    item_id = Column(Integer, primary_key=True, autoincrement=True)
+    attempt_id = Column(
+        Integer,
+        ForeignKey("placement_test_attempts.attempt_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    word_id = Column(Integer, ForeignKey("words.word_id"), nullable=False)
+    question_data = Column(JSON, nullable=False)
+    answer = Column(Text)
+    is_answered = Column(Integer, nullable=False, default=0, server_default="0")
+    is_correct = Column(Integer, nullable=False, default=0, server_default="0")
+    answered_at = Column(DateTime)
+
+
+=== backend\models\progress.py ===
+from sqlalchemy import (
+    Column,
+    Date,
+    DateTime,
+    ForeignKey,
+    Integer,
+    JSON,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+)
+
+from app.database import Base
+
+
+class UserWordProgress(Base):
+    __tablename__ = "user_word_progress"
+    __table_args__ = (
+        UniqueConstraint("user_id", "word_id", name="uq_user_word_progress_user_word"),
+    )
+
+    user_word_progress_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
+    word_id = Column(Integer, ForeignKey("words.word_id", ondelete="CASCADE"), nullable=False)
+    learned = Column(Integer, nullable=False, default=0, server_default="0")
+    mastered = Column(Integer, nullable=False, default=0, server_default="0")
+    correct_count = Column(Integer, nullable=False, default=0, server_default="0")
+    wrong_count = Column(Integer, nullable=False, default=0, server_default="0")
+    review_count = Column(Integer, nullable=False, default=0, server_default="0")
+    last_reviewed_at = Column(DateTime)
+    next_review_at = Column(DateTime)
+    created_at = Column(DateTime, server_default=func.current_timestamp())
+    updated_at = Column(
+        DateTime,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+    )
+
+
+class UserTopicProgress(Base):
+    __tablename__ = "user_topic_progress"
+    __table_args__ = (
+        UniqueConstraint("user_id", "topic_id", name="uq_user_topic_progress_user_topic"),
+    )
+
+    user_topic_progress_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
+    topic_id = Column(Integer, ForeignKey("topics.topic_id", ondelete="CASCADE"), nullable=False)
+    learned_count = Column(Integer, nullable=False, default=0, server_default="0")
+    mastered_count = Column(Integer, nullable=False, default=0, server_default="0")
+    last_studied_at = Column(DateTime)
+    last_reviewed_at = Column(DateTime)
+    created_at = Column(DateTime, server_default=func.current_timestamp())
+    updated_at = Column(
+        DateTime,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+    )
+
+
+class UserDailyActivity(Base):
+    __tablename__ = "user_daily_activity"
+    __table_args__ = (
+        UniqueConstraint("user_id", "activity_date", name="uq_user_daily_activity_user_date"),
+    )
+
+    activity_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
+    activity_date = Column(Date, nullable=False)
+    learned_count = Column(Integer, nullable=False, default=0, server_default="0")
+    review_count = Column(Integer, nullable=False, default=0, server_default="0")
+    quiz_count = Column(Integer, nullable=False, default=0, server_default="0")
+    created_at = Column(DateTime, server_default=func.current_timestamp())
+
+
+class ReviewSession(Base):
+    __tablename__ = "review_sessions"
+
+    review_session_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
+    topic_id = Column(Integer, ForeignKey("topics.topic_id", ondelete="CASCADE"), nullable=False)
+    review_type = Column(String, nullable=False)
+    total_items = Column(Integer, nullable=False, default=0, server_default="0")
+    completed_items = Column(Integer, nullable=False, default=0, server_default="0")
+    started_at = Column(DateTime, server_default=func.current_timestamp())
+    completed_at = Column(DateTime)
+
+
+class ReviewSessionItem(Base):
+    __tablename__ = "review_session_items"
+    __table_args__ = (
+        UniqueConstraint(
+            "review_session_id",
+            "word_id",
+            name="uq_review_session_items_session_word",
+        ),
+    )
+
+    session_item_id = Column(Integer, primary_key=True, autoincrement=True)
+    review_session_id = Column(
+        Integer,
+        ForeignKey("review_sessions.review_session_id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    word_id = Column(Integer, ForeignKey("words.word_id", ondelete="CASCADE"), nullable=False)
+    question_data = Column(JSON)
+    correct_answer = Column(Text)
+    answer = Column(Text)
+    is_answered = Column(Integer, nullable=False, default=0, server_default="0")
+    is_correct = Column(Integer, nullable=False, default=0, server_default="0")
+    answered_at = Column(DateTime)
+
+
+=== backend\models\pronunciation.py ===
+from sqlalchemy import (
+    CheckConstraint,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    JSON,
+    func,
+)
+
+from app.database import Base
+
+
+class PronunciationAttempt(Base):
+    """Một lần người học bấm micro và đọc 1 từ / 1 câu ở trang Luyện phát âm."""
+
+    __tablename__ = "pronunciation_attempts"
+    __table_args__ = (
+        CheckConstraint("mode IN ('word', 'sentence')", name="ck_pronunciation_mode"),
+        CheckConstraint("score >= 0 AND score <= 100", name="ck_pronunciation_score"),
+    )
+
+    attempt_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(
+        Integer,
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    # word_id có thể trống nếu từ trên giao diện chưa có trong bảng words
+    word_id = Column(Integer, ForeignKey("words.word_id"), index=True)
+    word = Column(String, nullable=False, index=True)   # từ tiếng Anh (chữ thường)
+    mode = Column(String, nullable=False)               # "word" | "sentence"
+    target_text = Column(Text, nullable=False)          # từ / câu phải đọc
+    transcript = Column(Text, nullable=False, default="", server_default="")  # máy nghe được
+    score = Column(Integer, nullable=False)             # 0 – 100 (%)
+    lesson_id = Column(Integer, ForeignKey("lessons.lesson_id", ondelete="CASCADE"), index=True)
+    overall_score = Column(Integer, nullable=False, default=0, server_default="0")
+    character_results = Column(JSON)
+    phoneme_results = Column(JSON)
+    created_at = Column(DateTime, nullable=False, server_default=func.current_timestamp())
+
+=== backend\models\user.py ===
+from sqlalchemy import Column, Integer, String, DateTime, func
+from app.database import Base
+
+class User(Base):
+    __tablename__="users"
+
+    user_id = Column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+    )
+
+    username = Column(
+        String,
+        unique=True,
+        nullable=False,
+    )
+
+    email = Column(
+        String,
+        unique=True,
+        nullable=False,
+    )
+
+    full_name = Column(String)
+
+    gender = Column(String)
+
+    bio = Column(String)  # giới thiệu ngắn ở trang Hồ sơ
+    avatar_key = Column(
+        String,
+        nullable=False,
+        default="bunny",
+        server_default="bunny",
+    )
+
+    password_hash = Column(
+        String,
+        nullable=False,
+    )
+
+    role = Column(
+        String,
+        nullable=False,
+        default="USER",
+        server_default="USER",
+    )
+
+    status = Column(
+        String,
+        nullable=False,
+        default="ACTIVE",
+        server_default="ACTIVE",
+    )
+
+    created_at = Column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+    )
+
+    updated_at = Column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+    )
+
+=== backend\routes\__init__.py ===
+
+
+=== backend\routes\auth.py ===
+from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+
+from app.database import SessionLocal
+from app.security import get_current_user
+from models.user import User
+from schemas.auth import LoginRequest, TokenResponse
+from services.auth_service import (
+    authenticate_user,
+    create_access_token,
+)
+
+
+router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@router.post("/login", response_model=TokenResponse)
+def login(
+    login_data: LoginRequest,
+    db: Session = Depends(get_db),
+):
+    try:
+        user = authenticate_user(
+            db=db,
+            identifier=login_data.identifier,
+            password=login_data.password,
+        )
+    except ValueError as error:
+        message = str(error)
+
+        if message == "Account is locked or inactive":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=message,
+            ) from error
+
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username/email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from error
+
+    access_token = create_access_token(user)
+
+    return TokenResponse(access_token=access_token)
+
+
+class ProfileUpdate(BaseModel):
+    # Khớp với giới hạn của form trong profile.js (tên 40 kí tự, giới thiệu 120 kí tự)
+    full_name: str = Field(min_length=1, max_length=40)
+    bio: str | None = Field(default=None, max_length=120)
+
+
+def _profile_dict(user: User) -> dict:
+    return {
+        "user_id": user.user_id,
+        "username": user.username,
+        "email": user.email,
+        "full_name": user.full_name,
+        "gender": user.gender,
+        "bio": user.bio or "",
+        "role": user.role,
+        "avatar_key": user.avatar_key or "bunny",
+        "created_at": user.created_at,
+    }
+
+
+@router.get("/me")
+def current_user_profile(user: User = Depends(get_current_user)):
+    return _profile_dict(user)
+
+
+@router.put("/me")
+def update_current_user_profile(
+    data: ProfileUpdate,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    full_name = data.full_name.strip()
+    if not full_name:
+        raise HTTPException(
+            status_code=422,
+            detail="Vui lòng nhập tên của bạn",
+        )
+
+    # get_current_user dùng session riêng, nên lấy lại user trong session của request này
+    db_user = db.query(User).filter(User.user_id == user.user_id).first()
+    db_user.full_name = full_name
+    db_user.bio = (data.bio or "").strip() or None
+    db.commit()
+    db.refresh(db_user)
+    return _profile_dict(db_user)
+
+=== backend\routes\levels.py ===
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+
+from app.security import get_current_user, get_db, require_admin
+from models.curriculum import Lesson, LessonWord, Level, Topic, Word
+from models.user import User
+from schemas.placement_test import (
+    LevelAccessResponse,
+    LevelCreate,
+    LevelResponse,
+    LevelUpdate,
+    LessonCreate,
+    LessonResponse,
+    LessonUpdate,
+    PlacementTestSettingsUpdate,
+    AdminWordResponse,
+    TopicCreate,
+    TopicResponse,
+    TopicUpdate,
+    WordCreate,
+    WordResponse,
+    WordUpdate,
+)
+from services.placement_test_service import (
+    get_level_words,
+    level_is_unlocked,
+)
+from services.pronunciation_service import ensure_reference_audio
+
+
+router = APIRouter(tags=["Levels"])
+
+
+def _level_response(db: Session, user: User, level: Level) -> dict:
+    return {
+        "level_id": level.level_id,
+        "name": level.name,
+        "description": level.description,
+        "display_order": level.display_order,
+        "placement_test_enabled": bool(level.placement_test_enabled),
+        "placement_test_question_count": level.placement_test_question_count,
+        "placement_test_passing_score": level.placement_test_passing_score,
+        "is_unlocked": level_is_unlocked(db, user, level),
+        "is_active": bool(level.is_active),
+    }
+
+
+def _require_unlocked_level(db: Session, user: User, level_id: int) -> Level:
+    level = db.query(Level).filter_by(level_id=level_id, is_active=1).first()
+    if level is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Level not found")
+    if not level_is_unlocked(db, user, level):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Pass this level's placement test or a higher-level test to access its content",
+        )
+    return level
+
+
+def _next_lesson_word_order(db: Session, lesson_id: int) -> int:
+    last_order = (
+        db.query(LessonWord.display_order)
+        .filter_by(lesson_id=lesson_id)
+        .order_by(LessonWord.display_order.desc())
+        .first()
+    )
+    return (last_order[0] if last_order is not None else 0) + 1
+
+
+@router.get("/levels", response_model=list[LevelResponse])
+def list_levels(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    levels = db.query(Level).filter_by(is_active=1).order_by(Level.display_order, Level.level_id).all()
+    return [_level_response(db, user, level) for level in levels]
+
+
+@router.post("/levels", response_model=LevelResponse, status_code=status.HTTP_201_CREATED)
+def create_level(
+    data: LevelCreate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_admin),
+):
+    if db.query(Level).filter_by(name=data.name).first():
+        raise HTTPException(status_code=409, detail="Level name already exists")
+
+    level = Level(
+        name=data.name,
+        description=data.description,
+        display_order=data.display_order,
+        placement_test_enabled=int(data.placement_test_enabled),
+        placement_test_question_count=data.placement_test_question_count,
+        placement_test_passing_score=data.placement_test_passing_score,
+        is_active=int(data.is_active),
+    )
+    db.add(level)
+    db.commit()
+    db.refresh(level)
+    return _level_response(db, user, level)
+
+
+@router.patch("/levels/{level_id}", response_model=LevelResponse)
+def update_level(
+    level_id: int,
+    data: LevelUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_admin),
+):
+    level = db.query(Level).filter_by(level_id=level_id, is_active=1).first()
+    if level is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Level not found")
+    changes = data.model_dump(exclude_unset=True)
+    if "name" in changes and changes["name"] != level.name:
+        if db.query(Level).filter_by(name=changes["name"]).first():
+            raise HTTPException(status_code=409, detail="Level name already exists")
+    question_count = changes.get("placement_test_question_count", level.placement_test_question_count)
+    passing_score = changes.get("placement_test_passing_score", level.placement_test_passing_score)
+    if passing_score > question_count:
+        raise HTTPException(status_code=422, detail="passing score cannot exceed the configured question count")
+    for key, value in changes.items():
+        if value is not None:
+            setattr(level, key, int(value) if key in {"placement_test_enabled", "is_active"} else value)
+    db.commit()
+    db.refresh(level)
+    return _level_response(db, user, level)
+
+
+@router.delete("/levels/{level_id}", status_code=status.HTTP_204_NO_CONTENT)
+def deactivate_level(
+    level_id: int,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    level = db.query(Level).filter_by(level_id=level_id).first()
+    if level is None:
+        raise HTTPException(status_code=404, detail="Level not found")
+    level.is_active = 0
+    db.commit()
+
+
+@router.get("/admin/levels", response_model=list[LevelResponse])
+def admin_list_levels(
+    db: Session = Depends(get_db),
+    user: User = Depends(require_admin),
+):
+    levels = db.query(Level).order_by(Level.display_order, Level.level_id).all()
+    return [_level_response(db, user, level) for level in levels]
+
+
+@router.get("/levels/{level_id}/access", response_model=LevelAccessResponse)
+def get_level_access(
+    level_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    level = db.query(Level).filter_by(level_id=level_id, is_active=1).first()
+    if level is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Level not found")
+    if level.placement_test_enabled:
+        question_count = min(
+            level.placement_test_question_count,
+            len(get_level_words(db, level_id)),
+        )
+        passing_score = (
+            min(level.placement_test_passing_score, question_count)
+            if question_count
+            else None
+        )
+    else:
+        question_count = None
+        passing_score = None
+    return {
+        "level_id": level.level_id,
+        "is_unlocked": level_is_unlocked(db, user, level),
+        "placement_test_enabled": bool(level.placement_test_enabled),
+        "question_count": question_count,
+        "required_passing_score": passing_score,
+    }
+
+
+@router.patch("/admin/levels/{level_id}/placement-test")
+def update_placement_test_settings(
+    level_id: int,
+    data: PlacementTestSettingsUpdate,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    level = db.query(Level).filter_by(level_id=level_id).first()
+    if level is None:
+        raise HTTPException(status_code=404, detail="Level not found")
+    if data.passing_score > data.question_count:
+        raise HTTPException(
+            status_code=422,
+            detail="passing score cannot exceed the configured question count",
+        )
+    level.placement_test_enabled = int(data.enabled)
+    level.placement_test_question_count = data.question_count
+    level.placement_test_passing_score = data.passing_score
+    db.commit()
+    db.refresh(level)
+    return {
+        "level_id": level.level_id,
+        "placement_test_enabled": bool(level.placement_test_enabled),
+        "placement_test_question_count": level.placement_test_question_count,
+        "placement_test_passing_score": level.placement_test_passing_score,
+    }
+
+
+@router.get("/topics", response_model=list[TopicResponse])
+def admin_list_topics(
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    return db.query(Topic).order_by(Topic.level_id, Topic.display_order, Topic.topic_id).all()
+
+
+@router.post("/topics", response_model=TopicResponse, status_code=status.HTTP_201_CREATED)
+def admin_create_topic(
+    data: TopicCreate,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    if db.query(Level).filter_by(level_id=data.level_id, is_active=1).first() is None:
+        raise HTTPException(status_code=404, detail="Active level not found")
+    if db.query(Topic).filter_by(level_id=data.level_id, name=data.name).first():
+        raise HTTPException(status_code=409, detail="Topic name already exists in this level")
+    topic = Topic(**data.model_dump(exclude={"is_active"}), is_active=int(data.is_active))
+    db.add(topic)
+    try:
+        db.commit()
+        db.refresh(topic)
+    except Exception:
+        db.rollback()
+        raise
+    return topic
+
+
+@router.patch("/topics/{topic_id}", response_model=TopicResponse)
+def admin_update_topic(
+    topic_id: int,
+    data: TopicUpdate,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    topic = db.query(Topic).filter_by(topic_id=topic_id).first()
+    if topic is None:
+        raise HTTPException(status_code=404, detail="Topic not found")
+    changes = data.model_dump(exclude_unset=True)
+    if (
+        changes.get("level_id") is not None
+        and changes["level_id"] != topic.level_id
+        and db.query(Level).filter_by(level_id=changes["level_id"], is_active=1).first() is None
+    ):
+        raise HTTPException(status_code=404, detail="Active level not found")
+    next_level_id = changes.get("level_id", topic.level_id)
+    next_name = changes.get("name", topic.name)
+    if db.query(Topic).filter(
+        Topic.level_id == next_level_id,
+        Topic.name == next_name,
+        Topic.topic_id != topic_id,
+    ).first():
+        raise HTTPException(status_code=409, detail="Topic name already exists in this level")
+    for key, value in changes.items():
+        if value is not None:
+            setattr(topic, key, int(value) if key == "is_active" else value)
+    db.commit()
+    db.refresh(topic)
+    return topic
+
+
+@router.delete("/topics/{topic_id}", status_code=status.HTTP_204_NO_CONTENT)
+def admin_delete_topic(
+    topic_id: int,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    topic = db.query(Topic).filter_by(topic_id=topic_id).first()
+    if topic is None:
+        raise HTTPException(status_code=404, detail="Topic not found")
+    topic.is_active = 0
+    db.commit()
+
+
+@router.post("/lessons", response_model=LessonResponse, status_code=status.HTTP_201_CREATED)
+def admin_create_lesson(
+    data: LessonCreate,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    if db.query(Topic).filter_by(topic_id=data.topic_id, is_active=1).first() is None:
+        raise HTTPException(status_code=404, detail="Active topic not found")
+    if db.query(Lesson).filter_by(topic_id=data.topic_id, display_order=data.display_order).first():
+        raise HTTPException(status_code=409, detail="Lesson order already exists in this topic")
+    lesson = Lesson(**data.model_dump(exclude={"is_active"}), is_active=int(data.is_active))
+    db.add(lesson)
+    try:
+        db.commit()
+        db.refresh(lesson)
+    except Exception:
+        db.rollback()
+        raise
+    return lesson
+
+
+@router.patch("/lessons/{lesson_id}", response_model=LessonResponse)
+def admin_update_lesson(
+    lesson_id: int,
+    data: LessonUpdate,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    lesson = db.query(Lesson).filter_by(lesson_id=lesson_id).first()
+    if lesson is None:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    changes = data.model_dump(exclude_unset=True)
+    if (
+        changes.get("topic_id") is not None
+        and changes["topic_id"] != lesson.topic_id
+        and db.query(Topic).filter_by(topic_id=changes["topic_id"], is_active=1).first() is None
+    ):
+        raise HTTPException(status_code=404, detail="Active topic not found")
+    next_topic_id = changes.get("topic_id", lesson.topic_id)
+    next_order = changes.get("display_order", lesson.display_order)
+    if db.query(Lesson).filter(
+        Lesson.topic_id == next_topic_id,
+        Lesson.display_order == next_order,
+        Lesson.lesson_id != lesson_id,
+    ).first():
+        raise HTTPException(status_code=409, detail="Lesson order already exists in this topic")
+    for key, value in changes.items():
+        if value is not None:
+            setattr(lesson, key, int(value) if key == "is_active" else value)
+    db.commit()
+    db.refresh(lesson)
+    return lesson
+
+
+@router.delete("/lessons/{lesson_id}", status_code=status.HTTP_204_NO_CONTENT)
+def admin_delete_lesson(
+    lesson_id: int,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    lesson = db.query(Lesson).filter_by(lesson_id=lesson_id).first()
+    if lesson is None:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    lesson.is_active = 0
+    db.commit()
+
+
+@router.get("/admin/lessons", response_model=list[LessonResponse])
+def admin_list_lessons(
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    return db.query(Lesson).order_by(Lesson.topic_id, Lesson.display_order, Lesson.lesson_id).all()
+
+
+@router.get("/admin/words", response_model=list[AdminWordResponse])
+def admin_list_words(
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    rows = (
+        db.query(Word, LessonWord.lesson_id)
+        .join(LessonWord, LessonWord.word_id == Word.word_id)
+        .filter(Word.is_active == 1)
+        .order_by(Word.word_id, LessonWord.lesson_id)
+        .all()
+    )
+    return [
+        {
+            "word_id": word.word_id,
+            "word": word.word,
+            "meaning": word.meaning,
+            "pronunciation": word.pronunciation,
+            "part_of_speech": word.part_of_speech,
+            "example": word.example,
+            "ipa": word.ipa,
+            "lesson_id": lesson_id,
+        }
+        for word, lesson_id in rows
+    ]
+
+
+@router.post("/words", response_model=AdminWordResponse, status_code=status.HTTP_201_CREATED)
+def admin_create_word(
+    data: WordCreate,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    lesson = db.query(Lesson).filter_by(lesson_id=data.lesson_id, is_active=1).first()
+    if lesson is None:
+        raise HTTPException(status_code=404, detail="Active lesson not found")
+    word = Word(
+        word=data.word,
+        meaning=data.meaning,
+        pronunciation=data.pronunciation,
+        part_of_speech=data.part_of_speech,
+        example=data.example,
+        ipa=data.ipa,
+        is_active=1,
+    )
+    db.add(word)
+    try:
+        db.flush()
+        db.add(
+            LessonWord(
+                lesson_id=lesson.lesson_id,
+                word_id=word.word_id,
+                display_order=_next_lesson_word_order(db, lesson.lesson_id),
+            )
+        )
+        db.commit()
+        db.refresh(word)
+        try:
+            ensure_reference_audio(word)
+            db.commit()
+        except Exception:
+            db.rollback()
+    except Exception:
+        db.rollback()
+        raise
+    return {
+        "word_id": word.word_id,
+        "word": word.word,
+        "meaning": word.meaning,
+        "pronunciation": word.pronunciation,
+        "part_of_speech": word.part_of_speech,
+        "example": word.example,
+        "ipa": word.ipa,
+        "lesson_id": lesson.lesson_id,
+    }
+
+
+@router.patch("/words/{word_id}", response_model=AdminWordResponse)
+def admin_update_word(
+    word_id: int,
+    data: WordUpdate,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    word = db.query(Word).filter_by(word_id=word_id).first()
+    if word is None:
+        raise HTTPException(status_code=404, detail="Word not found")
+    changes = data.model_dump(exclude_unset=True)
+    lesson_id = changes.pop("lesson_id", None)
+    if lesson_id is not None:
+        lesson = db.query(Lesson).filter_by(lesson_id=lesson_id, is_active=1).first()
+        if lesson is None:
+            raise HTTPException(status_code=404, detail="Active lesson not found")
+        db.query(LessonWord).filter_by(word_id=word_id).delete()
+        db.add(
+            LessonWord(
+                lesson_id=lesson_id,
+                word_id=word_id,
+                display_order=_next_lesson_word_order(db, lesson_id),
+            )
+        )
+    for key, value in changes.items():
+        setattr(word, key, value)
+    db.commit()
+    db.refresh(word)
+    try:
+        ensure_reference_audio(word, force=bool(changes.get("word")))
+        db.commit()
+    except Exception:
+        db.rollback()
+    assigned = db.query(LessonWord.lesson_id).filter_by(word_id=word_id).first()
+    return {
+        "word_id": word.word_id,
+        "word": word.word,
+        "meaning": word.meaning,
+        "pronunciation": word.pronunciation,
+        "part_of_speech": word.part_of_speech,
+        "example": word.example,
+        "ipa": word.ipa,
+        "lesson_id": assigned[0] if assigned else lesson_id,
+    }
+
+
+@router.delete("/words/{word_id}", status_code=status.HTTP_204_NO_CONTENT)
+def admin_delete_word(
+    word_id: int,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    word = db.query(Word).filter_by(word_id=word_id).first()
+    if word is None:
+        raise HTTPException(status_code=404, detail="Word not found")
+    word.is_active = 0
+    db.commit()
+
+
+@router.get(
+    "/levels/{level_id}/topics",
+    response_model=list[TopicResponse],
+)
+def list_level_topics(
+    level_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    level = _require_unlocked_level(db, user, level_id)
+    return (
+        db.query(Topic)
+        .filter_by(level_id=level.level_id, is_active=1)
+        .order_by(Topic.display_order, Topic.topic_id)
+        .all()
+    )
+
+
+@router.get("/topics/{topic_id}/lessons", response_model=list[LessonResponse])
+def list_topic_lessons(
+    topic_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    topic = db.query(Topic).filter_by(topic_id=topic_id, is_active=1).first()
+    if topic is None:
+        raise HTTPException(status_code=404, detail="Topic not found")
+    _require_unlocked_level(db, user, topic.level_id)
+    return (
+        db.query(Lesson)
+        .filter_by(topic_id=topic_id, is_active=1)
+        .order_by(Lesson.display_order, Lesson.lesson_id)
+        .all()
+    )
+
+
+@router.get("/lessons/{lesson_id}/words", response_model=list[WordResponse])
+def list_lesson_words(
+    lesson_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    lesson = db.query(Lesson).filter_by(lesson_id=lesson_id, is_active=1).first()
+    if lesson is None:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    topic = db.query(Topic).filter_by(topic_id=lesson.topic_id, is_active=1).first()
+    if topic is None:
+        raise HTTPException(status_code=404, detail="Topic not found")
+    _require_unlocked_level(db, user, topic.level_id)
+    return (
+        db.query(Word)
+        .join(LessonWord, LessonWord.word_id == Word.word_id)
+        .filter(
+            LessonWord.lesson_id == lesson_id,
+            Word.is_active == 1,
+        )
+        .order_by(LessonWord.display_order, Word.word_id)
+        .all()
+    )
+
+
+=== backend\routes\placement_tests.py ===
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+
+from app.security import get_current_user, get_db
+from models.placement_test import PlacementTestAttempt, PlacementTestAttemptItem
+from models.user import User
+from schemas.placement_test import (
+    PlacementTestAnswer,
+    PlacementTestAnswerResponse,
+    PlacementTestAttemptResponse,
+    PlacementTestQuestionResponse,
+)
+from services.placement_test_service import (
+    complete_attempt,
+    create_attempt,
+    submit_answer,
+)
+
+
+router = APIRouter(tags=["Placement tests"])
+
+
+@router.post(
+    "/levels/{level_id}/placement-test/attempts",
+    response_model=PlacementTestAttemptResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def start_placement_test(
+    level_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    try:
+        return create_attempt(db, user.user_id, level_id)
+    except LookupError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+
+
+@router.get(
+    "/placement-test/attempts/{attempt_id}",
+    response_model=PlacementTestAttemptResponse,
+)
+def get_placement_test_attempt(
+    attempt_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    attempt = (
+        db.query(PlacementTestAttempt)
+        .filter_by(attempt_id=attempt_id, user_id=user.user_id)
+        .first()
+    )
+    if attempt is None:
+        raise HTTPException(status_code=404, detail="Placement test attempt not found")
+    return attempt
+
+
+@router.get(
+    "/placement-test/attempts/{attempt_id}/questions",
+    response_model=list[PlacementTestQuestionResponse],
+)
+def get_placement_test_questions(
+    attempt_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    attempt = (
+        db.query(PlacementTestAttempt)
+        .filter_by(attempt_id=attempt_id, user_id=user.user_id)
+        .first()
+    )
+    if attempt is None:
+        raise HTTPException(status_code=404, detail="Placement test attempt not found")
+    return (
+        db.query(PlacementTestAttemptItem)
+        .filter_by(attempt_id=attempt_id)
+        .order_by(PlacementTestAttemptItem.item_id)
+        .all()
+    )
+
+
+@router.post(
+    "/placement-test/attempts/{attempt_id}/questions/{item_id}/answer",
+    response_model=PlacementTestAnswerResponse,
+)
+def answer_placement_test_question(
+    attempt_id: int,
+    item_id: int,
+    data: PlacementTestAnswer,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    try:
+        item = submit_answer(db, user.user_id, attempt_id, item_id, data.answer)
+    except LookupError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+    return {"item_id": item.item_id, "is_correct": bool(item.is_correct)}
+
+
+@router.post(
+    "/placement-test/attempts/{attempt_id}/complete",
+    response_model=PlacementTestAttemptResponse,
+)
+def finish_placement_test(
+    attempt_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    try:
+        return complete_attempt(db, user.user_id, attempt_id)
+    except LookupError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+
+
+=== backend\routes\progress.py ===
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+
+from app.security import get_current_user, get_db
+from models.user import User
+from schemas.progress import (
+    LearnedWordResponse,
+    QuickReviewAnswer,
+    QuickReviewAnswerResponse,
+    QuickReviewSessionResponse,
+    TopicProgressResponse,
+    LearningStreakResponse,
+)
+from services.progress_service import (
+    create_quick_review,
+    get_topic_progress,
+    mark_word_learned,
+    submit_quick_review_answer,
+    get_learning_streak,
+)
+
+
+router = APIRouter(tags=["Learning progress"])
+
+
+@router.get("/progress/streak", response_model=LearningStreakResponse)
+def read_learning_streak(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    return get_learning_streak(db, user)
+
+
+@router.get(
+    "/topics/{topic_id}/progress",
+    response_model=TopicProgressResponse,
+)
+def read_topic_progress(
+    topic_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    return get_topic_progress(db, user, topic_id)
+
+
+@router.post(
+    "/topics/{topic_id}/words/{word_id}/learn",
+    response_model=LearnedWordResponse,
+)
+def learn_topic_word(
+    topic_id: int,
+    word_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    return mark_word_learned(db, user, topic_id, word_id)
+
+
+@router.post(
+    "/topics/{topic_id}/quick-review",
+    response_model=QuickReviewSessionResponse,
+)
+def start_quick_review(
+    topic_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    return create_quick_review(db, user, topic_id)
+
+
+@router.post(
+    "/review-sessions/{review_session_id}/items/{item_id}/answer",
+    response_model=QuickReviewAnswerResponse,
+)
+def answer_quick_review_item(
+    review_session_id: int,
+    item_id: int,
+    data: QuickReviewAnswer,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    return submit_quick_review_answer(
+        db,
+        user,
+        review_session_id,
+        item_id,
+        data.answer,
+    )
+
+
+=== backend\routes\pronunciation.py ===
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi.responses import FileResponse
+from sqlalchemy.orm import Session
+
+from app.security import get_current_user, get_db
+from models.curriculum import Word
+from models.user import User
+from services.pronunciation_service import assess_recording, get_reference_audio
+
+
+router = APIRouter(prefix="/pronunciation", tags=["Pronunciation"])
+
+
+@router.post("/assess")
+def assess_pronunciation(
+    word_id: int = Form(...),
+    lesson_id: int = Form(...),
+    target_text: str = Form(...),
+    audio: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    try:
+        audio_bytes = audio.file.read()
+        if len(audio_bytes) > 10 * 1024 * 1024:
+            raise HTTPException(status_code=413, detail="Audio is too large")
+        extension = (audio.filename or "recording.webm").rsplit(".", 1)[-1].lower()
+        if extension not in {"webm", "wav", "ogg", "m4a", "mp3"}:
+            extension = "webm"
+        return assess_recording(
+            db,
+            user,
+            word_id=word_id,
+            lesson_id=lesson_id,
+            target_text=target_text,
+            audio_bytes=audio_bytes,
+            extension=extension,
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+
+
+@router.get("/words/{word_id}/reference-audio")
+async def reference_audio(
+    word_id: int,
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    word = db.query(Word).filter_by(word_id=word_id, is_active=1).first()
+    if word is None:
+        raise HTTPException(status_code=404, detail="Word not found")
+    try:
+        path = await get_reference_audio(word)
+        db.commit()
+    except Exception as error:
+        raise HTTPException(status_code=502, detail="Could not generate reference audio") from error
+    return FileResponse(path, media_type="audio/mpeg", filename=f"{word.word}.mp3")
+
+
+=== backend\routes\user.py ===
+from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+from schemas.user import UserResponse, UserCreate
+from services.user_service import get_all_users, create_user
+from app.security import get_current_user, get_db
+from models.user import User
+
+router = APIRouter(
+    prefix="/users",
+    tags=["Users"],
+)
+class AvatarUpdate(BaseModel):
+    avatar_key: str = Field(min_length=1, max_length=30)
+
+
+@router.patch("/me/avatar", response_model=UserResponse)
+def update_avatar(
+    data: AvatarUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    allowed = {
+        "bunny",
+        "bunny_blue",
+        "bunny_pink",
+        "bunny_green",
+        "bunny_purple",
+        "bunny_orange",
+    }
+    if data.avatar_key not in allowed:
+        raise HTTPException(status_code=422, detail="Invalid avatar")
+    current_user.avatar_key = data.avatar_key
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+
+@router.get("/", response_model=list[UserResponse])
+def read_users(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return get_all_users(db)
+
+@router.post(
+    "/",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+
+def register_user(
+    user_data: UserCreate,
+    db: Session = Depends(get_db),
+):
+    try:
+        return create_user(
+            db=db,
+            username=user_data.username,
+            email=user_data.email,
+            password=user_data.password,
+            full_name=user_data.full_name,
+            gender=user_data.gender,
+            avatar_key=user_data.avatar_key or "bunny",
+        )
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(error),
+        ) from error
+
+
+=== backend\schemas\__init__.py ===
+
+
+=== backend\schemas\auth.py ===
+from pydantic import BaseModel, Field
+
+class LoginRequest(BaseModel):
+    identifier: str = Field(min_length=3, max_length=40)
+    password: str = Field(min_length=9, max_length=40)
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+=== backend\schemas\placement_test.py ===
+from datetime import datetime
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+
+class LevelCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+    description: str | None = None
+    display_order: int = Field(ge=0)
+    placement_test_enabled: bool = False
+    placement_test_question_count: int = Field(default=10, ge=1)
+    placement_test_passing_score: int = Field(default=7, ge=1)
+    is_active: bool = True
+
+    @model_validator(mode="after")
+    def validate_passing_score(self):
+        if self.placement_test_passing_score > self.placement_test_question_count:
+            raise ValueError("passing score cannot exceed the configured question count")
+        return self
+
+
+class LevelUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+    description: str | None = None
+    display_order: int | None = Field(default=None, ge=0)
+    placement_test_enabled: bool | None = None
+    placement_test_question_count: int | None = Field(default=None, ge=1)
+    placement_test_passing_score: int | None = Field(default=None, ge=1)
+    is_active: bool | None = None
+
+    @model_validator(mode="after")
+    def validate_passing_score(self):
+        if (
+            self.placement_test_passing_score is not None
+            and self.placement_test_question_count is not None
+            and self.placement_test_passing_score > self.placement_test_question_count
+        ):
+            raise ValueError("passing score cannot exceed the configured question count")
+        return self
+
+
+class PlacementTestSettingsUpdate(BaseModel):
+    enabled: bool
+    question_count: int = Field(ge=1)
+    passing_score: int = Field(ge=1)
+
+    @model_validator(mode="after")
+    def validate_passing_score(self):
+        if self.passing_score > self.question_count:
+            raise ValueError("passing score cannot exceed the configured question count")
+        return self
+
+
+class TopicCreate(BaseModel):
+    level_id: int
+    name: str = Field(min_length=1, max_length=150)
+    description: str | None = None
+    display_order: int = Field(default=1, ge=1)
+    quick_review_limit: int = Field(default=15, ge=1)
+    is_active: bool = True
+
+
+class TopicUpdate(BaseModel):
+    level_id: int | None = None
+    name: str | None = Field(default=None, min_length=1, max_length=150)
+    description: str | None = None
+    display_order: int | None = Field(default=None, ge=1)
+    quick_review_limit: int | None = Field(default=None, ge=1)
+    is_active: bool | None = None
+
+
+class LessonCreate(BaseModel):
+    topic_id: int
+    name: str = Field(min_length=1, max_length=150)
+    description: str | None = None
+    display_order: int = Field(default=1, ge=1)
+    is_active: bool = True
+    pronunciation_passing_score: int = Field(default=70, ge=1, le=100)
+    pronunciation_max_attempts: int = Field(default=7, ge=1)
+
+
+class LessonUpdate(BaseModel):
+    topic_id: int | None = None
+    name: str | None = Field(default=None, min_length=1, max_length=150)
+    description: str | None = None
+    display_order: int | None = Field(default=None, ge=1)
+    is_active: bool | None = None
+    pronunciation_passing_score: int | None = Field(default=None, ge=1, le=100)
+    pronunciation_max_attempts: int | None = Field(default=None, ge=1)
+
+
+class WordCreate(BaseModel):
+    lesson_id: int
+    word: str = Field(min_length=1, max_length=200)
+    meaning: str = Field(min_length=1)
+    pronunciation: str | None = None
+    part_of_speech: str | None = None
+    example: str | None = None
+    ipa: str | None = None
+
+
+class WordUpdate(BaseModel):
+    lesson_id: int | None = None
+    word: str | None = Field(default=None, min_length=1, max_length=200)
+    meaning: str | None = Field(default=None, min_length=1)
+    pronunciation: str | None = None
+    part_of_speech: str | None = None
+    example: str | None = None
+    ipa: str | None = None
+
+
+class LevelResponse(BaseModel):
+    level_id: int
+    name: str
+    description: str | None
+    display_order: int
+    placement_test_enabled: bool
+    placement_test_question_count: int
+    placement_test_passing_score: int
+    is_unlocked: bool
+    is_active: bool
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class LevelAccessResponse(BaseModel):
+    level_id: int
+    is_unlocked: bool
+    placement_test_enabled: bool
+    question_count: int | None
+    required_passing_score: int | None
+
+
+class TopicResponse(BaseModel):
+    topic_id: int
+    level_id: int
+    name: str
+    description: str | None
+    display_order: int
+    quick_review_limit: int
+    is_active: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class LessonResponse(BaseModel):
+    lesson_id: int
+    topic_id: int
+    name: str
+    description: str | None
+    display_order: int
+    is_active: int
+    pronunciation_passing_score: int = 70
+    pronunciation_max_attempts: int = 7
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class WordResponse(BaseModel):
+    word_id: int
+    word: str
+    meaning: str
+    pronunciation: str | None
+    part_of_speech: str | None
+    example: str | None
+    ipa: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class AdminWordResponse(WordResponse):
+    lesson_id: int
+
+
+class PlacementTestAttemptResponse(BaseModel):
+    attempt_id: int
+    user_id: int
+    level_id: int
+    total_questions: int
+    passing_score: int
+    correct_answers: int
+    passed: bool
+    started_at: datetime
+    completed_at: datetime | None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class PlacementTestQuestionResponse(BaseModel):
+    item_id: int
+    attempt_id: int
+    word_id: int
+    question_data: dict[str, Any]
+    is_answered: bool
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class PlacementTestAnswerResponse(BaseModel):
+    item_id: int
+    is_correct: bool
+
+
+class PlacementTestAnswer(BaseModel):
+    answer: str = Field(min_length=1, max_length=1000)
+
+
+=== backend\schemas\progress.py ===
+from typing import Any
+
+from pydantic import BaseModel, Field
+
+
+class TopicProgressResponse(BaseModel):
+    topic_id: int
+    learned_count: int
+    learned_word_ids: list[int]
+
+
+class LearnedWordResponse(BaseModel):
+    topic_id: int
+    word_id: int
+    learned: bool
+    learned_count: int
+
+
+class QuickReviewItemResponse(BaseModel):
+    item_id: int
+    word_id: int
+    question_data: dict[str, Any]
+
+
+class QuickReviewSessionResponse(BaseModel):
+    review_session_id: int
+    topic_id: int
+    total_items: int
+    items: list[QuickReviewItemResponse]
+
+
+class QuickReviewAnswer(BaseModel):
+    answer: str = Field(min_length=1, max_length=1000)
+
+
+class QuickReviewAnswerResponse(BaseModel):
+    item_id: int
+    is_correct: bool
+    correct_answer: str
+    completed_items: int
+    total_items: int
+    session_completed: bool
+
+
+class LearningStreakResponse(BaseModel):
+    current_streak: int
+    longest_streak: int
+    total_active_days: int
+    activity_dates: list[str]
+
+
+=== backend\schemas\pronunciation.py ===
+from datetime import datetime
+from typing import Literal
+
+from pydantic import BaseModel, Field
+
+
+class PronunciationAttemptCreate(BaseModel):
+    word: str = Field(min_length=1, max_length=100)
+    mode: Literal["word", "sentence"]
+    target_text: str = Field(min_length=1, max_length=500)
+    transcript: str = Field(default="", max_length=500)
+    score: int = Field(ge=0, le=100)
+
+
+class PronunciationAttemptResponse(BaseModel):
+    attempt_id: int
+    word: str
+    mode: str
+    score: int
+    best_score: int
+    attempts: int
+    blocked_words: int = 0
+    created_at: datetime
+
+
+class WeakWord(BaseModel):
+    word: str
+    mode: str
+    best_score: int
+    attempts: int
+    last_practiced_at: datetime
+
+
+class PronunciationSummary(BaseModel):
+    total_attempts: int
+    average_score: int
+    words_practiced: int
+    weak_words: list[WeakWord]
+
+=== backend\schemas\user.py ===
+from datetime import datetime
+from pydantic import BaseModel, ConfigDict, Field
+
+class UserCreate(BaseModel):
+    username: str | None = Field(default=None, min_length=3, max_length=30)
+    email: str = Field(min_length=5, max_length=40)
+    password: str = Field(min_length=9, max_length=40)
+    full_name: str | None = Field(default=None, max_length=100)
+    gender: str | None = Field(default=None, max_length=20)
+    avatar_key: str | None = Field(default=None, max_length=30)
+
+class UserResponse(BaseModel):
+    user_id: int
+    username: str
+    email: str
+    full_name: str | None = None
+    gender: str | None = None
+    bio: str | None = None
+    avatar_key: str = "bunny"
+    role: str
+    status: str
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+=== backend\scripts\init_db.py ===
+from pathlib import Path
+import sqlite3
+
+
+# Thư mục gốc của project
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+# Đường dẫn đến file SQL và database SQLite
+SQL_FILE = PROJECT_ROOT / "database" / "database.sql"
+DATABASE_FILE = PROJECT_ROOT / "backend" / "database.db"
+
+
+def init_database():
+    if not SQL_FILE.exists():
+        raise FileNotFoundError(
+            f"Không tìm thấy file SQL: {SQL_FILE}"
+        )
+
+    if DATABASE_FILE.exists():
+        raise FileExistsError(
+            f"Database đã tồn tại: {DATABASE_FILE}. "
+            "Không khởi tạo lại để tránh ghi đè dữ liệu."
+        )
+
+    connection = sqlite3.connect(DATABASE_FILE)
+
+    try:
+        connection.execute("PRAGMA foreign_keys = ON")
+
+        sql_script = SQL_FILE.read_text(encoding="utf-8")
+        connection.executescript(sql_script)
+
+        connection.commit()
+        print("Khởi tạo database thành công!")
+
+    except Exception:
+        connection.rollback()
+        connection.close()
+
+        # Xóa database tạo dở khi khởi tạo thất bại
+        if DATABASE_FILE.exists():
+            DATABASE_FILE.unlink()
+
+        raise
+
+    else:
+        connection.close()
+
+
+if __name__ == "__main__":
+    init_database()
+
+
+=== backend\scripts\seed_demo_data.py ===
+import os
+import sys
+from pathlib import Path
+
+BACKEND_ROOT = Path(__file__).resolve().parent.parent
+if str(BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(BACKEND_ROOT))
+
+from sqlalchemy.orm import Session
+
+from app.database import SessionLocal, initialize_database
+from models.curriculum import Lesson, LessonWord, Level, Topic, Word
+from models.progress import UserWordProgress
+from models.user import User
+from services.user_service import password_hasher
+from services.pronunciation_service import ensure_reference_audio
+
+
+ADMIN_EMAIL = "admin@vocab.local"
+ADMIN_USERNAME = "demo_admin"
+USER_EMAIL = "learner@vocab.local"
+USER_USERNAME = "demo_learner"
+
+CURRICULUM = [
+    {
+        "name": "A1",
+        "description": "Cấp độ cơ bản dành cho người mới bắt đầu.",
+        "placement_test_enabled": 0,
+        "topics": [
+            {
+                "name": "Everyday Life",
+                "description": "Lời chào và những người quanh ta.",
+                "lessons": [
+                    (
+                        "Greetings",
+                        [
+                            ("hello", "xin chào", "/həˈloʊ/", "interjection", "Hello, my name is Lan."),
+                            ("good morning", "chào buổi sáng", "/ˌɡʊd ˈmɔːrnɪŋ/", "phrase", "Good morning, everyone."),
+                            ("goodbye", "tạm biệt", "/ˌɡʊdˈbaɪ/", "interjection", "She waved goodbye."),
+                            ("please", "làm ơn", "/pliːz/", "adverb", "Please open the door."),
+                            ("thank you", "cảm ơn", "/ˈθæŋk juː/", "phrase", "Thank you for your help."),
+                        ],
+                    ),
+                    (
+                        "People",
+                        [
+                            ("person", "người", "/ˈpɜːrsən/", "noun", "A kind person helped me."),
+                            ("friend", "bạn bè", "/frend/", "noun", "My friend lives nearby."),
+                            ("child", "đứa trẻ", "/tʃaɪld/", "noun", "The child is reading a book."),
+                            ("parent", "cha hoặc mẹ", "/ˈperənt/", "noun", "A parent came to the meeting."),
+                            ("teacher", "giáo viên", "/ˈtiːtʃər/", "noun", "Our teacher speaks clearly."),
+                        ],
+                    ),
+                ],
+            },
+            {
+                "name": "Food and Drink",
+                "description": "Các loại trái cây và món ăn quen thuộc.",
+                "lessons": [
+                    (
+                        "Fruit",
+                        [
+                            ("apple", "quả táo", "/ˈæpəl/", "noun", "I ate an apple after lunch."),
+                            ("banana", "quả chuối", "/bəˈnænə/", "noun", "The banana is ripe."),
+                            ("orange", "quả cam", "/ˈɔːrɪndʒ/", "noun", "She peeled an orange."),
+                            ("grape", "quả nho", "/ɡreɪp/", "noun", "He washed a grape."),
+                            ("pear", "quả lê", "/per/", "noun", "A pear fell from the tree."),
+                        ],
+                    ),
+                    (
+                        "Meals",
+                        [
+                            ("bread", "bánh mì", "/bred/", "noun", "We bought fresh bread."),
+                            ("rice", "cơm; gạo", "/raɪs/", "noun", "They eat rice for dinner."),
+                            ("water", "nước", "/ˈwɔːtər/", "noun", "Please drink some water."),
+                            ("milk", "sữa", "/mɪlk/", "noun", "The child poured a glass of milk."),
+                            ("egg", "trứng", "/eɡ/", "noun", "I cooked an egg for breakfast."),
+                        ],
+                    ),
+                ],
+            },
+        ],
+    },
+    {
+        "name": "B1",
+        "description": "Cấp độ trung cấp với chủ đề du lịch, học tập và công việc.",
+        "placement_test_enabled": 1,
+        "topics": [
+            {
+                "name": "Travel",
+                "description": "Từ vựng cần thiết khi đi lại và du lịch.",
+                "lessons": [
+                    (
+                        "Getting Around",
+                        [
+                            ("ticket", "vé", "/ˈtɪkɪt/", "noun", "I bought a ticket at the station."),
+                            ("station", "nhà ga", "/ˈsteɪʃən/", "noun", "We waited at the station."),
+                            ("train", "tàu hỏa", "/treɪn/", "noun", "The train arrived on time."),
+                            ("airport", "sân bay", "/ˈerpɔːrt/", "noun", "The airport is very busy."),
+                            ("luggage", "hành lý", "/ˈlʌɡɪdʒ/", "noun", "Her luggage is beside the door."),
+                        ],
+                    ),
+                    (
+                        "On the Road",
+                        [
+                            ("bus", "xe buýt", "/bʌs/", "noun", "The bus stops near my house."),
+                            ("taxi", "xe taxi", "/ˈtæksi/", "noun", "We called a taxi after dinner."),
+                            ("map", "bản đồ", "/mæp/", "noun", "He checked the map for directions."),
+                            ("hotel", "khách sạn", "/hoʊˈtel/", "noun", "Our hotel is near the beach."),
+                            ("journey", "chuyến đi", "/ˈdʒɜːrni/", "noun", "The journey took three hours."),
+                        ],
+                    ),
+                ],
+            },
+            {
+                "name": "Study and Work",
+                "description": "Học tập, lớp học và môi trường làm việc.",
+                "lessons": [
+                    (
+                        "Classroom",
+                        [
+                            ("lesson", "bài học", "/ˈlesən/", "noun", "Today's lesson is about animals."),
+                            ("subject", "môn học", "/ˈsʌbdʒɪkt/", "noun", "Science is my favorite subject."),
+                            ("notebook", "quyển vở", "/ˈnoʊtbʊk/", "noun", "She wrote the answer in her notebook."),
+                            ("pencil", "bút chì", "/ˈpensəl/", "noun", "I sharpened my pencil."),
+                            ("dictionary", "từ điển", "/ˈdɪkʃəneri/", "noun", "Use a dictionary to check the word."),
+                        ],
+                    ),
+                    (
+                        "Workplace",
+                        [
+                            ("office", "văn phòng", "/ˈɔːfɪs/", "noun", "The office closes at six."),
+                            ("meeting", "cuộc họp", "/ˈmiːtɪŋ/", "noun", "Our meeting starts at nine."),
+                            ("colleague", "đồng nghiệp", "/ˈkɑːliːɡ/", "noun", "A colleague shared the report."),
+                            ("project", "dự án", "/ˈprɑːdʒekt/", "noun", "They finished the project early."),
+                            ("deadline", "hạn chót", "/ˈdedlaɪn/", "noun", "The deadline is next Friday."),
+                        ],
+                    ),
+                ],
+            },
+        ],
+    },
+    {
+        "name": "C1",
+        "description": "Cấp độ nâng cao với chủ đề công nghệ và môi trường.",
+        "placement_test_enabled": 1,
+        "topics": [
+            {
+                "name": "Technology",
+                "description": "Thiết bị số, internet và giao tiếp trực tuyến.",
+                "lessons": [
+                    (
+                        "Devices",
+                        [
+                            ("computer", "máy tính", "/kəmˈpjuːtər/", "noun", "The computer needs a software update."),
+                            ("keyboard", "bàn phím", "/ˈkiːbɔːrd/", "noun", "This keyboard is comfortable to use."),
+                            ("screen", "màn hình", "/skriːn/", "noun", "The screen looks bright outdoors."),
+                            ("smartphone", "điện thoại thông minh", "/ˈsmɑːrtfoʊn/", "noun", "My smartphone has a new camera."),
+                            ("charger", "bộ sạc", "/ˈtʃɑːrdʒər/", "noun", "I packed my charger for the trip."),
+                        ],
+                    ),
+                    (
+                        "Internet",
+                        [
+                            ("website", "trang web", "/ˈwebsaɪt/", "noun", "The website has useful information."),
+                            ("password", "mật khẩu", "/ˈpæswɜːrd/", "noun", "Choose a strong password."),
+                            ("message", "tin nhắn", "/ˈmesɪdʒ/", "noun", "I sent a message to my classmate."),
+                            ("download", "tải xuống", "/ˌdaʊnˈloʊd/", "verb", "You can download the free guide."),
+                            ("search", "tìm kiếm", "/sɜːrtʃ/", "verb", "We search online for reliable sources."),
+                        ],
+                    ),
+                ],
+            },
+            {
+                "name": "Environment",
+                "description": "Thiên nhiên, khí hậu và các vấn đề môi trường.",
+                "lessons": [
+                    (
+                        "Nature",
+                        [
+                            ("forest", "rừng", "/ˈfɔːrɪst/", "noun", "A narrow path crosses the forest."),
+                            ("river", "sông", "/ˈrɪvər/", "noun", "The river flows through the valley."),
+                            ("mountain", "núi", "/ˈmaʊntən/", "noun", "Clouds covered the mountain."),
+                            ("ocean", "đại dương", "/ˈoʊʃən/", "noun", "The ocean was calm this morning."),
+                            ("wildlife", "động vật hoang dã", "/ˈwaɪldlaɪf/", "noun", "The park protects local wildlife."),
+                        ],
+                    ),
+                    (
+                        "Climate",
+                        [
+                            ("climate", "khí hậu", "/ˈklaɪmət/", "noun", "The climate is changing quickly."),
+                            ("pollution", "sự ô nhiễm", "/pəˈluːʃən/", "noun", "Air pollution affects many cities."),
+                            ("recycle", "tái chế", "/ˌriːˈsaɪkəl/", "verb", "We recycle paper and glass."),
+                            ("energy", "năng lượng", "/ˈenərdʒi/", "noun", "Solar panels produce clean energy."),
+                            ("plastic", "nhựa", "/ˈplæstɪk/", "noun", "They avoid single-use plastic bags."),
+                        ],
+                    ),
+                ],
+            },
+        ],
+    },
+]
+
+
+def _get_or_create_account(
+    db: Session,
+    *,
+    username: str,
+    email: str,
+    full_name: str,
+    role: str,
+    password_env: str,
+) -> tuple[User, bool]:
+    user = db.query(User).filter_by(email=email).first()
+    if user is not None:
+        if user.role != role or user.status != "ACTIVE":
+            raise RuntimeError(f"Existing account {email} is not an active {role} account")
+        return user, False
+
+    password = os.environ.get(password_env)
+    if not password or len(password) < 12:
+        password = "AdminDemo2026!" if role == "ADMIN" else "UserDemo2026!"
+    user = User(
+        username=username,
+        email=email,
+        full_name=full_name,
+        password_hash=password_hasher.hash(password),
+        role=role,
+        status="ACTIVE",
+    )
+    db.add(user)
+    db.flush()
+    return user, True
+
+
+def _get_or_create_word(
+    db: Session,
+    definition: tuple[str, str, str, str, str],
+) -> tuple[Word, bool]:
+    word_text, meaning, pronunciation, part_of_speech, example = definition
+    word = db.query(Word).filter_by(word=word_text).first()
+    created = word is None
+    if created:
+        word = Word(
+            word=word_text,
+            meaning=meaning,
+            pronunciation=pronunciation,
+            part_of_speech=part_of_speech,
+            example=example,
+            is_active=1,
+        )
+        db.add(word)
+        db.flush()
+    return word, created
+
+
+def seed_demo_data(db: Session) -> dict[str, int]:
+    admin, admin_created = _get_or_create_account(
+        db,
+        username=ADMIN_USERNAME,
+        email=ADMIN_EMAIL,
+        full_name="Demo Administrator",
+        role="ADMIN",
+        password_env="DEMO_ADMIN_PASSWORD",
+    )
+    learner, learner_created = _get_or_create_account(
+        db,
+        username=USER_USERNAME,
+        email=USER_EMAIL,
+        full_name="Demo Learner",
+        role="USER",
+        password_env="DEMO_USER_PASSWORD",
+    )
+
+    counts = {
+        "accounts_created": int(admin_created) + int(learner_created),
+        "levels": 0,
+        "topics": 0,
+        "lessons": 0,
+        "words": 0,
+        "lesson_word_links": 0,
+        "learned_demo_words": 0,
+    }
+
+    for level_order, level_data in enumerate(CURRICULUM, start=1):
+        level = db.query(Level).filter_by(name=level_data["name"]).first()
+        if level is None:
+            level = Level(
+                name=level_data["name"],
+                description=level_data["description"],
+                display_order=level_order,
+                placement_test_enabled=level_data["placement_test_enabled"],
+                placement_test_question_count=10,
+                placement_test_passing_score=7,
+                is_active=1,
+            )
+            db.add(level)
+            db.flush()
+            counts["levels"] += 1
+
+        for topic_order, topic_data in enumerate(level_data["topics"], start=1):
+            topic = (
+                db.query(Topic)
+                .filter_by(level_id=level.level_id, name=topic_data["name"])
+                .first()
+            )
+            if topic is None:
+                topic = Topic(
+                    level_id=level.level_id,
+                    name=topic_data["name"],
+                    description=topic_data["description"],
+                    display_order=topic_order,
+                    quick_review_limit=15,
+                    is_active=1,
+                )
+                db.add(topic)
+                db.flush()
+                counts["topics"] += 1
+
+            for lesson_order, (lesson_name, definitions) in enumerate(
+                topic_data["lessons"],
+                start=1,
+            ):
+                lesson = (
+                    db.query(Lesson)
+                    .filter_by(topic_id=topic.topic_id, name=lesson_name)
+                    .first()
+                )
+                if lesson is None:
+                    lesson = Lesson(
+                        topic_id=topic.topic_id,
+                        name=lesson_name,
+                        description=f"Sample vocabulary for {lesson_name.lower()}.",
+                        display_order=lesson_order,
+                        is_active=1,
+                    )
+                    db.add(lesson)
+                    db.flush()
+                    counts["lessons"] += 1
+
+                for word_order, definition in enumerate(definitions, start=1):
+                    word, word_created = _get_or_create_word(db, definition)
+                    counts["words"] += int(word_created)
+                    if db.query(LessonWord).filter_by(
+                        lesson_id=lesson.lesson_id,
+                        word_id=word.word_id,
+                    ).first():
+                        continue
+                    db.add(
+                        LessonWord(
+                            lesson_id=lesson.lesson_id,
+                            word_id=word.word_id,
+                            display_order=word_order,
+                        )
+                    )
+                    counts["lesson_word_links"] += 1
+                    if (
+                        level_data["name"] == "A1"
+                        and topic_data["name"] == "Everyday Life"
+                    ):
+                        existing_progress = db.query(UserWordProgress).filter_by(
+                            user_id=learner.user_id,
+                            word_id=word.word_id,
+                        ).first()
+                        if existing_progress is None:
+                            db.add(
+                                UserWordProgress(
+                                    user_id=learner.user_id,
+                                    word_id=word.word_id,
+                                    learned=1,
+                                )
+                            )
+                            counts["learned_demo_words"] += 1
+
+    db.commit()
+    return counts
+
+
+def main() -> None:
+    initialize_database()
+    with SessionLocal() as db:
+        counts = seed_demo_data(db)
+    print("Demo data is ready.")
+    print(f"Admin login: {ADMIN_EMAIL}")
+    print(f"User login: {USER_EMAIL}")
+    print("Demo password defaults: admin=AdminDemo2026!, user=UserDemo2026!")
+    for name, count in counts.items():
+        print(f"{name}: {count}")
+
+
+if __name__ == "__main__":
+    main()
+
+
+=== backend\services\__init__.py ===
+
+
+=== backend\services\auth_service.py ===
+
+from datetime import datetime, timedelta, timezone
+
+from jose import jwt
+from pwdlib import PasswordHash
+from sqlalchemy.orm import Session
+
+from models.user import User
+
+
+# Khóa dùng cho môi trường phát triển.
+# Trước khi triển khai thực tế, hãy chuyển khóa này
+# sang biến môi trường và không đưa khóa thật lên Git.
+SECRET_KEY = "dev-only-change-this-secret-key-before-deployment"
+
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+password_hasher = PasswordHash.recommended()
+
+
+def authenticate_user(
+    db: Session,
+    identifier: str,
+    password: str,
+) -> User:
+    user = (
+        db.query(User)
+        .filter(
+            (User.username == identifier)
+            | (User.email == identifier)
+        )
+        .first()
+    )
+
+    if user is None:
+        raise ValueError("Invalid username/email or password")
+
+    if not password_hasher.verify(password, user.password_hash):
+        raise ValueError("Invalid username/email or password")
+
+    if user.status != "ACTIVE":
+        raise ValueError("Account is locked or inactive")
+
+    return user
+
+
+def create_access_token(user: User) -> str:
+    now = datetime.now(timezone.utc)
+
+    payload = {
+        "sub": str(user.user_id),
+        "role": user.role,
+        "iat": now,
+        "exp": now + timedelta(
+            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+        ),
+    }
+
+    return jwt.encode(
+        payload,
+        SECRET_KEY,
+        algorithm=ALGORITHM,
+    )
+
+
+=== backend\services\content_filter.py ===
+"""Lọc từ tục tĩu / không phù hợp trong câu người học nói ở trang Luyện phát âm.
+
+Danh sách phải giống hệt BANNED_WORDS / BANNED_STEMS trong frontend/user/js/pronounce.js.
+Viết KHÔNG DẤU, chữ thường.
+"""
+import re
+import unicodedata
+
+BANNED_WORDS = {
+    # tiếng Anh
+    "fuck", "fucks", "fucked", "fucker", "fuckers", "fucking", "fuckin", "motherfucker", "motherfucking",
+    "shit", "shits", "shitty", "bullshit", "bitch", "bitches", "bitchy", "bastard", "bastards",
+    "ass", "asses", "asshole", "assholes", "jackass", "dumbass", "dick", "dicks", "dickhead",
+    "cock", "cocks", "pussy", "pussies", "cunt", "cunts", "whore", "whores", "slut", "sluts",
+    "piss", "pissed", "wanker", "twat", "prick", "bollocks", "crap", "damn", "goddamn",
+    "nigger", "niggers", "nigga", "niggas", "faggot", "faggots", "fag", "fags", "retard", "retarded",
+    "porn", "sex", "sexy", "nude", "boobs", "tits",
+    # tiếng Việt (không dấu, viết tắt)
+    "dit", "dkm", "dmm", "dcm", "dm", "dcmm", "vcl", "vkl", "vl", "clgt", "cc", "cl", "lon", "buoi", "cac", "deo", "du",
+}
+# Từ bắt đầu bằng các gốc này cũng bị chặn (vd: fuuuck, shitload, motherfuckers)
+BANNED_STEMS = ("fuck", "fuk", "fuuu", "motherf", "shit", "bitch", "cunt", "nigg", "fagg", "whor", "slut", "dickhead")
+
+
+def _plain(token: str) -> str:
+    """Bỏ dấu tiếng Việt, chữ thường, chỉ giữ a-z 0-9 * và dấu nháy: "Địt" -> "dit"."""
+    text = unicodedata.normalize("NFD", token.lower())
+    text = "".join(ch for ch in text if unicodedata.category(ch) != "Mn")
+    text = text.replace("đ", "d")
+    return re.sub(r"[^a-z0-9*']", "", text)
+
+
+def allowed_words(target: str) -> set[str]:
+    """Các từ có trong từ / câu mẫu thì không bao giờ bị chặn."""
+    return {_plain(w).replace("'", "") for w in re.split(r"[\s-]+", target or "") if _plain(w)}
+
+
+def is_banned(token: str, allowed: set[str] | None = None) -> bool:
+    word = _plain(token)
+    if not word:
+        return False
+    if "*" in word:  # Chrome tự che từ tục thành "f***"
+        return True
+    bare = word.replace("'", "")
+    if allowed and bare in allowed:
+        return False
+    return bare in BANNED_WORDS or bare.startswith(BANNED_STEMS)
+
+
+def clean_text(text: str, target: str = "") -> tuple[str, int]:
+    """Xoá từ cấm khỏi câu. Trả về (câu đã lọc, số từ bị bỏ qua)."""
+    allowed = allowed_words(target)
+    kept, removed = [], 0
+    for token in (text or "").split():
+        if is_banned(token, allowed):
+            removed += 1
+        else:
+            kept.append(token)
+    return " ".join(kept), removed
+
+=== backend\services\placement_test_service.py ===
+import random
+import re
+import unicodedata
+from datetime import datetime, timezone
+
+from sqlalchemy import and_, or_
+from sqlalchemy.orm import Session
+
+from models.curriculum import Lesson, LessonWord, Level, Topic, Word
+from models.placement_test import PlacementTestAttempt, PlacementTestAttemptItem
+from models.user import User
+
+
+def _normalize(value: str) -> str:
+    value = unicodedata.normalize("NFKC", value).casefold()
+    value = re.sub(r"\s+", " ", value).strip()
+    return value.strip(" \t\r\n.,!?;:\"'()[]{}…")
+
+
+def level_is_unlocked(db: Session, user: User, level: Level) -> bool:
+    if user.role == "ADMIN" or not level.placement_test_enabled:
+        return True
+
+    passed_higher_test = (
+        db.query(PlacementTestAttempt.attempt_id)
+        .join(Level, Level.level_id == PlacementTestAttempt.level_id)
+        .filter(
+            PlacementTestAttempt.user_id == user.user_id,
+            PlacementTestAttempt.passed == 1,
+            or_(
+                Level.display_order > level.display_order,
+                and_(
+                    Level.display_order == level.display_order,
+                    Level.level_id >= level.level_id,
+                ),
+            ),
+        )
+        .first()
+    )
+    return passed_higher_test is not None
+
+
+def get_level_or_raise(db: Session, level_id: int) -> Level:
+    level = db.query(Level).filter_by(level_id=level_id, is_active=1).first()
+    if level is None:
+        raise LookupError("Level not found")
+    return level
+
+
+def get_level_words(db: Session, level_id: int) -> list[Word]:
+    return (
+        db.query(Word)
+        .join(LessonWord, LessonWord.word_id == Word.word_id)
+        .join(Lesson, Lesson.lesson_id == LessonWord.lesson_id)
+        .join(Topic, Topic.topic_id == Lesson.topic_id)
+        .filter(
+            Topic.level_id == level_id,
+            Topic.is_active == 1,
+            Lesson.is_active == 1,
+            Word.is_active == 1,
+        )
+        .distinct()
+        .all()
+    )
+
+
+def create_attempt(db: Session, user_id: int, level_id: int) -> PlacementTestAttempt:
+    level = get_level_or_raise(db, level_id)
+    if not level.placement_test_enabled:
+        raise ValueError("This level does not have an entrance test")
+
+    words = get_level_words(db, level_id)
+    if not words:
+        raise ValueError("This level has no active vocabulary assigned to its lessons")
+
+    unique_meanings = {_normalize(word.meaning) for word in words if _normalize(word.meaning)}
+    if len(unique_meanings) < 4:
+        raise ValueError("This level needs at least four distinct meanings to create multiple-choice questions")
+
+    selected_words = random.sample(words, min(level.placement_test_question_count, len(words)))
+    passing_score = min(level.placement_test_passing_score, len(selected_words))
+
+    attempt = PlacementTestAttempt(
+        user_id=user_id,
+        level_id=level_id,
+        total_questions=len(selected_words),
+        passing_score=passing_score,
+    )
+    db.add(attempt)
+    try:
+        db.flush()
+        for word in selected_words:
+            correct_meaning = word.meaning.strip()
+            distractors_by_meaning = {}
+            for candidate in words:
+                meaning = candidate.meaning.strip()
+                normalized = _normalize(meaning)
+                if candidate.word_id != word.word_id and normalized != _normalize(correct_meaning):
+                    distractors_by_meaning.setdefault(normalized, meaning)
+            if len(distractors_by_meaning) < 3:
+                raise ValueError(
+                    "This level does not have enough distinct distractor meanings for every question"
+                )
+            distractors = random.sample(list(distractors_by_meaning.values()), 3)
+            options = [correct_meaning, *distractors]
+            random.shuffle(options)
+            db.add(
+                PlacementTestAttemptItem(
+                    attempt_id=attempt.attempt_id,
+                    word_id=word.word_id,
+                    question_data={
+                        "word": word.word,
+                        "pronunciation": word.pronunciation,
+                        "options": options,
+                    },
+                )
+            )
+        db.commit()
+        db.refresh(attempt)
+        return attempt
+    except Exception:
+        db.rollback()
+        raise
+
+
+def submit_answer(
+    db: Session,
+    user_id: int,
+    attempt_id: int,
+    item_id: int,
+    answer: str,
+) -> PlacementTestAttemptItem:
+    attempt = (
+        db.query(PlacementTestAttempt)
+        .filter_by(attempt_id=attempt_id, user_id=user_id)
+        .first()
+    )
+    if attempt is None:
+        raise LookupError("Placement test attempt not found")
+    if attempt.completed_at is not None:
+        raise ValueError("Placement test attempt is already completed")
+
+    item = (
+        db.query(PlacementTestAttemptItem)
+        .filter_by(item_id=item_id, attempt_id=attempt_id)
+        .first()
+    )
+    if item is None:
+        raise LookupError("Question not found in this attempt")
+    if item.is_answered:
+        raise ValueError("This question has already been answered")
+
+    normalized_answer = _normalize(answer)
+    options = item.question_data["options"]
+    if normalized_answer not in {_normalize(option) for option in options}:
+        raise ValueError("Answer must match one of the provided options")
+
+    word = db.query(Word).filter_by(word_id=item.word_id).first()
+    if word is None:
+        raise LookupError("Question vocabulary no longer exists")
+
+    item.answer = answer
+    item.is_answered = 1
+    item.is_correct = int(normalized_answer == _normalize(word.meaning))
+    item.answered_at = datetime.now(timezone.utc).replace(tzinfo=None)
+    try:
+        db.commit()
+        db.refresh(item)
+        return item
+    except Exception:
+        db.rollback()
+        raise
+
+
+def complete_attempt(
+    db: Session,
+    user_id: int,
+    attempt_id: int,
+) -> PlacementTestAttempt:
+    attempt = (
+        db.query(PlacementTestAttempt)
+        .filter_by(attempt_id=attempt_id, user_id=user_id)
+        .first()
+    )
+    if attempt is None:
+        raise LookupError("Placement test attempt not found")
+    if attempt.completed_at is not None:
+        return attempt
+
+    items = (
+        db.query(PlacementTestAttemptItem)
+        .filter_by(attempt_id=attempt_id)
+        .all()
+    )
+    if len(items) != attempt.total_questions or any(not item.is_answered for item in items):
+        raise ValueError("Answer every question before completing the placement test")
+
+    correct_answers = sum(item.is_correct for item in items)
+    attempt.correct_answers = correct_answers
+    attempt.passed = int(correct_answers >= attempt.passing_score)
+    attempt.completed_at = datetime.now(timezone.utc).replace(tzinfo=None)
+    try:
+        db.commit()
+        db.refresh(attempt)
+        return attempt
+    except Exception:
+        db.rollback()
+        raise
+
+
+=== backend\services\progress_service.py ===
+import random
+import re
+import unicodedata
+from datetime import date, datetime, timezone
+
+from fastapi import HTTPException, status
+from sqlalchemy.orm import Session
+
+from models.curriculum import Lesson, LessonWord, Level, Topic, Word
+from models.progress import (
+    ReviewSession,
+    ReviewSessionItem,
+    UserDailyActivity,
+    UserTopicProgress,
+    UserWordProgress,
+)
+from models.user import User
+from services.placement_test_service import level_is_unlocked
+
+
+def _normalize(value: str) -> str:
+    value = unicodedata.normalize("NFKC", value).casefold()
+    value = re.sub(r"\s+", " ", value).strip()
+    return value.strip(" \t\r\n.,!?;:\"'()[]{}…")
+
+
+def _now() -> datetime:
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+def get_learning_streak(db: Session, user: User) -> dict:
+    rows = (
+        db.query(UserDailyActivity.activity_date)
+        .filter(UserDailyActivity.user_id == user.user_id)
+        .order_by(UserDailyActivity.activity_date.desc())
+        .all()
+    )
+    active_dates = sorted({row.activity_date for row in rows if row.activity_date})
+    if not active_dates:
+        return {
+            "current_streak": 0,
+            "longest_streak": 0,
+            "total_active_days": 0,
+            "activity_dates": [],
+        }
+
+    longest = 1
+    running = 1
+    for previous, current in zip(active_dates, active_dates[1:]):
+        if (current - previous).days == 1:
+            running += 1
+            longest = max(longest, running)
+        else:
+            running = 1
+
+    today = date.today()
+    latest = active_dates[-1]
+    current = 0
+    if (today - latest).days in (0, 1):
+        cursor = latest
+        active_set = set(active_dates)
+        while cursor in active_set:
+            current += 1
+            cursor = cursor.fromordinal(cursor.toordinal() - 1)
+
+    return {
+        "current_streak": current,
+        "longest_streak": longest,
+        "total_active_days": len(active_dates),
+        "activity_dates": [item.isoformat() for item in active_dates[-60:]],
+    }
+
+
+def _accessible_topic(db: Session, user: User, topic_id: int) -> Topic:
+    topic = db.query(Topic).filter_by(topic_id=topic_id, is_active=1).first()
+    if topic is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Topic not found")
+    level = (
+        db.query(Level)
+        .filter_by(level_id=topic.level_id, is_active=1)
+        .first()
+    )
+    if level is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Level not found")
+    if not level_is_unlocked(db, user, level):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Pass this level's placement test or a higher-level test to access its content",
+        )
+    return topic
+
+
+def _topic_words(db: Session, topic_id: int) -> list[Word]:
+    return (
+        db.query(Word)
+        .join(LessonWord, LessonWord.word_id == Word.word_id)
+        .join(Lesson, Lesson.lesson_id == LessonWord.lesson_id)
+        .filter(
+            Lesson.topic_id == topic_id,
+            Lesson.is_active == 1,
+            Word.is_active == 1,
+        )
+        .distinct()
+        .all()
+    )
+
+
+def _user_available_words(db: Session, user: User) -> list[Word]:
+    available_levels = db.query(Level).filter_by(is_active=1).all()
+    available_level_ids = [
+        level.level_id for level in available_levels if level_is_unlocked(db, user, level)
+    ]
+    if not available_level_ids:
+        return []
+    return (
+        db.query(Word)
+        .join(LessonWord, LessonWord.word_id == Word.word_id)
+        .join(Lesson, Lesson.lesson_id == LessonWord.lesson_id)
+        .join(Topic, Topic.topic_id == Lesson.topic_id)
+        .filter(
+            Topic.level_id.in_(available_level_ids),
+            Topic.is_active == 1,
+            Lesson.is_active == 1,
+            Word.is_active == 1,
+        )
+        .distinct()
+        .all()
+    )
+
+
+def _learned_words(db: Session, user_id: int, topic_id: int) -> list[Word]:
+    return (
+        db.query(Word)
+        .join(LessonWord, LessonWord.word_id == Word.word_id)
+        .join(Lesson, Lesson.lesson_id == LessonWord.lesson_id)
+        .join(
+            UserWordProgress,
+            UserWordProgress.word_id == Word.word_id,
+        )
+        .filter(
+            Lesson.topic_id == topic_id,
+            Lesson.is_active == 1,
+            Word.is_active == 1,
+            UserWordProgress.user_id == user_id,
+            UserWordProgress.learned == 1,
+        )
+        .distinct()
+        .all()
+    )
+
+
+def get_topic_progress(db: Session, user: User, topic_id: int) -> dict:
+    _accessible_topic(db, user, topic_id)
+    learned_words = _learned_words(db, user.user_id, topic_id)
+    word_ids = sorted(word.word_id for word in learned_words)
+    return {
+        "topic_id": topic_id,
+        "learned_count": len(word_ids),
+        "learned_word_ids": word_ids,
+    }
+
+
+def _record_daily_activity(
+    db: Session,
+    user_id: int,
+    *,
+    learned_count: int = 0,
+    review_count: int = 0,
+) -> None:
+    activity = (
+        db.query(UserDailyActivity)
+        .filter_by(user_id=user_id, activity_date=date.today())
+        .first()
+    )
+    if activity is None:
+        activity = UserDailyActivity(
+            user_id=user_id,
+            activity_date=date.today(),
+            learned_count=learned_count,
+            review_count=review_count,
+        )
+        db.add(activity)
+    else:
+        activity.learned_count += learned_count
+        activity.review_count += review_count
+
+
+def mark_word_learned(
+    db: Session,
+    user: User,
+    topic_id: int,
+    word_id: int,
+) -> dict:
+    topic = _accessible_topic(db, user, topic_id)
+    membership = (
+        db.query(LessonWord.lesson_id)
+        .join(Lesson, Lesson.lesson_id == LessonWord.lesson_id)
+        .filter(
+            Lesson.topic_id == topic.topic_id,
+            Lesson.is_active == 1,
+            LessonWord.word_id == word_id,
+        )
+        .first()
+    )
+    word = db.query(Word).filter_by(word_id=word_id, is_active=1).first()
+    if membership is None or word is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Word not found in topic")
+
+    progress = (
+        db.query(UserWordProgress)
+        .filter_by(user_id=user.user_id, word_id=word_id)
+        .first()
+    )
+    newly_learned = progress is None or not progress.learned
+    if progress is None:
+        progress = UserWordProgress(user_id=user.user_id, word_id=word_id, learned=1)
+        db.add(progress)
+    elif newly_learned:
+        progress.learned = 1
+
+    topic_progress = (
+        db.query(UserTopicProgress)
+        .filter_by(user_id=user.user_id, topic_id=topic_id)
+        .first()
+    )
+    if topic_progress is None:
+        topic_progress = UserTopicProgress(
+            user_id=user.user_id,
+            topic_id=topic_id,
+            learned_count=0,
+        )
+        db.add(topic_progress)
+    topic_progress.learned_count = len(_learned_words(db, user.user_id, topic_id)) + int(
+        newly_learned
+    )
+    topic_progress.last_studied_at = _now()
+    if newly_learned:
+        _record_daily_activity(db, user.user_id, learned_count=1)
+
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+
+    return {
+        "topic_id": topic_id,
+        "word_id": word_id,
+        "learned": True,
+        "learned_count": topic_progress.learned_count,
+    }
+
+
+def _meaning_distractors(
+    words: list[Word],
+    candidates: list[Word],
+) -> list[str]:
+    correct_meaning = next((word.meaning for word in words if word.meaning), "")
+    correct_normalized = _normalize(correct_meaning)
+    unique_meanings = {}
+    for word in [*words, *candidates]:
+        meaning = (word.meaning or "").strip()
+        normalized = _normalize(meaning)
+        if normalized and normalized != correct_normalized:
+            unique_meanings.setdefault(normalized, meaning)
+    return list(unique_meanings.values())
+
+
+def _word_distractors(words: list[Word], candidates: list[Word]) -> list[str]:
+    correct_words = {_normalize(word.word) for word in words}
+    unique_words = {}
+    for word in [*words, *candidates]:
+        value = (word.word or "").strip()
+        normalized = _normalize(value)
+        if normalized and normalized not in correct_words:
+            unique_words.setdefault(normalized, value)
+    return list(unique_words.values())
+
+
+def _blank_sentence(word: Word) -> str:
+    example = (word.example or "").strip()
+    if example:
+        pattern = re.compile(
+            rf"(?<!\w){re.escape(word.word)}(?!\w)",
+            flags=re.IGNORECASE,
+        )
+        sentence, count = pattern.subn("____", example, count=1)
+        if count:
+            return sentence
+    return f"I learned the word ____ today."
+
+
+def _build_exercise(
+    word: Word,
+    topic_words: list[Word],
+    all_words: list[Word],
+) -> tuple[dict, str]:
+    meanings = _meaning_distractors([word], [*topic_words, *all_words])
+    word_options = _word_distractors([word], [*topic_words, *all_words])
+    available = ["meaning_input"]
+    if len(meanings) >= 3:
+        available.append("meaning_choice")
+    if len(word_options) >= 3:
+        available.append("fill_blank")
+    kind = random.choice(available)
+
+    if kind == "meaning_choice":
+        options = random.sample(meanings, 3) + [word.meaning.strip()]
+        random.shuffle(options)
+        return (
+            {
+                "kind": kind,
+                "word": word.word,
+                "pronunciation": word.pronunciation,
+                "options": options,
+            },
+            word.meaning.strip(),
+        )
+    if kind == "fill_blank":
+        options = random.sample(word_options, 3) + [word.word.strip()]
+        random.shuffle(options)
+        return (
+            {
+                "kind": kind,
+                "sentence": _blank_sentence(word),
+                "options": options,
+            },
+            word.word.strip(),
+        )
+    return (
+        {
+            "kind": kind,
+            "word": word.word,
+            "pronunciation": word.pronunciation,
+        },
+        word.meaning.strip(),
+    )
+
+
+def create_quick_review(db: Session, user: User, topic_id: int) -> dict:
+    topic = _accessible_topic(db, user, topic_id)
+    learned_words = _learned_words(db, user.user_id, topic_id)
+    if not learned_words:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Learn at least one word in this topic before starting a quick review",
+        )
+
+    selected_words = random.sample(
+        learned_words,
+        min(topic.quick_review_limit, len(learned_words)),
+    )
+    topic_words = _topic_words(db, topic_id)
+    all_words = _user_available_words(db, user)
+
+    session = ReviewSession(
+        user_id=user.user_id,
+        topic_id=topic_id,
+        review_type="NORMAL",
+        total_items=len(selected_words),
+        completed_items=0,
+    )
+    db.add(session)
+    try:
+        db.flush()
+        response_items = []
+        for word in selected_words:
+            question_data, correct_answer = _build_exercise(word, topic_words, all_words)
+            item = ReviewSessionItem(
+                review_session_id=session.review_session_id,
+                word_id=word.word_id,
+                question_data=question_data,
+                correct_answer=correct_answer,
+            )
+            db.add(item)
+            db.flush()
+            response_items.append(
+                {
+                    "item_id": item.session_item_id,
+                    "word_id": word.word_id,
+                    "question_data": question_data,
+                }
+            )
+        db.commit()
+        db.refresh(session)
+    except Exception:
+        db.rollback()
+        raise
+
+    return {
+        "review_session_id": session.review_session_id,
+        "topic_id": topic_id,
+        "total_items": len(response_items),
+        "items": response_items,
+    }
+
+
+def submit_quick_review_answer(
+    db: Session,
+    user: User,
+    review_session_id: int,
+    item_id: int,
+    answer: str,
+) -> dict:
+    review_session = (
+        db.query(ReviewSession)
+        .filter_by(review_session_id=review_session_id, user_id=user.user_id)
+        .first()
+    )
+    if review_session is None:
+        raise HTTPException(status_code=404, detail="Review session not found")
+
+    item = (
+        db.query(ReviewSessionItem)
+        .filter_by(session_item_id=item_id, review_session_id=review_session_id)
+        .first()
+    )
+    if item is None:
+        raise HTTPException(status_code=404, detail="Review question not found")
+
+    if item.is_answered:
+        correct_answer = item.correct_answer or ""
+        return {
+            "item_id": item.session_item_id,
+            "is_correct": bool(item.is_correct),
+            "correct_answer": correct_answer,
+            "completed_items": review_session.completed_items,
+            "total_items": review_session.total_items,
+            "session_completed": review_session.completed_at is not None,
+        }
+
+    question_data = item.question_data or {}
+    normalized_answer = _normalize(answer)
+    if question_data.get("kind") in {"meaning_choice", "fill_blank"}:
+        options = question_data.get("options", [])
+        if normalized_answer not in {_normalize(option) for option in options}:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="Answer must match one of the provided options",
+            )
+
+    is_correct = normalized_answer == _normalize(item.correct_answer or "")
+    now = _now()
+    item.answer = answer
+    item.is_answered = 1
+    item.is_correct = int(is_correct)
+    item.answered_at = now
+
+    word_progress = (
+        db.query(UserWordProgress)
+        .filter_by(user_id=user.user_id, word_id=item.word_id)
+        .first()
+    )
+    if word_progress is None:
+        raise HTTPException(status_code=409, detail="Learned-word progress no longer exists")
+    word_progress.review_count += 1
+    word_progress.correct_count += int(is_correct)
+    word_progress.wrong_count += int(not is_correct)
+    word_progress.last_reviewed_at = now
+
+    topic_progress = (
+        db.query(UserTopicProgress)
+        .filter_by(user_id=user.user_id, topic_id=review_session.topic_id)
+        .first()
+    )
+    if topic_progress is None:
+        topic_progress = UserTopicProgress(
+            user_id=user.user_id,
+            topic_id=review_session.topic_id,
+            learned_count=len(_learned_words(db, user.user_id, review_session.topic_id)),
+        )
+        db.add(topic_progress)
+    topic_progress.last_reviewed_at = now
+    _record_daily_activity(db, user.user_id, review_count=1)
+
+    review_session.completed_items += 1
+    if review_session.completed_items == review_session.total_items:
+        review_session.completed_at = now
+
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+
+    return {
+        "item_id": item.session_item_id,
+        "is_correct": is_correct,
+        "correct_answer": item.correct_answer or "",
+        "completed_items": review_session.completed_items,
+        "total_items": review_session.total_items,
+        "session_completed": review_session.completed_at is not None,
+    }
+
+
+=== backend\services\pronunciation_service.py ===
+import math
+import subprocess
+import tempfile
+import asyncio
+import threading
+from pathlib import Path
+from typing import Iterable
+
+import soundfile as sf
+import numpy as np
+import edge_tts
+from sqlalchemy.orm import Session
+
+from models.curriculum import Lesson, Word
+from models.pronunciation import PronunciationAttempt
+from models.user import User
+
+
+_ASSESSOR = None
+_CACHE_DIR = Path(__file__).resolve().parents[1] / "uploads" / "audio"
+
+# Model AI chấm phát âm (~1.26GB, tải từ HuggingFace lần đầu rồi lưu ở ~/.cache/huggingface).
+# _LOAD_LOCK: nhiều request cùng lúc chỉ nạp model 1 lần (trước đây mỗi request tự tải -> tải trùng).
+# _ASSESS_LOCK: model dùng chung giữ trạng thái câu mẫu (set_sentence), nên chấm lần lượt từng bản ghi.
+_LOAD_LOCK = threading.Lock()
+_ASSESS_LOCK = threading.Lock()
+
+
+def _get_assessor():
+    global _ASSESSOR
+    if _ASSESSOR is None:
+        with _LOAD_LOCK:
+            if _ASSESSOR is None:
+                from pronounce_assess import PronounceAssessModel
+
+                _ASSESSOR = PronounceAssessModel()
+    return _ASSESSOR
+
+
+def preload_assessor_in_background() -> None:
+    """Nạp sẵn model ở luồng nền khi backend khởi động,
+    để người học bấm chấm lần đầu không phải chờ tải model."""
+    def _load():
+        try:
+            _get_assessor()
+            print("[pronunciation] Model chấm phát âm đã sẵn sàng.")
+        except Exception as error:  # không làm sập server nếu thiếu mạng / thiếu thư viện
+            print(f"[pronunciation] Chưa nạp được model: {error}")
+
+    threading.Thread(target=_load, name="preload-pronounce-model", daemon=True).start()
+
+
+def decode_audio(audio_bytes: bytes, extension: str = "webm") -> np.ndarray:
+    _CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(suffix=f".{extension}", delete=False) as source:
+        source.write(audio_bytes)
+        source_path = source.name
+
+    wav_path = source_path + ".wav"
+    try:
+        import imageio_ffmpeg
+
+        ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
+        attempts = (
+            [
+                ffmpeg, "-v", "error", "-y",
+                "-i", source_path,
+                "-vn", "-ac", "1", "-ar", "16000",
+                "-f", "wav", wav_path,
+            ],
+            [
+                ffmpeg, "-v", "error", "-y",
+                "-fflags", "+genpts",
+                "-i", source_path,
+                "-vn", "-ac", "1", "-ar", "16000",
+                "-f", "wav", wav_path,
+            ],
+        )
+        result = None
+        detail = ""
+        for command in attempts:
+            if Path(wav_path).exists():
+                Path(wav_path).unlink()
+            result = subprocess.run(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            if result.returncode == 0 and Path(wav_path).is_file() and Path(wav_path).stat().st_size > 44:
+                break
+            detail = result.stderr.decode("utf-8", "replace").strip()
+        if result.returncode != 0:
+            detail = result.stderr.decode("utf-8", "replace").strip()
+            raise ValueError(
+                "Could not decode the recorded audio"
+                + (f": {detail[-300:]}" if detail else "")
+            )
+        audio, wav_sample_rate = sf.read(wav_path, dtype="float32", always_2d=False)
+        if wav_sample_rate != 16000:
+            raise ValueError("Decoded audio sample rate is invalid")
+        if hasattr(audio, "mean") and getattr(audio, "ndim", 1) > 1:
+            audio = audio.mean(axis=1)
+        if len(audio) == 0:
+            raise ValueError("Recorded audio contains no usable signal")
+        return audio.astype(np.float32)
+    except ValueError:
+        raise
+    except Exception as error:
+        raise ValueError(f"Could not decode the recorded audio: {type(error).__name__}: {error}") from error
+    finally:
+        try:
+            Path(source_path).unlink(missing_ok=True)
+            wav_candidate = Path(source_path + ".wav")
+            wav_candidate.unlink(missing_ok=True)
+        except Exception:
+            pass
+
+
+def _chunks(audio: np.ndarray, chunk_size: int = 8000) -> Iterable[np.ndarray]:
+    for start in range(0, len(audio), chunk_size):
+        chunk = audio[start:start + chunk_size]
+        if len(chunk):
+            yield chunk.astype(np.float32)
+
+
+# Mức độ của từng trạng thái (số lớn hơn = nặng hơn), dùng khi nhiều âm rơi vào cùng 1 chữ
+_SEVERITY = {"correct": 0, "close": 1, "missing": 2, "wrong": 3}
+# gop (0..1) của âm đọc lệch: từ ngưỡng này trở lên coi là "gần đúng" thay vì "sai"
+_CLOSE_GOP = 0.5
+
+
+def _phoneme_status(event: dict) -> str:
+    label = event.get("label")
+    if label == "omitted":
+        return "missing"
+    if label == "mispronounced":
+        gop = event.get("gop")
+        try:
+            if gop is not None and math.isfinite(float(gop)) and float(gop) >= _CLOSE_GOP:
+                return "close"
+        except (TypeError, ValueError):
+            pass
+        return "wrong"
+    return "correct"
+
+
+def _letter_statuses(target: str, phoneme_events: list[dict]) -> list[str]:
+    """Trạng thái cho từng ký tự của câu mẫu.
+
+    Âm vị thứ p (trong tổng n âm của câu mẫu) được gán vào chữ cái tương ứng theo tỉ lệ
+    vị trí, chỉ tính chữ cái/số (bỏ khoảng trắng, dấu câu) nên không tô đỏ khoảng trắng.
+    """
+    chars = list(target)
+    statuses = ["correct"] * len(chars)
+    letter_idx = [i for i, ch in enumerate(chars) if ch.isalnum()]
+    ref_events = [e for e in phoneme_events if e.get("position") is not None]
+    if not letter_idx or not ref_events:
+        return statuses
+
+    n_ref = max(int(e["position"]) for e in ref_events) + 1
+    for event in ref_events:
+        status = _phoneme_status(event)
+        if status == "correct":
+            continue
+        pos = int(event["position"])
+        k = min(len(letter_idx) - 1, int((pos + 0.5) * len(letter_idx) / n_ref))
+        char_index = letter_idx[k]
+        if _SEVERITY[status] > _SEVERITY[statuses[char_index]]:
+            statuses[char_index] = status
+    return statuses
+
+
+def _character_results(target: str, phoneme_events: list[dict]) -> list[dict]:
+    target = target.strip()
+    if not target:
+        return []
+    statuses = _letter_statuses(target, phoneme_events)
+    return [{"character": char, "status": status} for char, status in zip(target, statuses)]
+
+
+def _word_results(target: str, character_results: list[dict]) -> list[dict]:
+    """Gộp kết quả từng chữ cái thành kết quả từng từ (dùng cho chế độ đọc cả câu)."""
+    words, current = [], []
+    for item in character_results + [{"character": " ", "status": "correct"}]:
+        if item["character"].isspace():
+            if current:
+                text = "".join(c["character"] for c in current)
+                letters = [c["status"] for c in current if c["character"].isalnum()]
+                bad = [s for s in letters if s != "correct"]
+                if not bad:
+                    status = "correct"
+                elif all(s == "missing" for s in bad) and len(bad) * 2 >= len(letters):
+                    status = "missing"
+                elif all(s == "close" for s in bad) or len(bad) <= max(1, len(letters) // 4):
+                    status = "close"
+                else:
+                    status = "wrong"
+                words.append({"text": text, "status": status})
+                current = []
+        else:
+            current.append(item)
+    return words
+
+
+def _issues(phoneme_events: list[dict], limit: int = 5) -> list[dict]:
+    """Các âm cần sửa: đọc lệch (âm mẫu -> âm máy nghe được) hoặc bị bỏ sót."""
+    issues = []
+    for event in phoneme_events:
+        if event.get("position") is None:
+            continue
+        status = _phoneme_status(event)
+        if status == "correct":
+            continue
+        issues.append({
+            "status": status,
+            "expected": event.get("phoneme"),
+            "heard": event.get("decoded") if status != "missing" else None,
+        })
+        if len(issues) >= limit:
+            break
+    return issues
+
+
+def assess_recording(
+    db: Session,
+    user: User,
+    word_id: int,
+    lesson_id: int,
+    target_text: str,
+    audio_bytes: bytes,
+    extension: str,
+) -> dict:
+    word = db.query(Word).filter_by(word_id=word_id, is_active=1).first()
+    if word is None:
+        raise ValueError("Word not found")
+
+    lesson = db.query(Lesson).filter_by(lesson_id=lesson_id, is_active=1).first()
+    if lesson is None:
+        raise ValueError("Lesson not found")
+
+    target = (target_text or word.word).strip()
+    audio = decode_audio(audio_bytes, extension)
+    if len(audio) < 1600:
+        raise ValueError("Recorded audio is too short")
+
+    assessor = _get_assessor()
+    events = []
+    prosody = {}
+    with _ASSESS_LOCK:
+        assessor.set_sentence(target)
+        for event in assessor.stream_decode(_chunks(audio), sample_rate=16000):
+            if event.label == "prosody":
+                prosody = {
+                    "monotony_score": event.monotony_score,
+                    "rhythm_score": event.rhythm_score,
+                    "boundary_score": event.boundary_score,
+                    "speaking_rate": event.speaking_rate,
+                }
+                continue
+            events.append({
+                "phoneme": event.phoneme,
+                "position": event.position,
+                "label": event.label,
+                "decoded": event.decoded,
+                "gop": event.gop,
+            })
+
+    if not events:
+        raise ValueError("No pronunciation phonemes could be detected")
+
+    weights = {"correct": 1.0, "mispronounced": 0.35, "omitted": 0.0, "insertion": 0.10}
+    reference_events = [event for event in events if event["position"] is not None]
+    phoneme_score = sum(weights.get(event["label"], 0.0) for event in reference_events)
+    if reference_events:
+        phoneme_score = round(100 * phoneme_score / len(reference_events))
+    else:
+        phoneme_score = 0
+
+    gop_values = [
+        float(event["gop"])
+        for event in reference_events
+        if event.get("gop") is not None and math.isfinite(float(event["gop"]))
+    ]
+    gop_score = round(100 * sum(gop_values) / len(gop_values)) if gop_values else phoneme_score
+    overall = round(0.75 * phoneme_score + 0.25 * gop_score)
+
+    character_results = _character_results(target, events)
+
+    attempt = PronunciationAttempt(
+        user_id=user.user_id,
+        word_id=word.word_id,
+        lesson_id=lesson.lesson_id,
+        word=word.word.strip().lower(),
+        mode="word",
+        target_text=target,
+        transcript="",
+        score=overall,
+        overall_score=overall,
+        character_results=character_results,
+        phoneme_results=events,
+    )
+    db.add(attempt)
+    db.commit()
+    db.refresh(attempt)
+
+    attempts = (
+        db.query(PronunciationAttempt)
+        .filter_by(user_id=user.user_id, lesson_id=lesson.lesson_id, word_id=word.word_id)
+        .count()
+    )
+    passed = overall >= lesson.pronunciation_passing_score
+    exhausted = attempts >= lesson.pronunciation_max_attempts
+
+    return {
+        "attempt_id": attempt.attempt_id,
+        "word": word.word,
+        "target_text": target,
+        "score": overall,
+        "passed": passed,
+        "attempt": attempts,
+        "max_attempts": lesson.pronunciation_max_attempts,
+        "passing_score": lesson.pronunciation_passing_score,
+        "advance": passed or exhausted,
+        "characters": character_results,
+        "words": _word_results(target, character_results),
+        "issues": _issues(events),
+        "phonemes": events,
+        "prosody": prosody,
+    }
+
+
+async def get_reference_audio(word: Word, force: bool = False) -> Path:
+    cache_dir = _CACHE_DIR
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    cache_path = cache_dir / f"word_{word.word_id}.mp3"
+    if force and cache_path.exists():
+        cache_path.unlink()
+    if not cache_path.exists():
+        communicate = edge_tts.Communicate(
+            text=word.word,
+            voice="en-US-JennyNeural",
+        )
+        await communicate.save(str(cache_path))
+    word.reference_audio_path = str(cache_path)
+    return cache_path
+
+
+def ensure_reference_audio(word: Word, force: bool = False) -> Path:
+    """Tạo file mẫu đồng bộ cho luồng admin/create/update."""
+    return asyncio.run(get_reference_audio(word, force=force))
+
+=== backend\services\token_service.py ===
+
+from jose import JWTError, jwt
+
+from services.auth_service import SECRET_KEY, ALGORITHM
+
+
+def decode_access_token(token: str) -> dict:
+    try:
+        payload = jwt.decode(
+            token,
+            SECRET_KEY,
+            algorithms=[ALGORITHM],
+        )
+
+        # Token phải có subject là user_id.
+        subject = payload.get("sub")
+
+        if subject is None:
+            raise ValueError("Invalid token")
+
+        return payload
+
+    except JWTError as error:
+        raise ValueError("Invalid or expired token") from error
+
+
+=== backend\services\user_service.py ===
+from pwdlib import PasswordHash
+from sqlalchemy.orm import Session
+import re
+from models.user import User
+
+password_hasher = PasswordHash.recommended()
+
+def get_all_users(db: Session) -> list[User]:
+    return db.query(User).order_by(User.user_id).all()
+
+def create_user(
+    db: Session,
+    username: str | None,
+    email: str,
+    password: str,
+    full_name: str | None = None,
+    gender: str | None = None,
+    avatar_key: str = "bunny",
+) -> User:
+    if not username:
+        base = re.sub(r"[^A-Za-z0-9_]", "", email.split("@", 1)[0])[:24] or "user"
+        if len(base) < 3:
+            base = f"{base}user"[:24]
+        username = base
+        suffix = 1
+        while db.query(User.user_id).filter(User.username == username).first():
+            tail = str(suffix)
+            username = f"{base[:30 - len(tail)]}{tail}"
+            suffix += 1
+
+    existing_username = (
+        db.query(User)
+        .filter(User.username == username)
+        .first()
+    )
+
+    if existing_username:
+        raise ValueError("Username already exists")
+
+    existing_email = (
+        db.query(User)
+        .filter(User.email == email)
+        .first()
+    )
+
+    if existing_email:
+        raise ValueError("Email already exists")
+
+    hashed_password = password_hasher.hash(password)
+
+    new_user = User(
+        username=username,
+        email=email,
+        password_hash=hashed_password,
+        full_name=full_name,
+        gender=gender,
+        avatar_key=avatar_key,
+    )
+
+    db.add(new_user)
+
+    try:
+        db.commit()
+        db.refresh(new_user)
+    except Exception:
+        db.rollback()
+        raise
+
+    return new_user
+
+
+=== backend\tests\test_admin_curriculum_routes.py ===
+import unittest
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
+
+from app.database import Base
+from models.curriculum import LessonWord, Word
+from models.user import User
+from routes.levels import (
+    admin_create_lesson,
+    admin_create_topic,
+    admin_create_word,
+    admin_list_lessons,
+    admin_list_levels,
+    admin_list_topics,
+    admin_list_words,
+    admin_update_word,
+    create_level,
+)
+from schemas.placement_test import (
+    LevelCreate,
+    LessonCreate,
+    TopicCreate,
+    WordCreate,
+    WordUpdate,
+    AdminWordResponse,
+)
+
+
+class AdminCurriculumRouteTests(unittest.TestCase):
+    def setUp(self):
+        self.engine = create_engine(
+            "sqlite://",
+            connect_args={"check_same_thread": False},
+            poolclass=StaticPool,
+        )
+        Base.metadata.create_all(self.engine)
+        self.db = Session(self.engine)
+        self.admin = User(
+            username="admin",
+            email="admin@example.com",
+            password_hash="hash",
+            role="ADMIN",
+            status="ACTIVE",
+        )
+        self.db.add(self.admin)
+        self.db.commit()
+
+    def tearDown(self):
+        self.db.close()
+        self.engine.dispose()
+
+    def test_admin_can_create_curriculum_and_assign_vocabulary(self):
+        level = create_level(
+            LevelCreate(name="A1", display_order=1),
+            self.db,
+            self.admin,
+        )
+        topic = admin_create_topic(
+            TopicCreate(level_id=level["level_id"], name="Food", quick_review_limit=12),
+            self.db,
+            self.admin,
+        )
+        lesson = admin_create_lesson(
+            LessonCreate(topic_id=topic.topic_id, name="Fruit"),
+            self.db,
+            self.admin,
+        )
+        word = admin_create_word(
+            WordCreate(
+                lesson_id=lesson.lesson_id,
+                word="apple",
+                meaning="quả táo",
+                example="I ate an apple.",
+            ),
+            self.db,
+            self.admin,
+        )
+
+        self.assertEqual(AdminWordResponse.model_validate(word).lesson_id, lesson.lesson_id)
+        self.assertEqual(admin_list_levels(self.db, self.admin)[0]["name"], "A1")
+        self.assertEqual(admin_list_topics(self.db, self.admin)[0].quick_review_limit, 12)
+        self.assertEqual(admin_list_lessons(self.db, self.admin)[0].name, "Fruit")
+        self.assertEqual(admin_list_words(self.db, self.admin)[0]["word"], "apple")
+
+        changed = admin_update_word(
+            word["word_id"],
+            WordUpdate(meaning="táo"),
+            self.db,
+            self.admin,
+        )
+        self.assertEqual(changed["meaning"], "táo")
+        self.assertEqual(self.db.get(Word, word["word_id"]).meaning, "táo")
+
+    def test_created_words_receive_next_display_order(self):
+        level = create_level(
+            LevelCreate(name="A1", display_order=1),
+            self.db,
+            self.admin,
+        )
+        topic = admin_create_topic(
+            TopicCreate(level_id=level["level_id"], name="Food", quick_review_limit=12),
+            self.db,
+            self.admin,
+        )
+        lesson = admin_create_lesson(
+            LessonCreate(topic_id=topic.topic_id, name="Fruit"),
+            self.db,
+            self.admin,
+        )
+
+        for word_text in ("apple", "banana"):
+            admin_create_word(
+                WordCreate(
+                    lesson_id=lesson.lesson_id,
+                    word=word_text,
+                    meaning=f"{word_text} meaning",
+                ),
+                self.db,
+                self.admin,
+            )
+
+        orders = [
+            item.display_order
+            for item in self.db.query(LessonWord)
+            .filter_by(lesson_id=lesson.lesson_id)
+            .order_by(LessonWord.display_order)
+            .all()
+        ]
+        self.assertEqual(orders, [1, 2])
+
+    def test_reassigned_word_receives_next_display_order(self):
+        level = create_level(
+            LevelCreate(name="A1", display_order=1),
+            self.db,
+            self.admin,
+        )
+        topic = admin_create_topic(
+            TopicCreate(level_id=level["level_id"], name="Food", quick_review_limit=12),
+            self.db,
+            self.admin,
+        )
+        source_lesson = admin_create_lesson(
+            LessonCreate(topic_id=topic.topic_id, name="Fruit"),
+            self.db,
+            self.admin,
+        )
+        target_lesson = admin_create_lesson(
+            LessonCreate(topic_id=topic.topic_id, name="Vegetables", display_order=2),
+            self.db,
+            self.admin,
+        )
+        moved_word = admin_create_word(
+            WordCreate(
+                lesson_id=source_lesson.lesson_id,
+                word="apple",
+                meaning="quả táo",
+            ),
+            self.db,
+            self.admin,
+        )
+        admin_create_word(
+            WordCreate(
+                lesson_id=target_lesson.lesson_id,
+                word="carrot",
+                meaning="cà rốt",
+            ),
+            self.db,
+            self.admin,
+        )
+
+        admin_update_word(
+            moved_word["word_id"],
+            WordUpdate(lesson_id=target_lesson.lesson_id),
+            self.db,
+            self.admin,
+        )
+
+        orders = [
+            item.display_order
+            for item in self.db.query(LessonWord)
+            .filter_by(lesson_id=target_lesson.lesson_id)
+            .order_by(LessonWord.display_order)
+            .all()
+        ]
+        self.assertEqual(orders, [1, 2])
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+=== backend\tests\test_auth_schema.py ===
+import unittest
+
+from pydantic import ValidationError
+
+from schemas.auth import LoginRequest
+
+
+class LoginRequestTests(unittest.TestCase):
+    def test_accepts_email_at_user_schema_maximum_length(self):
+        email = f"{'a' * 28}@example.com"
+        self.assertEqual(len(email), 40)
+
+        request = LoginRequest(
+            identifier=email,
+            password="UserDemo2026!",
+        )
+
+        self.assertEqual(request.identifier, email)
+
+    def test_rejects_identifier_longer_than_user_email_limit(self):
+        email = f"{'a' * 29}@example.com"
+        self.assertEqual(len(email), 41)
+
+        with self.assertRaises(ValidationError):
+            LoginRequest(identifier=email, password="UserDemo2026!")
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+=== backend\tests\test_placement_test.py ===
+import unittest
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
+
+from app.database import Base
+from models.curriculum import Lesson, LessonWord, Level, Topic, Word
+from models.placement_test import PlacementTestAttemptItem
+from models.user import User
+from services.placement_test_service import (
+    complete_attempt,
+    create_attempt,
+    level_is_unlocked,
+    submit_answer,
+)
+
+
+class PlacementTestServiceTests(unittest.TestCase):
+    def setUp(self):
+        self.engine = create_engine(
+            "sqlite://",
+            connect_args={"check_same_thread": False},
+            poolclass=StaticPool,
+        )
+        Base.metadata.create_all(self.engine)
+        self.db = Session(self.engine)
+
+        self.user = User(
+            username="learner",
+            email="learner@example.com",
+            password_hash="hash",
+            role="USER",
+            status="ACTIVE",
+        )
+        self.db.add(self.user)
+        self.db.flush()
+
+        self.lower_level = Level(
+            name="A1",
+            display_order=1,
+            placement_test_enabled=1,
+            placement_test_question_count=10,
+            placement_test_passing_score=7,
+            is_active=1,
+        )
+        self.open_level = Level(
+            name="Starter",
+            display_order=0,
+            placement_test_enabled=0,
+            is_active=1,
+        )
+        self.test_level = Level(
+            name="A2",
+            display_order=2,
+            placement_test_enabled=1,
+            placement_test_question_count=10,
+            placement_test_passing_score=7,
+            is_active=1,
+        )
+        self.db.add_all([self.open_level, self.lower_level, self.test_level])
+        self.db.flush()
+
+        topic = Topic(
+            level_id=self.test_level.level_id,
+            name="Family",
+            display_order=1,
+            is_active=1,
+        )
+        self.db.add(topic)
+        self.db.flush()
+        lesson = Lesson(
+            topic_id=topic.topic_id,
+            name="People",
+            display_order=1,
+            is_active=1,
+        )
+        self.db.add(lesson)
+        self.db.flush()
+
+        self.words = [
+            Word(word="mother", meaning="mẹ", is_active=1),
+            Word(word="father", meaning="cha", is_active=1),
+            Word(word="sister", meaning="chị/em gái", is_active=1),
+            Word(word="brother", meaning="anh/em trai", is_active=1),
+        ]
+        self.db.add_all(self.words)
+        self.db.flush()
+        self.db.add_all(
+            LessonWord(
+                lesson_id=lesson.lesson_id,
+                word_id=word.word_id,
+                display_order=index,
+            )
+            for index, word in enumerate(self.words, start=1)
+        )
+        self.db.commit()
+
+    def tearDown(self):
+        self.db.close()
+        self.engine.dispose()
+
+    def test_question_count_is_capped_by_vocabulary_and_pass_score_is_possible(self):
+        attempt = create_attempt(self.db, self.user.user_id, self.test_level.level_id)
+        items = (
+            self.db.query(PlacementTestAttemptItem)
+            .filter_by(attempt_id=attempt.attempt_id)
+            .all()
+        )
+
+        self.assertEqual(attempt.total_questions, 4)
+        self.assertEqual(attempt.passing_score, 4)
+        self.assertEqual(len(items), 4)
+        for item in items:
+            self.assertEqual(len(item.question_data["options"]), 4)
+            self.assertEqual(len(set(item.question_data["options"])), 4)
+
+    def test_passing_unlocks_this_level_and_all_lower_levels(self):
+        attempt = create_attempt(self.db, self.user.user_id, self.test_level.level_id)
+        items = (
+            self.db.query(PlacementTestAttemptItem)
+            .filter_by(attempt_id=attempt.attempt_id)
+            .all()
+        )
+        for item in items:
+            word = self.db.get(Word, item.word_id)
+            submit_answer(
+                self.db,
+                self.user.user_id,
+                attempt.attempt_id,
+                item.item_id,
+                word.meaning,
+            )
+
+        result = complete_attempt(self.db, self.user.user_id, attempt.attempt_id)
+        self.assertEqual(result.passed, 1)
+        self.assertTrue(level_is_unlocked(self.db, self.user, self.test_level))
+        self.assertTrue(level_is_unlocked(self.db, self.user, self.lower_level))
+
+    def test_not_passing_does_not_unlock_test_level(self):
+        attempt = create_attempt(self.db, self.user.user_id, self.test_level.level_id)
+        items = (
+            self.db.query(PlacementTestAttemptItem)
+            .filter_by(attempt_id=attempt.attempt_id)
+            .all()
+        )
+        for item in items:
+            word = self.db.get(Word, item.word_id)
+            incorrect = next(
+                option for option in item.question_data["options"]
+                if option != word.meaning
+            )
+            submit_answer(
+                self.db,
+                self.user.user_id,
+                attempt.attempt_id,
+                item.item_id,
+                incorrect,
+            )
+
+        result = complete_attempt(self.db, self.user.user_id, attempt.attempt_id)
+        self.assertEqual(result.passed, 0)
+        self.assertFalse(level_is_unlocked(self.db, self.user, self.test_level))
+        self.assertFalse(level_is_unlocked(self.db, self.user, self.lower_level))
+        self.assertTrue(level_is_unlocked(self.db, self.user, self.open_level))
+
+    def test_disabled_exam_level_is_open_without_an_attempt(self):
+        self.assertTrue(level_is_unlocked(self.db, self.user, self.open_level))
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+=== backend\tests\test_placement_test_migration.py ===
+import unittest
+from unittest.mock import patch
+
+from sqlalchemy import create_engine, text
+from sqlalchemy.pool import StaticPool
+
+from app.database import migrate_placement_test_schema
+
+
+class PlacementTestMigrationTests(unittest.TestCase):
+    def test_existing_database_gets_additive_columns_and_is_idempotent(self):
+        engine = create_engine("sqlite://", poolclass=StaticPool)
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    "CREATE TABLE users (user_id INTEGER PRIMARY KEY, username TEXT)"
+                )
+            )
+            connection.execute(
+                text(
+                    "CREATE TABLE levels (level_id INTEGER PRIMARY KEY, name TEXT, "
+                    "description TEXT, display_order INTEGER)"
+                )
+            )
+            connection.execute(
+                text(
+                    "CREATE TABLE topics (topic_id INTEGER PRIMARY KEY, "
+                    "quick_review_limit INTEGER)"
+                )
+            )
+            connection.execute(
+                text("CREATE TABLE lessons (lesson_id INTEGER PRIMARY KEY)")
+            )
+            connection.execute(
+                text("CREATE TABLE words (word_id INTEGER PRIMARY KEY)")
+            )
+            connection.execute(
+                text("INSERT INTO levels (level_id, name, display_order) VALUES (1, 'A1', 1)")
+            )
+
+        try:
+            with patch("app.database.engine", engine):
+                migrate_placement_test_schema()
+                migrate_placement_test_schema()
+
+            with engine.connect() as connection:
+                level_columns = {
+                    row[1] for row in connection.execute(text("PRAGMA table_info(levels)"))
+                }
+                user_columns = {
+                    row[1] for row in connection.execute(text("PRAGMA table_info(users)"))
+                }
+                level = connection.execute(
+                    text(
+                        "SELECT placement_test_enabled, placement_test_question_count, "
+                        "placement_test_passing_score FROM levels WHERE level_id = 1"
+                    )
+                ).one()
+                integrity = connection.execute(text("PRAGMA integrity_check")).scalar_one()
+
+            self.assertTrue(
+                {
+                    "placement_test_enabled",
+                    "placement_test_question_count",
+                    "placement_test_passing_score",
+                    "is_active",
+                }.issubset(level_columns)
+            )
+            self.assertTrue({"role", "status"}.issubset(user_columns))
+            self.assertEqual(tuple(level), (0, 10, 7))
+            self.assertEqual(integrity, "ok")
+        finally:
+            engine.dispose()
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+=== backend\tests\test_placement_test_routes.py ===
+import unittest
+
+from fastapi import HTTPException
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
+
+from app.database import Base
+from models.curriculum import Lesson, LessonWord, Level, Topic, Word
+from models.user import User
+from routes.levels import list_level_topics
+from routes.placement_tests import (
+    answer_placement_test_question,
+    finish_placement_test,
+    get_placement_test_questions,
+    start_placement_test,
+)
+from schemas.placement_test import PlacementTestAnswer, PlacementTestAttemptResponse
+
+
+class PlacementTestRouteTests(unittest.TestCase):
+    def setUp(self):
+        self.engine = create_engine(
+            "sqlite://",
+            connect_args={"check_same_thread": False},
+            poolclass=StaticPool,
+        )
+        Base.metadata.create_all(self.engine)
+        self.db = Session(self.engine)
+
+        self.user = User(
+            username="learner",
+            email="learner@example.com",
+            password_hash="hash",
+            role="USER",
+            status="ACTIVE",
+        )
+        self.db.add(self.user)
+        level = Level(
+            name="A1",
+            display_order=1,
+            placement_test_enabled=1,
+            placement_test_question_count=4,
+            placement_test_passing_score=3,
+            is_active=1,
+        )
+        self.db.add(level)
+        self.db.flush()
+        self.level = level
+        topic = Topic(
+            level_id=level.level_id,
+            name="Family",
+            display_order=1,
+            is_active=1,
+        )
+        self.db.add(topic)
+        self.db.flush()
+        lesson = Lesson(
+            topic_id=topic.topic_id,
+            name="People",
+            display_order=1,
+            is_active=1,
+        )
+        self.db.add(lesson)
+        self.db.flush()
+        words = [
+            Word(word="mother", meaning="mẹ", is_active=1),
+            Word(word="father", meaning="cha", is_active=1),
+            Word(word="sister", meaning="chị/em gái", is_active=1),
+            Word(word="brother", meaning="anh/em trai", is_active=1),
+        ]
+        self.db.add_all(words)
+        self.db.flush()
+        self.db.add_all(
+            LessonWord(
+                lesson_id=lesson.lesson_id,
+                word_id=word.word_id,
+                display_order=index,
+            )
+            for index, word in enumerate(words, start=1)
+        )
+        self.db.commit()
+
+    def tearDown(self):
+        self.db.close()
+        self.engine.dispose()
+
+    def test_api_routes_gate_level_content_and_unlock_after_a_pass(self):
+        with self.assertRaises(HTTPException) as error:
+            list_level_topics(self.level.level_id, self.db, self.user)
+        self.assertEqual(error.exception.status_code, 403)
+
+        attempt = start_placement_test(self.level.level_id, self.db, self.user)
+        questions = get_placement_test_questions(
+            attempt.attempt_id,
+            self.db,
+            self.user,
+        )
+        for question in questions:
+            correct_meaning = self.db.get(Word, question.word_id).meaning
+            answer_result = answer_placement_test_question(
+                attempt.attempt_id,
+                question.item_id,
+                PlacementTestAnswer(answer=correct_meaning),
+                self.db,
+                self.user,
+            )
+            self.assertTrue(answer_result["is_correct"])
+
+        result = finish_placement_test(attempt.attempt_id, self.db, self.user)
+        response = PlacementTestAttemptResponse.model_validate(result)
+        self.assertTrue(response.passed)
+        self.assertEqual(len(list_level_topics(self.level.level_id, self.db, self.user)), 1)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+=== backend\tests\test_progress_routes.py ===
+import unittest
+from unittest.mock import patch
+
+from fastapi import HTTPException
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
+
+from app.database import Base
+from models.curriculum import Lesson, LessonWord, Level, Topic, Word
+from models.progress import ReviewSessionItem, UserDailyActivity, UserWordProgress
+from models.user import User
+from routes.progress import (
+    answer_quick_review_item,
+    learn_topic_word,
+    read_topic_progress,
+    start_quick_review,
+)
+from schemas.progress import (
+    QuickReviewAnswer,
+    QuickReviewAnswerResponse,
+    QuickReviewSessionResponse,
+    TopicProgressResponse,
+)
+
+
+class LearningProgressRouteTests(unittest.TestCase):
+    def setUp(self):
+        self.engine = create_engine(
+            "sqlite://",
+            connect_args={"check_same_thread": False},
+            poolclass=StaticPool,
+        )
+        Base.metadata.create_all(self.engine)
+        self.db = Session(self.engine, autoflush=False)
+        self.user = User(
+            username="learner",
+            email="learner@example.com",
+            password_hash="hash",
+            role="USER",
+            status="ACTIVE",
+        )
+        self.db.add(self.user)
+        level = Level(name="A1", display_order=1, placement_test_enabled=0, is_active=1)
+        self.db.add(level)
+        self.db.flush()
+        self.level = level
+        self.topic = Topic(
+            level_id=level.level_id,
+            name="Food",
+            display_order=1,
+            quick_review_limit=3,
+            is_active=1,
+        )
+        self.db.add(self.topic)
+        self.db.flush()
+        lesson = Lesson(
+            topic_id=self.topic.topic_id,
+            name="Fruit",
+            display_order=1,
+            is_active=1,
+        )
+        self.db.add(lesson)
+        self.db.flush()
+        words = [
+            Word(word="apple", meaning="táo", example="I ate an apple.", is_active=1),
+            Word(word="pear", meaning="lê", example="She picked a pear.", is_active=1),
+            Word(word="plum", meaning="mận", example="The plum is sweet.", is_active=1),
+            Word(word="peach", meaning="đào", is_active=1),
+            Word(word="grape", meaning="nho", is_active=1),
+            Word(word="melon", meaning="dưa", is_active=1),
+        ]
+        self.db.add_all(words)
+        self.db.flush()
+        self.words = words
+        self.db.add_all(
+            LessonWord(
+                lesson_id=lesson.lesson_id,
+                word_id=word.word_id,
+                display_order=index,
+            )
+            for index, word in enumerate(words, start=1)
+        )
+        self.db.commit()
+
+    def tearDown(self):
+        self.db.close()
+        self.engine.dispose()
+
+    def test_quick_review_uses_only_learned_words_and_admin_limit(self):
+        for word in self.words[:5]:
+            learn_topic_word(self.topic.topic_id, word.word_id, self.db, self.user)
+
+        progress = read_topic_progress(self.topic.topic_id, self.db, self.user)
+        TopicProgressResponse.model_validate(progress)
+        self.assertEqual(progress["learned_count"], 5)
+        self.assertEqual(set(progress["learned_word_ids"]), {word.word_id for word in self.words[:5]})
+
+        review = start_quick_review(self.topic.topic_id, self.db, self.user)
+        QuickReviewSessionResponse.model_validate(review)
+        selected_ids = {item["word_id"] for item in review["items"]}
+        self.assertEqual(review["total_items"], 3)
+        self.assertEqual(len(selected_ids), 3)
+        self.assertLessEqual(selected_ids, set(progress["learned_word_ids"]))
+
+        for item_data in review["items"]:
+            question = item_data["question_data"]
+            if question["kind"] in {"meaning_choice", "fill_blank"}:
+                self.assertEqual(len(question["options"]), 4)
+            if question["kind"] == "fill_blank":
+                self.assertIn("____", question["sentence"])
+
+            stored_item = self.db.get(ReviewSessionItem, item_data["item_id"])
+            result = answer_quick_review_item(
+                review["review_session_id"],
+                item_data["item_id"],
+                QuickReviewAnswer(answer=stored_item.correct_answer),
+                self.db,
+                self.user,
+            )
+            QuickReviewAnswerResponse.model_validate(result)
+            self.assertTrue(result["is_correct"])
+
+        self.assertTrue(result["session_completed"])
+        self.assertEqual(
+            self.db.query(UserWordProgress)
+            .filter_by(user_id=self.user.user_id)
+            .with_entities(UserWordProgress.review_count)
+            .all()
+            .count((1,)),
+            3,
+        )
+
+    def test_quick_review_caps_to_number_of_learned_words(self):
+        learn_topic_word(self.topic.topic_id, self.words[0].word_id, self.db, self.user)
+        learn_topic_word(self.topic.topic_id, self.words[0].word_id, self.db, self.user)
+
+        review = start_quick_review(self.topic.topic_id, self.db, self.user)
+        self.assertEqual(review["total_items"], 1)
+        self.assertEqual(review["items"][0]["word_id"], self.words[0].word_id)
+
+        activities = self.db.query(UserDailyActivity).filter_by(user_id=self.user.user_id).all()
+        self.assertEqual(len(activities), 1)
+        self.assertEqual(activities[0].learned_count, 1)
+
+    def test_quick_review_requires_at_least_one_learned_word(self):
+        with self.assertRaises(HTTPException) as error:
+            start_quick_review(self.topic.topic_id, self.db, self.user)
+        self.assertEqual(error.exception.status_code, 409)
+
+    def test_choice_answers_are_validated_and_wrong_answers_are_recorded(self):
+        learn_topic_word(self.topic.topic_id, self.words[0].word_id, self.db, self.user)
+        with patch("services.progress_service.random.choice", return_value="meaning_choice"):
+            review = start_quick_review(self.topic.topic_id, self.db, self.user)
+        item_data = review["items"][0]
+        item = self.db.get(ReviewSessionItem, item_data["item_id"])
+
+        with self.assertRaises(HTTPException) as error:
+            answer_quick_review_item(
+                review["review_session_id"],
+                item.session_item_id,
+                QuickReviewAnswer(answer="not an option"),
+                self.db,
+                self.user,
+            )
+        self.assertEqual(error.exception.status_code, 422)
+
+        wrong_option = next(
+            option
+            for option in item.question_data["options"]
+            if option != item.correct_answer
+        )
+        result = answer_quick_review_item(
+            review["review_session_id"],
+            item.session_item_id,
+            QuickReviewAnswer(answer=wrong_option),
+            self.db,
+            self.user,
+        )
+        self.assertFalse(result["is_correct"])
+        progress = self.db.query(UserWordProgress).filter_by(
+            user_id=self.user.user_id,
+            word_id=item.word_id,
+        ).one()
+        self.assertEqual(progress.review_count, 1)
+        self.assertEqual(progress.wrong_count, 1)
+
+    def test_cannot_mark_a_word_from_another_topic_as_learned(self):
+        other_topic = Topic(
+            level_id=self.level.level_id,
+            name="Other",
+            display_order=2,
+            quick_review_limit=5,
+            is_active=1,
+        )
+        self.db.add(other_topic)
+        self.db.commit()
+
+        with self.assertRaises(HTTPException) as error:
+            learn_topic_word(other_topic.topic_id, self.words[0].word_id, self.db, self.user)
+        self.assertEqual(error.exception.status_code, 404)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+=== backend\tests\test_pronunciation.py ===
+import unittest
+
+from services.pronunciation_service import _character_results, decode_audio
+
+
+class PronunciationAssessmentTests(unittest.TestCase):
+    def test_character_results_mark_mispronounced_positions(self):
+        characters = _character_results(
+            "hello",
+            [
+                {"position": 0, "label": "correct"},
+                {"position": 2, "label": "mispronounced"},
+            ],
+        )
+        self.assertEqual([item["character"] for item in characters], list("hello"))
+        self.assertIn(
+            "wrong",
+            [item["status"] for item in characters],
+        )
+
+    def test_character_results_default_to_correct(self):
+        characters = _character_results(
+            "cat",
+            [{"position": 0, "label": "correct"}],
+        )
+        self.assertEqual(
+            [item["status"] for item in characters],
+            ["correct", "correct", "correct"],
+        )
+
+    def test_invalid_audio_is_rejected(self):
+        with self.assertRaises(ValueError):
+            decode_audio(b"not an audio stream", "webm")
+
+
+if __name__ == "__main__":
+    unittest.main()

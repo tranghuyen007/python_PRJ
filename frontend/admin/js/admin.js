@@ -117,6 +117,8 @@ let levels = [];
 let topics = [];
 let lessons = [];
 let vocabularies = [];
+let adminUserCount = null;
+let adminUserCountFailed = false;
 
 // Hàm nạp dữ liệu từ FastAPI
 async function loadAllData() {
@@ -224,7 +226,10 @@ function switchToPage(pageName) {
         menu.classList.toggle("active", menu.dataset.page === pageName);
     });
 
-    if (pageName === "dashboard") renderDashboardStats();
+    if (pageName === "dashboard") {
+        renderDashboardStats();
+        loadAdminUserCount();
+    }
     if (pageName === "levels") renderLevels();
     if (pageName === "topics") renderTopics();
     if (pageName === "lessons") {
@@ -235,6 +240,7 @@ function switchToPage(pageName) {
         renderVocabularyLessonOptions();
         renderVocabularies();
     }
+    if (pageName === "users") loadAdminUsers();
 }
 
 function quickAddVocabularyForLesson(lessonId) {
@@ -258,7 +264,8 @@ const titles = {
     levels: "Quản lý cấp độ",
     topics: "Quản lý chủ đề",
     lessons: "Quản lý bài học",
-    vocabulary: "Quản lý từ vựng"
+    vocabulary: "Quản lý từ vựng",
+    users: "Quản lý người dùng"
 };
 
 menuItems.forEach(function (item) {
@@ -1556,13 +1563,33 @@ function renderDashboardStats() {
     const elTopics = document.getElementById("stat-topics");
     const elLessons = document.getElementById("stat-lessons");
     const elVocabs = document.getElementById("stat-vocabularies");
+    const elUsers = document.getElementById("stat-users");
 
     if (elLevels) elLevels.textContent = levels.length;
     if (elTopics) elTopics.textContent = topics.length;
     if (elLessons) elLessons.textContent = lessons.length;
     if (elVocabs) elVocabs.textContent = vocabularies.length;
+    if (elUsers) {
+        if (adminUserCountFailed) elUsers.textContent = "-";
+        else if (adminUserCount === null) elUsers.textContent = "...";
+        else elUsers.textContent = adminUserCount;
+    }
 
     renderVocabularyChart();
+}
+
+async function loadAdminUserCount() {
+    try {
+        const result = await fetchAPI("/admin/users/?page=1&page_size=1");
+        if (!result) return;
+        adminUserCount = result.total;
+        adminUserCountFailed = false;
+        renderDashboardStats();
+    } catch (error) {
+        console.error("Không thể tải số lượng người dùng:", error);
+        adminUserCountFailed = true;
+        renderDashboardStats();
+    }
 }
 
 function renderVocabularyChart() {
@@ -1610,6 +1637,211 @@ function renderVocabularyChart() {
     });
 }
 
+const userList = document.getElementById("user-list");
+const userSearch = document.getElementById("user-search");
+const userStatusFilter = document.getElementById("user-status-filter");
+const userRoleFilter = document.getElementById("user-role-filter");
+const userForm = document.getElementById("user-form");
+const userFormContainer = document.getElementById("user-form-container");
+const userPageSummary = document.getElementById("user-page-summary");
+const userPageSize = 20;
+let userPage = 1;
+let userTotal = 0;
+let editingUserId = null;
+let userLoadRequestId = 0;
+let userSearchTimer = null;
+
+function appendUserCell(row, value) {
+    const cell = document.createElement("td");
+    cell.textContent = value == null || value === "" ? "-" : String(value);
+    row.appendChild(cell);
+}
+
+function renderAdminUsers(users) {
+    userList.innerHTML = "";
+
+    users.forEach(function (user) {
+        const row = document.createElement("tr");
+        appendUserCell(row, user.user_id);
+        appendUserCell(row, user.username);
+        appendUserCell(row, user.full_name);
+        appendUserCell(row, user.email);
+        appendUserCell(row, user.role === "ADMIN" ? "Quản trị viên" : "Người dùng");
+        appendUserCell(row, user.status === "ACTIVE" ? "Đang hoạt động" : "Đã khóa");
+        appendUserCell(row, user.created_at ? new Date(user.created_at).toLocaleDateString("vi-VN") : "");
+
+        const actions = document.createElement("td");
+        actions.className = "user-actions";
+
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.className = "btn-edit";
+        editButton.textContent = "Sửa";
+        editButton.addEventListener("click", function () {
+            openUserForm(user.user_id);
+        });
+
+        const statusButton = document.createElement("button");
+        statusButton.type = "button";
+        statusButton.className = user.status === "ACTIVE" ? "btn-delete" : "btn-edit";
+        statusButton.textContent = user.status === "ACTIVE" ? "Khóa" : "Mở khóa";
+        statusButton.addEventListener("click", function () {
+            changeAdminUserStatus(user);
+        });
+
+        actions.append(editButton, statusButton);
+        row.appendChild(actions);
+        userList.appendChild(row);
+    });
+
+    if (users.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 8;
+        cell.className = "user-empty";
+        cell.textContent = "Không tìm thấy người dùng.";
+        row.appendChild(cell);
+        userList.appendChild(row);
+    }
+
+    const totalPages = Math.max(1, Math.ceil(userTotal / userPageSize));
+    userPageSummary.textContent = `Trang ${userPage}/${totalPages} - ${userTotal} người dùng`;
+    document.getElementById("btn-user-prev").disabled = userPage <= 1;
+    document.getElementById("btn-user-next").disabled = userPage >= totalPages;
+}
+
+async function loadAdminUsers() {
+    const requestId = ++userLoadRequestId;
+    const params = new URLSearchParams({
+        page: String(userPage),
+        page_size: String(userPageSize)
+    });
+    const query = userSearch.value.trim();
+    if (query) params.set("q", query);
+    if (userStatusFilter.value) params.set("status", userStatusFilter.value);
+    if (userRoleFilter.value) params.set("role", userRoleFilter.value);
+
+    userList.innerHTML = "";
+    const loadingRow = document.createElement("tr");
+    const loadingCell = document.createElement("td");
+    loadingCell.colSpan = 8;
+    loadingCell.className = "user-empty";
+    loadingCell.textContent = "Đang tải danh sách người dùng...";
+    loadingRow.appendChild(loadingCell);
+    userList.appendChild(loadingRow);
+
+    try {
+        const result = await fetchAPI(`/admin/users/?${params.toString()}`);
+        if (requestId !== userLoadRequestId || !result) return;
+        userTotal = result.total;
+        const totalPages = Math.max(1, Math.ceil(userTotal / userPageSize));
+        if (userPage > totalPages) {
+            userPage = totalPages;
+            await loadAdminUsers();
+            return;
+        }
+        renderAdminUsers(result.items);
+    } catch (error) {
+        if (requestId !== userLoadRequestId) return;
+        userList.innerHTML = "";
+        const errorRow = document.createElement("tr");
+        const errorCell = document.createElement("td");
+        errorCell.colSpan = 8;
+        errorCell.className = "user-error";
+        errorCell.textContent = `Không thể tải danh sách: ${error.message}`;
+        errorRow.appendChild(errorCell);
+        userList.appendChild(errorRow);
+        userPageSummary.textContent = "";
+    }
+}
+
+async function openUserForm(userId) {
+    try {
+        const user = await fetchAPI(`/admin/users/${userId}`);
+        if (!user) return;
+        editingUserId = user.user_id;
+        document.getElementById("user-username").value = user.username || "";
+        document.getElementById("user-email").value = user.email || "";
+        document.getElementById("user-full-name").value = user.full_name || "";
+        userFormContainer.classList.remove("hidden");
+        userFormContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function changeAdminUserStatus(user) {
+    const nextStatus = user.status === "ACTIVE" ? "LOCKED" : "ACTIVE";
+    const action = nextStatus === "LOCKED" ? "khóa" : "mở khóa";
+    if (!confirm(`Bạn có chắc muốn ${action} tài khoản "${user.username}"?`)) return;
+
+    try {
+        await fetchAPI(`/admin/users/${user.user_id}/status`, "PATCH", { status: nextStatus });
+        await loadAdminUsers();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+userForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    if (editingUserId === null) return;
+
+    const payload = {
+        username: document.getElementById("user-username").value.trim(),
+        email: document.getElementById("user-email").value.trim(),
+        full_name: document.getElementById("user-full-name").value.trim() || null
+    };
+
+    try {
+        await fetchAPI(`/admin/users/${editingUserId}`, "PATCH", payload);
+        userFormContainer.classList.add("hidden");
+        userForm.reset();
+        editingUserId = null;
+        await loadAdminUsers();
+    } catch (error) {
+        alert(error.message);
+    }
+});
+
+document.getElementById("btn-cancel-user").addEventListener("click", function () {
+    userFormContainer.classList.add("hidden");
+    userForm.reset();
+    editingUserId = null;
+});
+
+userSearch.addEventListener("input", function () {
+    window.clearTimeout(userSearchTimer);
+    userSearchTimer = window.setTimeout(function () {
+        userPage = 1;
+        loadAdminUsers();
+    }, 250);
+});
+
+userStatusFilter.addEventListener("change", function () {
+    userPage = 1;
+    loadAdminUsers();
+});
+
+userRoleFilter.addEventListener("change", function () {
+    userPage = 1;
+    loadAdminUsers();
+});
+
+document.getElementById("btn-user-prev").addEventListener("click", function () {
+    if (userPage > 1) {
+        userPage--;
+        loadAdminUsers();
+    }
+});
+
+document.getElementById("btn-user-next").addEventListener("click", function () {
+    if (userPage < Math.ceil(userTotal / userPageSize)) {
+        userPage++;
+        loadAdminUsers();
+    }
+});
+
 /* ================================================================
    KHỞI TẠO TẤT CẢ DỮ LIỆU BAN ĐẦU
 ================================================================ */
@@ -1624,6 +1856,7 @@ function initApp() {
     renderVocabularies();
     renderDashboardStats();
     loadAllData(); // Gọi nạp dữ liệu từ API thay cho dữ liệu mẫu
+    loadAdminUserCount();
 }
 
 initApp();

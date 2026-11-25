@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin | English Vocabulary</title>
 
-    <link rel="stylesheet" href="css/admin.css?v=table-alignment">
+    <link rel="stylesheet" href="css/admin.css?v=user-dashboard-count">
 </head>
 
 <body>
@@ -37,6 +37,10 @@
 
             <button class="menu-item" data-page="vocabulary">
                 Quản lý từ vựng
+            </button>
+
+            <button class="menu-item" data-page="users">
+                Quản lý người dùng
             </button>
         </aside>
 
@@ -77,6 +81,11 @@
                     <div class="stat-card">
                         <p>Từ vựng</p>
                         <h3 id="stat-vocabularies">0</h3>
+                    </div>
+
+                    <div class="stat-card">
+                        <p>Người dùng</p>
+                        <h3 id="stat-users">...</h3>
                     </div>
 
                 </div>
@@ -372,11 +381,79 @@
 
             </section>
 
+            <section id="users" class="page hidden">
+                <div class="section-header">
+                    <div>
+                        <h2>Danh sách người dùng</h2>
+                        <p>Tìm kiếm, cập nhật thông tin và quản lý trạng thái tài khoản.</p>
+                    </div>
+                </div>
+
+                <div class="topic-toolbar user-toolbar">
+                    <input type="search" id="user-search" placeholder="Tìm theo tên, username hoặc email...">
+                    <select id="user-status-filter" aria-label="Lọc theo trạng thái">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="ACTIVE">Đang hoạt động</option>
+                        <option value="LOCKED">Đã khóa</option>
+                    </select>
+                    <select id="user-role-filter" aria-label="Lọc theo vai trò">
+                        <option value="">Tất cả vai trò</option>
+                        <option value="USER">Người dùng</option>
+                        <option value="ADMIN">Quản trị viên</option>
+                    </select>
+                </div>
+
+                <div id="user-form-container" class="form-container user-form-container hidden">
+                    <h3>Cập nhật người dùng</h3>
+                    <form id="user-form">
+                        <label for="user-username">Tên đăng nhập</label>
+                        <input type="text" id="user-username" minlength="3" maxlength="30" required>
+
+                        <label for="user-email">Email</label>
+                        <input type="email" id="user-email" minlength="5" maxlength="40" required>
+
+                        <label for="user-full-name">Họ và tên</label>
+                        <input type="text" id="user-full-name" maxlength="100">
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Lưu thay đổi</button>
+                            <button type="button" id="btn-cancel-user" class="btn-secondary">Hủy</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên đăng nhập</th>
+                                <th>Họ và tên</th>
+                                <th>Email</th>
+                                <th>Vai trò</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày tạo</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-list"></tbody>
+                    </table>
+                </div>
+
+                <div class="user-pagination">
+                    <span id="user-page-summary" aria-live="polite"></span>
+                    <div>
+                        <button type="button" id="btn-user-prev" class="btn-secondary">Trước</button>
+                        <button type="button" id="btn-user-next" class="btn-secondary">Sau</button>
+                    </div>
+                </div>
+            </section>
+
         </main>
 
     </div>
 
-    <script src="js/admin.js?v=crud-final"></script>
+    <script src="js/admin.js?v=user-dashboard-count"></script>
 </body>
 
 </html>
